@@ -1,32 +1,32 @@
-import EventEmitter, { type GeneralEventTypes } from './event-emitter'
+import EventEmitter, { type GeneralEventTypes } from './event-emitter';
 
 type PlayerOptions = {
-  media?: HTMLMediaElement
-  mediaControls?: boolean
-  autoplay?: boolean
-  playbackRate?: number
-}
+  media?: HTMLMediaElement;
+  mediaControls?: boolean;
+  autoplay?: boolean;
+  playbackRate?: number;
+};
 
 class Player<T extends GeneralEventTypes> extends EventEmitter<T> {
-  protected media: HTMLMediaElement
-  private isExternalMedia = false
+  protected media: HTMLMediaElement;
+  private isExternalMedia = false;
 
   constructor(options: PlayerOptions) {
-    super()
+    super();
 
     if (options.media) {
-      this.media = options.media
-      this.isExternalMedia = true
+      this.media = options.media;
+      this.isExternalMedia = true;
     } else {
-      this.media = document.createElement('audio')
+      this.media = document.createElement('audio');
     }
     // Controls
     if (options.mediaControls) {
-      this.media.controls = true
+      this.media.controls = true;
     }
     // Autoplay
     if (options.autoplay) {
-      this.media.autoplay = true
+      this.media.autoplay = true;
     }
     // Speed
     if (options.playbackRate != null) {
@@ -34,145 +34,148 @@ class Player<T extends GeneralEventTypes> extends EventEmitter<T> {
         'canplay',
         () => {
           if (options.playbackRate != null) {
-            this.media.playbackRate = options.playbackRate
+            this.media.playbackRate = options.playbackRate;
           }
         },
-        { once: true },
-      )
+        { once: true }
+      );
     }
   }
 
   protected onMediaEvent<K extends keyof HTMLElementEventMap>(
     event: K,
     callback: (ev: HTMLElementEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: boolean | AddEventListenerOptions
   ): () => void {
-    this.media.addEventListener(event, callback, options)
-    return () => this.media.removeEventListener(event, callback, options)
+    this.media.addEventListener(event, callback, options);
+    return () => this.media.removeEventListener(event, callback, options);
   }
 
   protected getSrc() {
-    return this.media.currentSrc || this.media.src || ''
+    return this.media.currentSrc || this.media.src || '';
   }
 
   private revokeSrc() {
-    const src = this.getSrc()
+    const src = this.getSrc();
     if (src.startsWith('blob:')) {
-      URL.revokeObjectURL(src)
+      URL.revokeObjectURL(src);
     }
   }
 
   private canPlayType(type: string): boolean {
-    return this.media.canPlayType(type) !== ''
+    return this.media.canPlayType(type) !== '';
   }
 
   protected setSrc(url: string, blob?: Blob) {
-    const src = this.getSrc()
-    if (url && src === url) return
-    this.revokeSrc()
-    const newSrc = blob instanceof Blob && (this.canPlayType(blob.type) || !url) ? URL.createObjectURL(blob) : url
+    const src = this.getSrc();
+    if (url && src === url) return;
+    this.revokeSrc();
+    const newSrc =
+      blob instanceof Blob && (this.canPlayType(blob.type) || !url)
+        ? URL.createObjectURL(blob)
+        : url;
     try {
-      this.media.src = newSrc
+      this.media.src = newSrc;
     } catch (e) {
-      this.media.src = url
+      this.media.src = url;
     }
   }
 
   protected destroy() {
-    this.media.pause()
+    this.media.pause();
 
-    if (this.isExternalMedia) return
-    this.media.remove()
-    this.revokeSrc()
-    this.media.src = ''
+    if (this.isExternalMedia) return;
+    this.media.remove();
+    this.revokeSrc();
+    this.media.src = '';
     // Load resets the media element to its initial state
-    this.media.load()
+    this.media.load();
   }
 
   protected setMediaElement(element: HTMLMediaElement) {
-    this.media = element
+    this.media = element;
   }
 
   /** Start playing the audio */
   public async play(): Promise<void> {
-    return this.media.play()
+    return this.media.play();
   }
 
   /** Pause the audio */
   public pause(): void {
-    this.media.pause()
+    this.media.pause();
   }
 
   /** Check if the audio is playing */
   public isPlaying(): boolean {
-    return !this.media.paused && !this.media.ended
+    return !this.media.paused && !this.media.ended;
   }
 
   /** Jump to a specific time in the audio (in seconds) */
   public setTime(time: number) {
-    this.media.currentTime = time
+    this.media.currentTime = time;
   }
 
   /** Get the duration of the audio in seconds */
   public getDuration(): number {
-    return this.media.duration
+    return this.media.duration;
   }
 
   /** Get the current audio position in seconds */
   public getCurrentTime(): number {
-    return this.media.currentTime
+    return this.media.currentTime;
   }
 
   /** Get the audio volume */
   public getVolume(): number {
-    return this.media.volume
+    return this.media.volume;
   }
 
   /** Set the audio volume */
   public setVolume(volume: number) {
-    this.media.volume = volume
+    this.media.volume = volume;
   }
 
   /** Get the audio muted state */
   public getMuted(): boolean {
-    return this.media.muted
+    return this.media.muted;
   }
 
   /** Mute or unmute the audio */
   public setMuted(muted: boolean) {
-    this.media.muted = muted
+    this.media.muted = muted;
   }
 
   /** Get the playback speed */
   public getPlaybackRate(): number {
-    return this.media.playbackRate
+    return this.media.playbackRate;
   }
 
   /** Check if the audio is seeking */
   public isSeeking(): boolean {
-    return this.media.seeking
+    return this.media.seeking;
   }
 
   /** Set the playback speed, pass an optional false to NOT preserve the pitch */
   public setPlaybackRate(rate: number, preservePitch?: boolean) {
     // preservePitch is true by default in most browsers
     if (preservePitch != null) {
-      this.media.preservesPitch = preservePitch
+      this.media.preservesPitch = preservePitch;
     }
-    this.media.playbackRate = rate
+    this.media.playbackRate = rate;
   }
 
   /** Get the HTML media element */
   public getMediaElement(): HTMLMediaElement {
-    return this.media
+    return this.media;
   }
 
   /** Set a sink id to change the audio output device */
   public setSinkId(sinkId: string): Promise<void> {
     // See https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/setSinkId
-    const media = this.media as HTMLAudioElement & { setSinkId: (sinkId: string) => Promise<void> }
-    return media.setSinkId(sinkId)
+    const media = this.media as HTMLAudioElement & { setSinkId: (sinkId: string) => Promise<void> };
+    return media.setSinkId(sinkId);
   }
 }
 
-export default Player
+export default Player;

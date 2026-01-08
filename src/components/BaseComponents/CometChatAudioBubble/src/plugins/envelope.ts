@@ -2,27 +2,27 @@
  * Envelope is a visual UI for controlling the audio volume and add fade-in and fade-out effects.
  */
 
-import BasePlugin, { type BasePluginEvents } from '../base-plugin'
-import { makeDraggable } from '../draggable'
-import EventEmitter from '../event-emitter'
-import createElement from '../dom'
+import BasePlugin, { type BasePluginEvents } from '../base-plugin';
+import { makeDraggable } from '../draggable';
+import EventEmitter from '../event-emitter';
+import createElement from '../dom';
 
 export type EnvelopePoint = {
-  id?: string
-  time: number // in seconds
-  volume: number // 0 to 1
-}
+  id?: string;
+  time: number; // in seconds
+  volume: number; // 0 to 1
+};
 
 export type EnvelopePluginOptions = {
-  points?: any
-  volume?: number
-  lineWidth?: string
-  lineColor?: string
-  dragLine?: boolean
-  dragPointSize?: number
-  dragPointFill?: string
-  dragPointStroke?: string
-}
+  points?: any;
+  volume?: number;
+  lineWidth?: string;
+  lineColor?: string;
+  dragLine?: boolean;
+  dragPointSize?: number;
+  dragPointFill?: string;
+  dragPointStroke?: string;
+};
 
 const defaultOptions = {
   points: [] as any,
@@ -31,41 +31,41 @@ const defaultOptions = {
   dragPointSize: 10,
   dragPointFill: 'rgba(255, 255, 255, 0.8)',
   dragPointStroke: 'rgba(255, 255, 255, 0.8)',
-}
+};
 
-type Options = EnvelopePluginOptions & typeof defaultOptions
+type Options = EnvelopePluginOptions & typeof defaultOptions;
 
 export type EnvelopePluginEvents = BasePluginEvents & {
-  'points-change': [newPoints: EnvelopePoint[]]
-  'volume-change': [volume: number]
-}
+  'points-change': [newPoints: EnvelopePoint[]];
+  'volume-change': [volume: number];
+};
 
 class Polyline extends EventEmitter<{
-  'point-move': [point: EnvelopePoint, relativeX: number, relativeY: number]
-  'point-dragout': [point: EnvelopePoint]
-  'point-create': [relativeX: number, relativeY: number]
-  'line-move': [relativeY: number]
+  'point-move': [point: EnvelopePoint, relativeX: number, relativeY: number];
+  'point-dragout': [point: EnvelopePoint];
+  'point-create': [relativeX: number, relativeY: number];
+  'line-move': [relativeY: number];
 }> {
-  private svg: SVGSVGElement
-  private options: Options
+  private svg: SVGSVGElement;
+  private options: Options;
   private polyPoints: Map<
     EnvelopePoint,
     {
-      polyPoint: SVGPoint
-      circle: SVGEllipseElement
+      polyPoint: SVGPoint;
+      circle: SVGEllipseElement;
     }
-  >
-  private subscriptions: (() => void)[] = []
+  >;
+  private subscriptions: (() => void)[] = [];
 
   constructor(options: Options, wrapper: HTMLElement) {
-    super()
+    super();
 
-    this.subscriptions = []
-    this.options = options
-    this.polyPoints = new Map()
+    this.subscriptions = [];
+    this.options = options;
+    this.polyPoints = new Map();
 
-    const width = wrapper.clientWidth
-    const height = wrapper.clientHeight
+    const width = wrapper.clientWidth;
+    const height = wrapper.clientHeight;
 
     // SVG element
     const svg = createElement(
@@ -84,10 +84,10 @@ class Polyline extends EventEmitter<{
         },
         part: 'envelope',
       },
-      wrapper,
-    ) as SVGSVGElement
+      wrapper
+    ) as SVGSVGElement;
 
-    this.svg = svg
+    this.svg = svg;
 
     // A polyline representing the envelope
     const polyline = createElement(
@@ -101,66 +101,66 @@ class Polyline extends EventEmitter<{
         part: 'polyline',
         style: options.dragLine
           ? {
-            cursor: 'row-resize',
-            pointerEvents: 'stroke',
-          }
+              cursor: 'row-resize',
+              pointerEvents: 'stroke',
+            }
           : {},
       },
-      svg,
-    ) as SVGPolylineElement
+      svg
+    ) as SVGPolylineElement;
 
     // Make the polyline draggable along the Y axis
     if (options.dragLine) {
       this.subscriptions.push(
         makeDraggable(polyline as unknown as HTMLElement, (_, dy) => {
-          const { height } = svg.viewBox.baseVal
-          const { points } = polyline
+          const { height } = svg.viewBox.baseVal;
+          const { points } = polyline;
           for (let i = 1; i < points.numberOfItems - 1; i++) {
-            const point = points.getItem(i)
-            point.y = Math.min(height, Math.max(0, point.y + dy))
+            const point = points.getItem(i);
+            point.y = Math.min(height, Math.max(0, point.y + dy));
           }
-          const circles = svg.querySelectorAll('ellipse')
+          const circles = svg.querySelectorAll('ellipse');
           Array.from(circles).forEach((circle) => {
-            const newY = Math.min(height, Math.max(0, Number(circle.getAttribute('cy')) + dy))
-            circle.setAttribute('cy', newY.toString())
-          })
+            const newY = Math.min(height, Math.max(0, Number(circle.getAttribute('cy')) + dy));
+            circle.setAttribute('cy', newY.toString());
+          });
 
-          this.emit('line-move', dy / height)
-        }),
-      )
+          this.emit('line-move', dy / height);
+        })
+      );
     }
 
     // Listen to double click to add a new point
     svg.addEventListener('dblclick', (e) => {
-      const rect = svg.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
-      this.emit('point-create', x / rect.width, y / rect.height)
-    })
+      const rect = svg.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      this.emit('point-create', x / rect.width, y / rect.height);
+    });
 
     // Long press on touch devices
     {
-      let pressTimer: number
+      let pressTimer: number;
 
-      const clearTimer = () => clearTimeout(pressTimer)
+      const clearTimer = () => clearTimeout(pressTimer);
 
       svg.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) {
           pressTimer = window.setTimeout(() => {
-            e.preventDefault()
-            const rect = svg.getBoundingClientRect()
-            const x = e.touches[0].clientX - rect.left
-            const y = e.touches[0].clientY - rect.top
-            this.emit('point-create', x / rect.width, y / rect.height)
-          }, 500)
+            e.preventDefault();
+            const rect = svg.getBoundingClientRect();
+            const x = e.touches[0].clientX - rect.left;
+            const y = e.touches[0].clientY - rect.top;
+            this.emit('point-create', x / rect.width, y / rect.height);
+          }, 500);
         } else {
-          clearTimer()
+          clearTimer();
         }
-      })
+      });
 
-      svg.addEventListener('touchmove', clearTimer)
+      svg.addEventListener('touchmove', clearTimer);
 
-      svg.addEventListener('touchend', clearTimer)
+      svg.addEventListener('touchend', clearTimer);
     }
   }
 
@@ -171,14 +171,14 @@ class Polyline extends EventEmitter<{
         onDrag,
         () => (draggable.style.cursor = 'grabbing'),
         () => (draggable.style.cursor = 'grab'),
-        1,
-      ),
-    )
+        1
+      )
+    );
   }
 
   private createCircle(x: number, y: number) {
-    const size = this.options.dragPointSize
-    const radius = size / 2
+    const size = this.options.dragPointSize;
+    const radius = size / 2;
     return createElement(
       'ellipse',
       {
@@ -196,133 +196,138 @@ class Polyline extends EventEmitter<{
         },
         part: 'envelope-circle',
       },
-      this.svg,
-    ) as SVGEllipseElement
+      this.svg
+    ) as SVGEllipseElement;
   }
 
   removePolyPoint(point: EnvelopePoint) {
-    const item = this.polyPoints.get(point)
-    if (!item) return
-    const { polyPoint, circle } = item
-    const { points } = this.svg.querySelector('polyline') as SVGPolylineElement
-    const index = Array.from(points).findIndex((p) => p.x === polyPoint.x && p.y === polyPoint.y)
-    points.removeItem(index)
-    circle.remove()
-    this.polyPoints.delete(point)
+    const item = this.polyPoints.get(point);
+    if (!item) return;
+    const { polyPoint, circle } = item;
+    const { points } = this.svg.querySelector('polyline') as SVGPolylineElement;
+    const index = Array.from(points).findIndex((p) => p.x === polyPoint.x && p.y === polyPoint.y);
+    points.removeItem(index);
+    circle.remove();
+    this.polyPoints.delete(point);
   }
 
   addPolyPoint(relX: number, relY: number, refPoint: EnvelopePoint) {
-    const { svg } = this
-    const { width, height } = svg.viewBox.baseVal
-    const x = relX * width
-    const y = height - relY * height
-    const threshold = this.options.dragPointSize / 2
+    const { svg } = this;
+    const { width, height } = svg.viewBox.baseVal;
+    const x = relX * width;
+    const y = height - relY * height;
+    const threshold = this.options.dragPointSize / 2;
 
-    const newPoint = svg.createSVGPoint()
-    newPoint.x = relX * width
-    newPoint.y = height - relY * height
+    const newPoint = svg.createSVGPoint();
+    newPoint.x = relX * width;
+    newPoint.y = height - relY * height;
 
-    const circle = this.createCircle(x, y)
-    const { points } = svg.querySelector('polyline') as SVGPolylineElement
-    const newIndex = Array.from(points).findIndex((point) => point.x >= x)
-    points.insertItemBefore(newPoint, Math.max(newIndex, 1))
+    const circle = this.createCircle(x, y);
+    const { points } = svg.querySelector('polyline') as SVGPolylineElement;
+    const newIndex = Array.from(points).findIndex((point) => point.x >= x);
+    points.insertItemBefore(newPoint, Math.max(newIndex, 1));
 
-    this.polyPoints.set(refPoint, { polyPoint: newPoint, circle })
+    this.polyPoints.set(refPoint, { polyPoint: newPoint, circle });
 
     this.makeDraggable(circle, (dx, dy) => {
-      const newX = newPoint.x + dx
-      const newY = newPoint.y + dy
+      const newX = newPoint.x + dx;
+      const newY = newPoint.y + dy;
 
       // Remove the point if it's dragged out of the SVG
-      if (newX < -threshold || newY < -threshold || newX > width + threshold || newY > height + threshold) {
-        this.emit('point-dragout', refPoint)
-        return
+      if (
+        newX < -threshold ||
+        newY < -threshold ||
+        newX > width + threshold ||
+        newY > height + threshold
+      ) {
+        this.emit('point-dragout', refPoint);
+        return;
       }
 
       // Don't allow to drag past the next or previous point
-      const next = Array.from(points).find((point) => point.x > newPoint.x)
-      const prev = (Array.from(points) as any).findLast((point: any) => point.x < newPoint.x)
+      const next = Array.from(points).find((point) => point.x > newPoint.x);
+      const prev = (Array.from(points) as any).findLast((point: any) => point.x < newPoint.x);
       if ((next && newX >= next.x) || (prev && newX <= prev.x)) {
-        return
+        return;
       }
 
       // Update the point and the circle position
-      newPoint.x = newX
-      newPoint.y = newY
-      circle.setAttribute('cx', newX.toString())
-      circle.setAttribute('cy', newY.toString())
+      newPoint.x = newX;
+      newPoint.y = newY;
+      circle.setAttribute('cx', newX.toString());
+      circle.setAttribute('cy', newY.toString());
 
       // Emit the event passing the point and new relative coordinates
-      this.emit('point-move', refPoint, newX / width, newY / height)
-    })
+      this.emit('point-move', refPoint, newX / width, newY / height);
+    });
   }
 
   update() {
-    const { svg } = this
-    const aspectRatioX = svg.viewBox.baseVal.width / svg.clientWidth
-    const aspectRatioY = svg.viewBox.baseVal.height / svg.clientHeight
-    const circles = svg.querySelectorAll('ellipse')
+    const { svg } = this;
+    const aspectRatioX = svg.viewBox.baseVal.width / svg.clientWidth;
+    const aspectRatioY = svg.viewBox.baseVal.height / svg.clientHeight;
+    const circles = svg.querySelectorAll('ellipse');
 
     circles.forEach((circle) => {
-      const radius = this.options.dragPointSize / 2
-      const rx = radius * aspectRatioX
-      const ry = radius * aspectRatioY
-      circle.setAttribute('rx', rx.toString())
-      circle.setAttribute('ry', ry.toString())
-    })
+      const radius = this.options.dragPointSize / 2;
+      const rx = radius * aspectRatioX;
+      const ry = radius * aspectRatioY;
+      circle.setAttribute('rx', rx.toString());
+      circle.setAttribute('ry', ry.toString());
+    });
   }
 
   destroy() {
-    this.subscriptions.forEach((unsubscribe) => unsubscribe())
-    this.polyPoints.clear()
-    this.svg.remove()
+    this.subscriptions.forEach((unsubscribe) => unsubscribe());
+    this.polyPoints.clear();
+    this.svg.remove();
   }
 }
 
-const randomId = () => Math.random().toString(36).slice(2)
+const randomId = () => Math.random().toString(36).slice(2);
 
 class EnvelopePlugin extends BasePlugin<EnvelopePluginEvents, EnvelopePluginOptions> {
-  protected options: Options
-  private polyline: Polyline | null = null
-  private points: EnvelopePoint[]
-  private throttleTimeout: ReturnType<typeof setTimeout> | null = null
-  private volume = 1
+  protected options: Options;
+  private polyline: Polyline | null = null;
+  private points: EnvelopePoint[];
+  private throttleTimeout: ReturnType<typeof setTimeout> | null = null;
+  private volume = 1;
 
   /**
    * Create a new Envelope plugin.
    */
   constructor(options: EnvelopePluginOptions) {
-    super(options)
+    super(options);
 
-    this.points = options.points || []
+    this.points = options.points || [];
 
-    this.options = Object.assign({}, defaultOptions, options)
-    this.options.lineColor = this.options.lineColor || defaultOptions.lineColor
-    this.options.dragPointFill = this.options.dragPointFill || defaultOptions.dragPointFill
-    this.options.dragPointStroke = this.options.dragPointStroke || defaultOptions.dragPointStroke
-    this.options.dragPointSize = this.options.dragPointSize || defaultOptions.dragPointSize
+    this.options = Object.assign({}, defaultOptions, options);
+    this.options.lineColor = this.options.lineColor || defaultOptions.lineColor;
+    this.options.dragPointFill = this.options.dragPointFill || defaultOptions.dragPointFill;
+    this.options.dragPointStroke = this.options.dragPointStroke || defaultOptions.dragPointStroke;
+    this.options.dragPointSize = this.options.dragPointSize || defaultOptions.dragPointSize;
   }
 
   public static create(options: EnvelopePluginOptions) {
-    return new EnvelopePlugin(options)
+    return new EnvelopePlugin(options);
   }
 
   /**
    * Add an envelope point with a given time and volume.
    */
   public addPoint(point: EnvelopePoint) {
-    if (!point.id) point.id = randomId()
+    if (!point.id) point.id = randomId();
 
     // Insert the point in the correct position to keep the array sorted
-    const index = (this.points as any).findLastIndex((p: any) => p.time < point.time)
-    this.points.splice(index + 1, 0, point)
+    const index = (this.points as any).findLastIndex((p: any) => p.time < point.time);
+    this.points.splice(index + 1, 0, point);
 
-    this.emitPoints()
+    this.emitPoints();
 
     // Add the point to the polyline if the duration is available
-    const duration = this.wavesurfer?.getDuration()
+    const duration = this.wavesurfer?.getDuration();
     if (duration) {
-      this.addPolyPoint(point, duration)
+      this.addPolyPoint(point, duration);
     }
   }
 
@@ -330,11 +335,11 @@ class EnvelopePlugin extends BasePlugin<EnvelopePluginEvents, EnvelopePluginOpti
    * Remove an envelope point.
    */
   public removePoint(point: EnvelopePoint) {
-    const index = this.points.indexOf(point)
+    const index = this.points.indexOf(point);
     if (index > -1) {
-      this.points.splice(index, 1)
-      this.polyline?.removePolyPoint(point)
-      this.emitPoints()
+      this.points.splice(index, 1);
+      this.polyline?.removePolyPoint(point);
+      this.emitPoints();
     }
   }
 
@@ -342,144 +347,144 @@ class EnvelopePlugin extends BasePlugin<EnvelopePluginEvents, EnvelopePluginOpti
    * Get all envelope points. Should not be modified directly.
    */
   public getPoints(): EnvelopePoint[] {
-    return this.points
+    return this.points;
   }
 
   /**
    * Set new envelope points.
    */
   public setPoints(newPoints: EnvelopePoint[]) {
-    this.points.slice().forEach((point) => this.removePoint(point))
-    newPoints.forEach((point) => this.addPoint(point))
+    this.points.slice().forEach((point) => this.removePoint(point));
+    newPoints.forEach((point) => this.addPoint(point));
   }
 
   /**
    * Destroy the plugin instance.
    */
   public destroy() {
-    this.polyline?.destroy()
-    super.destroy()
+    this.polyline?.destroy();
+    super.destroy();
   }
 
   /**
    * Get the envelope volume.
    */
   public getCurrentVolume(): number {
-    return this.volume
+    return this.volume;
   }
 
   /**
    * Set the envelope volume. 0..1 (more than 1 will boost the volume).
    */
   public setVolume(floatValue: number) {
-    this.volume = floatValue
-    this.wavesurfer?.setVolume(floatValue)
+    this.volume = floatValue;
+    this.wavesurfer?.setVolume(floatValue);
   }
 
   /** Called by wavesurfer, don't call manually */
   onInit() {
     if (!this.wavesurfer) {
-      throw Error('WaveSurfer is not initialized')
+      throw Error('WaveSurfer is not initialized');
     }
 
-    const { options } = this
-    options.volume = options.volume ?? this.wavesurfer.getVolume()
+    const { options } = this;
+    options.volume = options.volume ?? this.wavesurfer.getVolume();
 
-    this.setVolume(options.volume)
+    this.setVolume(options.volume);
 
     this.subscriptions.push(
       this.wavesurfer.on('decode', (duration) => {
-        this.initPolyline()
+        this.initPolyline();
 
         this.points.forEach((point) => {
-          this.addPolyPoint(point, duration)
-        })
+          this.addPolyPoint(point, duration);
+        });
       }),
 
       this.wavesurfer.on('redraw', () => {
-        this.polyline?.update()
+        this.polyline?.update();
       }),
 
       this.wavesurfer.on('timeupdate', (time) => {
-        this.onTimeUpdate(time)
-      }),
-    )
+        this.onTimeUpdate(time);
+      })
+    );
   }
 
   private emitPoints() {
     if (this.throttleTimeout) {
-      clearTimeout(this.throttleTimeout)
+      clearTimeout(this.throttleTimeout);
     }
     this.throttleTimeout = setTimeout(() => {
-      this.emit('points-change', this.points)
-    }, 200)
+      this.emit('points-change', this.points);
+    }, 200);
   }
 
   private initPolyline() {
-    if (this.polyline) this.polyline.destroy()
-    if (!this.wavesurfer) return
+    if (this.polyline) this.polyline.destroy();
+    if (!this.wavesurfer) return;
 
-    const wrapper = this.wavesurfer.getWrapper()
+    const wrapper = this.wavesurfer.getWrapper();
 
-    this.polyline = new Polyline(this.options, wrapper)
+    this.polyline = new Polyline(this.options, wrapper);
 
     this.subscriptions.push(
       this.polyline.on('point-move', (point, relativeX, relativeY) => {
-        const duration = this.wavesurfer?.getDuration() || 0
-        point.time = relativeX * duration
-        point.volume = 1 - relativeY
+        const duration = this.wavesurfer?.getDuration() || 0;
+        point.time = relativeX * duration;
+        point.volume = 1 - relativeY;
 
-        this.emitPoints()
+        this.emitPoints();
       }),
 
       this.polyline.on('point-dragout', (point) => {
-        this.removePoint(point)
+        this.removePoint(point);
       }),
 
       this.polyline.on('point-create', (relativeX, relativeY) => {
         this.addPoint({
           time: relativeX * (this.wavesurfer?.getDuration() || 0),
           volume: 1 - relativeY,
-        })
+        });
       }),
 
       this.polyline.on('line-move', (relativeY) => {
         this.points.forEach((point) => {
-          point.volume = Math.min(1, Math.max(0, point.volume - relativeY))
-        })
+          point.volume = Math.min(1, Math.max(0, point.volume - relativeY));
+        });
 
-        this.emitPoints()
+        this.emitPoints();
 
-        this.onTimeUpdate(this.wavesurfer?.getCurrentTime() || 0)
-      }),
-    )
+        this.onTimeUpdate(this.wavesurfer?.getCurrentTime() || 0);
+      })
+    );
   }
 
   private addPolyPoint(point: EnvelopePoint, duration: number) {
-    this.polyline?.addPolyPoint(point.time / duration, point.volume, point)
+    this.polyline?.addPolyPoint(point.time / duration, point.volume, point);
   }
 
   private onTimeUpdate(time: number) {
-    if (!this.wavesurfer) return
-    let nextPoint = this.points.find((point) => point.time > time)
+    if (!this.wavesurfer) return;
+    let nextPoint = this.points.find((point) => point.time > time);
     if (!nextPoint) {
-      nextPoint = { time: this.wavesurfer.getDuration() || 0, volume: 0 }
+      nextPoint = { time: this.wavesurfer.getDuration() || 0, volume: 0 };
     }
-    let prevPoint = (this.points as any).findLast((point: any) => point.time <= time)
+    let prevPoint = (this.points as any).findLast((point: any) => point.time <= time);
     if (!prevPoint) {
-      prevPoint = { time: 0, volume: 0 }
+      prevPoint = { time: 0, volume: 0 };
     }
-    const timeDiff = nextPoint.time - prevPoint.time
-    const volumeDiff = nextPoint.volume - prevPoint.volume
-    const newVolume = prevPoint.volume + (time - prevPoint.time) * (volumeDiff / timeDiff)
-    const clampedVolume = Math.min(1, Math.max(0, newVolume))
-    const roundedVolume = Math.round(clampedVolume * 100) / 100
+    const timeDiff = nextPoint.time - prevPoint.time;
+    const volumeDiff = nextPoint.volume - prevPoint.volume;
+    const newVolume = prevPoint.volume + (time - prevPoint.time) * (volumeDiff / timeDiff);
+    const clampedVolume = Math.min(1, Math.max(0, newVolume));
+    const roundedVolume = Math.round(clampedVolume * 100) / 100;
 
     if (roundedVolume !== this.getCurrentVolume()) {
-      this.setVolume(roundedVolume)
-      this.emit('volume-change', roundedVolume)
+      this.setVolume(roundedVolume);
+      this.emit('volume-change', roundedVolume);
     }
   }
 }
 
-export default EnvelopePlugin
+export default EnvelopePlugin;

@@ -78,7 +78,7 @@ class Recorder {
       this.audioRecorder.stop();
 
       this.audioRecorder.getBuffer((buffer) => {
-        this.audioRecorder.exportWAV(blob => resolve({buffer, blob}));
+        this.audioRecorder.exportWAV((blob) => resolve({ buffer, blob }));
       });
     });
   }
@@ -105,7 +105,7 @@ class Recorder {
         data[idx] = datum;
       }
 
-      this.config.onAnalysed({data, lineTo: lastNonZero});
+      this.config.onAnalysed({ data, lineTo: lastNonZero });
     }
   }
 

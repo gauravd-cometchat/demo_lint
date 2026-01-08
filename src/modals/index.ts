@@ -1,5 +1,3 @@
-
-
 export { CometChatActions } from './CometChatActions';
 export { CometChatActionsIcon } from './CometChatActionsIcon';
 export { CometChatActionsView } from './CometChatActionsView';

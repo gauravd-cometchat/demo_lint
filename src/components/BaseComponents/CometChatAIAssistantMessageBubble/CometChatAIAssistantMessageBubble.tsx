@@ -8,10 +8,12 @@ import { CometChatFullScreenViewer } from '../CometChatFullScreenViewer/CometCha
 import { CometChatUIEvents } from '../../../events/CometChatUIEvents';
 
 interface CometChatAIAssistantMessageBubbleProps {
-  message?: CometChat.AIAssistantMessage
+  message?: CometChat.AIAssistantMessage;
 }
 
-const CometChatAIAssistantMessageBubble: React.FC<CometChatAIAssistantMessageBubbleProps> = ({ message }) => {
+const CometChatAIAssistantMessageBubble: React.FC<CometChatAIAssistantMessageBubbleProps> = ({
+  message,
+}) => {
   function getMarkDownTheme() {
     return getThemeMode() === 'dark' ? oneDark : oneLight;
   }
@@ -29,16 +31,15 @@ const CometChatAIAssistantMessageBubble: React.FC<CometChatAIAssistantMessageBub
     };
   }, [message]);
   return (
-    <div className='cometchat'
+    <div
+      className="cometchat"
       style={{
         height: '100%',
         width: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}
     >
-      <div
-        className='cometchat-ai-assistant-message-bubble'
-      >
+      <div className="cometchat-ai-assistant-message-bubble">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           children={message?.getAssistantMessageData()?.getText() || ''}
@@ -48,13 +49,15 @@ const CometChatAIAssistantMessageBubble: React.FC<CometChatAIAssistantMessageBub
               const isInline = !className || !match;
               return !isInline && match ? (
                 <SyntaxHighlighter
-                            className="cometchat-ai-assistant-message-bubble__code-block"
-                language={match[1]} PreTag="div" style={theme}>
+                  className="cometchat-ai-assistant-message-bubble__code-block"
+                  language={match[1]}
+                  PreTag="div"
+                  style={theme}
+                >
                   {String(children).replace(/\n$/, '')}
                 </SyntaxHighlighter>
               ) : (
-                <code 
-                className={className} {...props}>
+                <code className={className} {...props}>
                   {children}
                 </code>
               );
@@ -65,7 +68,7 @@ const CometChatAIAssistantMessageBubble: React.FC<CometChatAIAssistantMessageBub
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className='cometchat-ai-assistant-message-bubble__link'
+                  className="cometchat-ai-assistant-message-bubble__link"
                   {...props}
                 >
                   {children}
@@ -103,8 +106,6 @@ const CometChatAIAssistantMessageBubble: React.FC<CometChatAIAssistantMessageBub
       </div>
     </div>
   );
-
-
 };
 
 export { CometChatAIAssistantMessageBubble };

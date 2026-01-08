@@ -1,14 +1,13 @@
-import { CometChat } from "@cometchat/chat-sdk-javascript";
+import { CometChat } from '@cometchat/chat-sdk-javascript';
 
 /**
  * Abstract class representing a data source for extensions.
  * Provides methods to enable and add extensions, and to get the extension ID.
  */
 abstract class ExtensionsDataSource {
-
   /**
    * Abstract method to add an extension. Implementations must provide their own logic.
-   * 
+   *
    * @abstract
    */
   abstract addExtension(): void;
@@ -16,7 +15,7 @@ abstract class ExtensionsDataSource {
   /**
    * Abstract method to get the unique identifier for the extension.
    * Implementations must provide their own logic to return the extension ID.
-   * 
+   *
    * @abstract
    * @returns {string} The unique identifier for the extension.
    */
@@ -24,16 +23,17 @@ abstract class ExtensionsDataSource {
 
   /**
    * Enables the extension if it is not already enabled.
-   * Checks if the extension is enabled using `CometChat.isExtensionEnabled()` and 
+   * Checks if the extension is enabled using `CometChat.isExtensionEnabled()` and
    * adds the extension if it is enabled.
-   * 
+   *
    * @returns {void}
    */
   enable(): void {
     CometChat.isExtensionEnabled(this.getExtensionId()).then(
-      (enabled: Boolean) => {
+      (enabled: boolean) => {
         if (enabled) this.addExtension();
-      }, error => { }
+      },
+      (error) => {}
     );
   }
 }

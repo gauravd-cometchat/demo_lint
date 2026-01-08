@@ -10,11 +10,10 @@ export enum AuxiliaryButtonAlignment {
  * It is used for specifying the function of enter button
  * It is used in CometChatMessageComposer component.
  */
-export enum EnterKeyBehavior
-{
-  SendMessage = "sendMessage",
-  NewLine = "newLine",
-  None = "none",
+export enum EnterKeyBehavior {
+  SendMessage = 'sendMessage',
+  NewLine = 'newLine',
+  None = 'none',
 }
 
 /**
@@ -22,10 +21,10 @@ export enum EnterKeyBehavior
  * It is used in CometChatContextualMenu, CometChatMessageBubble, CometChatUsers and CometChatGroupMembers components.
  */
 export enum Placement {
-  top = "top",
-  right = "right",
-  bottom = "bottom",
-  left = "left",
+  top = 'top',
+  right = 'right',
+  bottom = 'bottom',
+  left = 'left',
 }
 
 /**
@@ -75,7 +74,7 @@ export enum MessageStatus {
   inprogress,
   success,
   error,
-  cancelled
+  cancelled,
 }
 
 /**
@@ -137,10 +136,10 @@ export enum TimestampAlignment {
  * It is used in CometChatTabs, CometChatOutgoingCall components.
  */
 export enum IconButtonAlignment {
-  top = "column",
-  bottom = "column-reverse",
-  left = "row",
-  right = "row-reverse",
+  top = 'column',
+  bottom = 'column-reverse',
+  left = 'row',
+  right = 'row-reverse',
 }
 
 /**
@@ -183,13 +182,13 @@ export enum PanelAlignment {
 }
 
 /**
- * It is used to provide the alignment for the labels. 
+ * It is used to provide the alignment for the labels.
  */
 export enum LabelAlignment {
-  top = "column",
-  bottom = "column-reverse",
-  left = "row",
-  right = "row-reverse",
+  top = 'column',
+  bottom = 'column-reverse',
+  left = 'row',
+  right = 'row-reverse',
 }
 
 /**
@@ -197,14 +196,14 @@ export enum LabelAlignment {
  * It is used in modal components.
  */
 export enum ElementType {
-  label = "label",
-  text = "textInput",
-  dropdown = "dropdown",
-  checkbox = "checkbox",
-  radio = "radio",
-  button = "button",
-  singleSelect = "singleSelect",
-  dateTime = "dateTime",
+  label = 'label',
+  text = 'textInput',
+  dropdown = 'dropdown',
+  checkbox = 'checkbox',
+  radio = 'radio',
+  button = 'button',
+  singleSelect = 'singleSelect',
+  dateTime = 'dateTime',
 }
 
 /**
@@ -212,9 +211,9 @@ export enum ElementType {
  * It is used in InteractiveMessageUtils function and in modal components.
  */
 export enum ButtonAction {
-  apiAction = "apiAction",
-  urlNavigation = "urlNavigation",
-  custom = "custom",
+  apiAction = 'apiAction',
+  urlNavigation = 'urlNavigation',
+  custom = 'custom',
 }
 
 /**
@@ -222,10 +221,10 @@ export enum ButtonAction {
  * It is used in InteractiveMessageUtils function and APIAction inside modals.
  */
 export enum HTTPSRequestMethods {
-  POST = "POST",
-  PUT = "PUT",
-  PATCH = "PATCH",
-  DELETE = "DELETE",
+  POST = 'POST',
+  PUT = 'PUT',
+  PATCH = 'PATCH',
+  DELETE = 'DELETE',
 }
 
 /**
@@ -233,9 +232,9 @@ export enum HTTPSRequestMethods {
  * It is used in DateTimePickerElement component.
  */
 export enum DateTimePickerMode {
-  date = "date",
-  dateTime = "dateTime",
-  time = "time",
+  date = 'date',
+  dateTime = 'dateTime',
+  time = 'time',
 }
 
 /**
@@ -261,11 +260,11 @@ export enum MouseEventSource {
  */
 export enum PreviewMessageMode {
   edit,
-  none
+  none,
 }
 /**
- * It is generally used for formatting the text by providing the required data. 
- * It is used in CometChatConversations, CometChatTextFormatter and CometChatMentionsFormatter. 
+ * It is generally used for formatting the text by providing the required data.
+ * It is used in CometChatConversations, CometChatTextFormatter and CometChatMentionsFormatter.
  */
 export enum MentionsTargetElement {
   textinput,
@@ -280,17 +279,16 @@ export enum MentionsTargetElement {
 export enum MentionsVisibility {
   usersConversationOnly,
   groupConversationOnly,
-  both
+  both,
 }
-
 
 /**
  * Specifies the scope of the search functionality.
- * 
+ *
  * @remarks
  * - `Conversations`: Limits the search to conversations only.
  * - `Messages`: Limits the search to messages only.
- * 
+ *
  */
 export enum CometChatSearchScope {
   Conversations = 'conversations',
@@ -298,7 +296,7 @@ export enum CometChatSearchScope {
 }
 /**
  * Specifies the filters available for the search functionality.
- * 
+ *
  * @remarks
  * - `Messages`: Filters to search within messages.
  * - `Conversations`: Filters to search within conversations.

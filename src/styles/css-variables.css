@@ -199,30 +199,30 @@
    Set the primary color and a range of extended shades to be used throughout the application,
     maintaining a consistent visual theme with variations to suit different UI components and states.
      */
-  --cometchat-primary-color: #6852D6;
-  --cometchat-extended-primary-color-50: #F9F8FD;
-  --cometchat-extended-primary-color-100: #EDEAFA;
-  --cometchat-extended-primary-color-200: #DCD7F6;
-  --cometchat-extended-primary-color-300: #CCC4F1;
-  --cometchat-extended-primary-color-400: #BBB1ED;
-  --cometchat-extended-primary-color-500: #AA9EE8;
-  --cometchat-extended-primary-color-600: #9A8BE4;
-  --cometchat-extended-primary-color-700: #8978DF;
-  --cometchat-extended-primary-color-800: #7965DB;
-  --cometchat-extended-primary-color-900: #5D49BE;
+  --cometchat-primary-color: #6852d6;
+  --cometchat-extended-primary-color-50: #f9f8fd;
+  --cometchat-extended-primary-color-100: #edeafa;
+  --cometchat-extended-primary-color-200: #dcd7f6;
+  --cometchat-extended-primary-color-300: #ccc4f1;
+  --cometchat-extended-primary-color-400: #bbb1ed;
+  --cometchat-extended-primary-color-500: #aa9ee8;
+  --cometchat-extended-primary-color-600: #9a8be4;
+  --cometchat-extended-primary-color-700: #8978df;
+  --cometchat-extended-primary-color-800: #7965db;
+  --cometchat-extended-primary-color-900: #5d49be;
 
   /*
     Neutral Colors
      Define a neutral color palette, providing versatile shades for backgrounds,text and borders. These neutrals serve as the foundation for the application's color scheme.
      */
-  --cometchat-neutral-color-50: #FFFFFF;
-  --cometchat-neutral-color-100: #FAFAFA;
-  --cometchat-neutral-color-200: #F5F5F5;
-  --cometchat-neutral-color-300: #E8E8E8;
-  --cometchat-neutral-color-400: #DCDCDC;
-  --cometchat-neutral-color-500: #A1A1A1;
+  --cometchat-neutral-color-50: #ffffff;
+  --cometchat-neutral-color-100: #fafafa;
+  --cometchat-neutral-color-200: #f5f5f5;
+  --cometchat-neutral-color-300: #e8e8e8;
+  --cometchat-neutral-color-400: #dcdcdc;
+  --cometchat-neutral-color-500: #a1a1a1;
   --cometchat-neutral-color-600: #727272;
-  --cometchat-neutral-color-700: #5B5B5B;
+  --cometchat-neutral-color-700: #5b5b5b;
   --cometchat-neutral-color-800: #434343;
   --cometchat-neutral-color-900: #141414;
 
@@ -231,11 +231,11 @@
    Assign colors for various alerts, such as informational messages, warnings,  success notifications,
 and errors.
      */
-  --cometchat-info-color: #0B7BEA;
-  --cometchat-warning-color: #FFAB00;
-  --cometchat-success-color: #09C26F;
-  --cometchat-error-color: #F44649;
-  --cometchat-error-color-100: #FEF3F2;
+  --cometchat-info-color: #0b7bea;
+  --cometchat-warning-color: #ffab00;
+  --cometchat-success-color: #09c26f;
+  --cometchat-error-color: #f44649;
+  --cometchat-error-color-100: #fef3f2;
 
   /*
     Static colors
@@ -244,7 +244,7 @@ and errors.
        */
 
   --cometchat-static-black: #141414;
-  --cometchat-static-white: #FFFFFF;
+  --cometchat-static-white: #ffffff;
 
   /*
   Background Colors
@@ -255,8 +255,6 @@ and errors.
   --cometchat-background-color-03: var(--cometchat-neutral-color-200);
   --cometchat-background-color-04: var(--cometchat-neutral-color-300);
 
-
-
   /*
   Border Colors
 Define border colors for UI elements,
@@ -266,7 +264,6 @@ Define border colors for UI elements,
   --cometchat-border-color-default: var(--cometchat-neutral-color-300);
   --cometchat-border-color-dark: var(--cometchat-neutral-color-400);
   --cometchat-border-color-highlight: var(--cometchat-primary-color);
-
 
   /*
   Text Colors
@@ -293,9 +290,13 @@ Define border colors for UI elements,
     Styling for shimmer effects shown while loading content in the uikit.
      */
   --cometchat-shimmer-background-color: var(--cometchat-neutral-color-200);
-  --cometchat-shimmer-gradient-color: linear-gradient(90deg, #E0E0E0 0%, #EEE 100%);
-  --cometchat-text-shimmer-gradient-color: linear-gradient(270deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.70) 50%, rgba(255, 255, 255, 0.00) 100%);
-
+  --cometchat-shimmer-gradient-color: linear-gradient(90deg, #e0e0e0 0%, #eee 100%);
+  --cometchat-text-shimmer-gradient-color: linear-gradient(
+    270deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
 
   /*
     Styling for buttons.
@@ -313,53 +314,53 @@ Define border colors for UI elements,
   --cometchat-white-pressed: var(--cometchat-neutral-color-300);
 }
 
-[data-theme="dark"] {
-  --cometchat-primary-color: #6852D6;
-  --cometchat-extended-primary-color-50: #15102B;
-  --cometchat-extended-primary-color-100: #1D173C;
-  --cometchat-extended-primary-color-200: #251E4D;
-  --cometchat-extended-primary-color-300: #2E245E;
-  --cometchat-extended-primary-color-400: #362B6F;
-  --cometchat-extended-primary-color-500: #3E3180;
+[data-theme='dark'] {
+  --cometchat-primary-color: #6852d6;
+  --cometchat-extended-primary-color-50: #15102b;
+  --cometchat-extended-primary-color-100: #1d173c;
+  --cometchat-extended-primary-color-200: #251e4d;
+  --cometchat-extended-primary-color-300: #2e245e;
+  --cometchat-extended-primary-color-400: #362b6f;
+  --cometchat-extended-primary-color-500: #3e3180;
   --cometchat-extended-primary-color-600: #473892;
-  --cometchat-extended-primary-color-700: #4F3EA3;
-  --cometchat-extended-primary-color-800: #5745B4;
-  --cometchat-extended-primary-color-900: #7460D9;
+  --cometchat-extended-primary-color-700: #4f3ea3;
+  --cometchat-extended-primary-color-800: #5745b4;
+  --cometchat-extended-primary-color-900: #7460d9;
   /**
    * Neutral Colors
   * Define a neutral color palette, providing versatile shades for backgrounds,text and borders. These neutrals serve as the foundation for the application's color scheme.
    **/
   --cometchat-neutral-color-50: #141414;
-  --cometchat-neutral-color-100: #1A1A1A;
+  --cometchat-neutral-color-100: #1a1a1a;
   --cometchat-neutral-color-200: #272727;
   --cometchat-neutral-color-300: #383838;
-  --cometchat-neutral-color-400: #4C4C4C;
+  --cometchat-neutral-color-400: #4c4c4c;
   --cometchat-neutral-color-500: #858585;
   --cometchat-neutral-color-600: #989898;
-  --cometchat-neutral-color-700: #A8A8A8;
-  --cometchat-neutral-color-800: #C8C8C8;
-  --cometchat-neutral-color-900: #FFFFFF;
+  --cometchat-neutral-color-700: #a8a8a8;
+  --cometchat-neutral-color-800: #c8c8c8;
+  --cometchat-neutral-color-900: #ffffff;
   /*
   Alert Colors
   Assign colors for various alerts, such as informational messages, warnings,  success notifications,
   and errors.
      */
 
-  --cometchat-info-color: #0D66BF;
-  --cometchat-warning-color: #D08D04;
-  --cometchat-success-color: #0B9F5D;
-  --cometchat-message-seen-color: #56E8A7;
-  --cometchat-error-color: #C73C3E;
-  --cometchat-error-color-100: #3A0C05;
-  
-    /*
+  --cometchat-info-color: #0d66bf;
+  --cometchat-warning-color: #d08d04;
+  --cometchat-success-color: #0b9f5d;
+  --cometchat-message-seen-color: #56e8a7;
+  --cometchat-error-color: #c73c3e;
+  --cometchat-error-color-100: #3a0c05;
+
+  /*
     Static colors
      Assign colors for various alerts, such as informational messages, warnings,  success notifications,
   and errors.
        */
 
-       --cometchat-static-black: #141414;
-       --cometchat-static-white: #FFFFFF;
+  --cometchat-static-black: #141414;
+  --cometchat-static-white: #ffffff;
 
   /*
   Background Colors
@@ -405,7 +406,12 @@ Define border colors for UI elements,
    */
   --cometchat-shimmer-background-color: var(--cometchat-background-color-01);
   --cometchat-shimmer-gradient-color: linear-gradient(90deg, #383838 0%, #272727 100%);
-  --cometchat-text-shimmer-gradient-color: linear-gradient(270deg, rgba(26, 26, 26, 0.00) 0%, rgba(26, 26, 26, 0.70) 50%, rgba(26, 26, 26, 0.00) 100%);
+  --cometchat-text-shimmer-gradient-color: linear-gradient(
+    270deg,
+    rgba(26, 26, 26, 0) 0%,
+    rgba(26, 26, 26, 0.7) 50%,
+    rgba(26, 26, 26, 0) 100%
+  );
 
   /*
    Styling for buttons.

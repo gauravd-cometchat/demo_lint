@@ -1,21 +1,19 @@
-import {getLocalizedString} from "../../../resources/CometChatLocalize/cometchat-localize";
-import { CometChatUIKitConstants } from "../../../constants/CometChatUIKitConstants";
+import { getLocalizedString } from '../../../resources/CometChatLocalize/cometchat-localize';
+import { CometChatUIKitConstants } from '../../../constants/CometChatUIKitConstants';
 
 export function isSentByMe(call: CometChat.Call | any, loggedInUser: CometChat.User) {
-  let senderUid:string ="";
+  let senderUid: string = '';
   try {
-    senderUid = (call.getCallInitiator && call.getCallInitiator()?.getUid()) || call?.getInitiator()?.getUid();
+    senderUid =
+      (call.getCallInitiator && call.getCallInitiator()?.getUid()) ||
+      call?.getInitiator()?.getUid();
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
   return !senderUid || senderUid === loggedInUser?.getUid();
 }
 
-
-export function isMissedCall(
-  call: CometChat.Call,
-  loggedInUser: CometChat.User
-) {
+export function isMissedCall(call: CometChat.Call, loggedInUser: CometChat.User) {
   const callStatus = call.getStatus();
   const sentByMe = isSentByMe(call, loggedInUser);
 
@@ -42,16 +40,14 @@ export function verifyCallUser(call: any, loggedInUser: CometChat.User) {
   }
 }
 
-
-
 export function convertMinutesToHoursMinutesSeconds(minutes: number): string {
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = Math.floor(minutes % 60);
   const seconds = Math.floor((minutes - Math.floor(minutes)) * 60);
 
-  let hoursString = "";
-  let minutesString = "";
-  let secondsString = "";
+  let hoursString = '';
+  let minutesString = '';
+  let secondsString = '';
 
   if (hours > 0) {
     hoursString = `${hours}h`;
@@ -73,9 +69,9 @@ export function convertSecondsToHoursMinutesSeconds(seconds: number): string {
   const remainingMinutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = Math.floor((seconds % 3600) % 60);
 
-  let hoursString = "";
-  let minutesString = "";
-  let secondsString = "";
+  let hoursString = '';
+  let minutesString = '';
+  let secondsString = '';
 
   if (hours > 0) {
     hoursString = `${hours}h`;
@@ -99,9 +95,9 @@ export function downloadRecordingFromURL(url: string) {
     })
     .then((blob) => {
       const blobURL = URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = blobURL;
-      a.download = "recording.mp4";
+      a.download = 'recording.mp4';
       document.body.appendChild(a);
       a.click();
     })

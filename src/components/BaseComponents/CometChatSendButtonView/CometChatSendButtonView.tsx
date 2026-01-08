@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState } from 'react';
 import { stopStreamingMessage, streamingState$ } from '../../../services/stream-message.service';
 const CometChatSendButtonView = ({ isButtonDisabled }: { isButtonDisabled: boolean }) => {
   const [isStreaming, setIsStreaming] = useState(false);
@@ -14,10 +14,12 @@ const CometChatSendButtonView = ({ isButtonDisabled }: { isButtonDisabled: boole
         if (isStreaming) {
           stopStreamingMessage();
         }
-      }} className={`cometchat-ai-assistant-chat__send-button-view ${!isButtonDisabled && 'cometchat-ai-assistant-chat__send-button-view--active'}
+      }}
+      className={`cometchat-ai-assistant-chat__send-button-view ${!isButtonDisabled && 'cometchat-ai-assistant-chat__send-button-view--active'}
                   ${isStreaming && 'cometchat-ai-assistant-chat__send-button-view--streaming'}
-                  `}>
-      <div className='cometchat-ai-assistant-chat__send-button-icon'></div>
+                  `}
+    >
+      <div className="cometchat-ai-assistant-chat__send-button-icon"></div>
     </div>
   );
 };

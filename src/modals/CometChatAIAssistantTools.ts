@@ -15,7 +15,7 @@ interface ICometChatAIAssistantToolsMap {
 
 /**
  * CometChatAIAssistantTools class for managing action functions
- * 
+ *
  * Usage:
  * ```typescript
  * const toolkit = new CometChatAIAssistantTools({
@@ -25,25 +25,25 @@ interface ICometChatAIAssistantToolsMap {
  *     fetch(`/api/weather?location=${params.location}`);
  *   },
  * });
- * 
+ *
  * ```
  */
 class CometChatAIAssistantTools {
   private actionsMap: ICometChatAIAssistantToolsMap;
-  
+
   [functionName: string]: any;
   constructor(actions: ICometChatAIAssistantToolsMap) {
     this.actionsMap = actions;
-    
+
     // Make functions directly accessible as properties
-    Object.keys(actions).forEach(functionName => {
+    Object.keys(actions).forEach((functionName) => {
       this[functionName] = actions[functionName];
     });
   }
 
   /**
    * Get the implementation of a specific action
-   * 
+   *
    * @param functionName - Name of the function
    * @returns The function implementation or undefined if not found
    */
@@ -51,10 +51,9 @@ class CometChatAIAssistantTools {
     return this.actionsMap[functionName];
   }
 
-
   /**
    * Get a copy of all actions
-   * 
+   *
    * @returns A copy of the actions map
    */
   getActions(): ICometChatAIAssistantToolsMap {
@@ -62,4 +61,8 @@ class CometChatAIAssistantTools {
   }
 }
 
-export { CometChatAIAssistantTools, type ICometChatAIAssistantToolsMap, type CometChatAIAssistantToolsFunction };
+export {
+  CometChatAIAssistantTools,
+  type ICometChatAIAssistantToolsMap,
+  type CometChatAIAssistantToolsFunction,
+};

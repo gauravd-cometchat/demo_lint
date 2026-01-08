@@ -9,17 +9,22 @@
 }
 
 .cometchat-special-mentions-list .cometchat-special-mentions-list__item:hover {
-  background: var(--cometchat-white-hover, #FAFAFA);
+  background: var(--cometchat-white-hover, #fafafa);
 }
 
-.cometchat-special-mentions-list .cometchat-special-mentions-list__item .cometchat-special-mentions-list__item-name {
+.cometchat-special-mentions-list
+  .cometchat-special-mentions-list__item
+  .cometchat-special-mentions-list__item-name {
   padding: 5px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
-.cometchat-special-mentions-list .cometchat-special-mentions-list__item .cometchat-special-mentions-list__item-name .cometchat-special-mentions-list__item-name-subtext{
+.cometchat-special-mentions-list
+  .cometchat-special-mentions-list__item
+  .cometchat-special-mentions-list__item-name
+  .cometchat-special-mentions-list__item-name-subtext {
   color: var(--cometchat-neutral-color-700);
   font: var(--cometchat-font-body-regular);
 }

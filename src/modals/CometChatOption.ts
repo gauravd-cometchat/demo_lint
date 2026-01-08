@@ -5,13 +5,13 @@
  */
 export class CometChatOption {
   /** Unique identifier for the option. */
-  public id?: string = "";
+  public id?: string = '';
 
   /** Text label for the option. */
-  public title?: string = "";
+  public title?: string = '';
 
   /** URL of the icon representing the option. */
-  public iconURL?: string = "";
+  public iconURL?: string = '';
 
   /** Function to be called when the option is clicked. */
   public onClick?: any = null;
@@ -21,6 +21,6 @@ export class CometChatOption {
    * @param {Partial<CometChatOption>} props - Properties to initialize the option.
    */
   constructor(props: Partial<CometChatOption>) {
-      Object.assign(this, props);
+    Object.assign(this, props);
   }
 }

@@ -1,13 +1,12 @@
-import { CometChat } from "@cometchat/chat-sdk-javascript";
-import { Receipts } from "../Enums/Enums";
-import { CometChatUIKitConstants } from "../constants/CometChatUIKitConstants";
+import { CometChat } from '@cometchat/chat-sdk-javascript';
+import { Receipts } from '../Enums/Enums';
+import { CometChatUIKitConstants } from '../constants/CometChatUIKitConstants';
 
 /**
  * Utility class for handling message receipt statuses.
  * It is used in CometChatConversations and CometChatMessageList components.
  */
 export class MessageReceiptUtils {
-  
   /**
    * Gets the receipt status icon for a given message.
    *
@@ -18,19 +17,15 @@ export class MessageReceiptUtils {
    * @returns {Receipts} - The receipt status icon.
    */
   static getReceiptStatus = (message: CometChat.BaseMessage) => {
-    if (
-      message instanceof CometChat.TextMessage ||
-      message instanceof CometChat.MediaMessage
-    ) {
+    if (message instanceof CometChat.TextMessage || message instanceof CometChat.MediaMessage) {
       const moderationStatus = message.getModerationStatus();
       // Prioritize immediate error/disapproval cases
-      if (moderationStatus ===  CometChatUIKitConstants.moderationStatus.disapproved) {
+      if (moderationStatus === CometChatUIKitConstants.moderationStatus.disapproved) {
         return Receipts.error;
       }
     }
 
-    const hasError =
-      (message as any)?.error || (message as any)?.metadata?.error;
+    const hasError = (message as any)?.error || (message as any)?.metadata?.error;
     if (hasError) {
       return Receipts.error;
     }

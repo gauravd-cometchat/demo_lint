@@ -2,19 +2,9 @@ var WORKER_ENABLED;
 
 if (!window.global) {
   window.global = window;
-  WORKER_ENABLED = !!(
-    global === global.window &&
-    global.URL &&
-    global.Blob &&
-    global.Worker
-  );
-}else{
-  WORKER_ENABLED = !!(
-    global === global.window &&
-    global.URL &&
-    global.Blob &&
-    global.Worker
-  );
+  WORKER_ENABLED = !!(global === global.window && global.URL && global.Blob && global.Worker);
+} else {
+  WORKER_ENABLED = !!(global === global.window && global.URL && global.Blob && global.Worker);
 }
 
 function InlineWorker(func, self) {
@@ -30,9 +20,7 @@ function InlineWorker(func, self) {
       .match(/^function\s*\w*\s*\([\w\s,]*\)\s*{([\w\W]*?)}$/)[1];
 
     return new global.Worker(
-      global.URL.createObjectURL(
-        new global.Blob([functionBody], { type: "text/javascript" })
-      )
+      global.URL.createObjectURL(new global.Blob([functionBody], { type: 'text/javascript' }))
     );
   }
 

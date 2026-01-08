@@ -1,15 +1,11 @@
-
-import { CometChat } from "@cometchat/chat-sdk-javascript";
-import { CometChatMessageEvents } from "../events/CometChatMessageEvents";
-import { CometChatUIKitConstants } from "../constants/CometChatUIKitConstants";
+import { CometChat } from '@cometchat/chat-sdk-javascript';
+import { CometChatMessageEvents } from '../events/CometChatMessageEvents';
+import { CometChatUIKitConstants } from '../constants/CometChatUIKitConstants';
 
 export class ChatSdkEventInitializer {
   private static messageListenerId = `message_listener_${new Date().getTime()}`;
   public static attachListeners() {
-    CometChat.addMessageListener(
-      this.messageListenerId,
-      this.getMessageListenerObject()
-    );
+    CometChat.addMessageListener(this.messageListenerId, this.getMessageListenerObject());
   }
 
   public static detachListeners() {
@@ -44,11 +40,9 @@ export class ChatSdkEventInitializer {
       },
       onMessagesDeliveredToAll: (messageReceipt: CometChat.MessageReceipt) => {
         CometChatMessageEvents.onMessagesDeliveredToAll.next(messageReceipt);
-
       },
       onMessagesReadByAll: (messageReceipt: CometChat.MessageReceipt) => {
         CometChatMessageEvents.onMessagesReadByAll.next(messageReceipt);
-
       },
       onMessageEdited: (message: CometChat.BaseMessage) => {
         CometChatMessageEvents.onMessageEdited.next(message);
@@ -64,26 +58,22 @@ export class ChatSdkEventInitializer {
       },
       onSchedulerMessageReceived: (message: CometChat.InteractiveMessage) => {
         CometChatMessageEvents.onSchedulerMessageReceived.next(message);
-        
       },
-      onInteractiveMessageReceived: (
-        message: CometChat.InteractiveMessage
-    ) => {
+      onInteractiveMessageReceived: (message: CometChat.InteractiveMessage) => {
         switch (message.getType()) {
-            case CometChatUIKitConstants.MessageTypes.form:
-                CometChatMessageEvents.onFormMessageReceived.next(message);
-                break;
-            case CometChatUIKitConstants.MessageTypes.card:
-                CometChatMessageEvents.onCardMessageReceived.next(message);
-                break;
-            default:
-                CometChatMessageEvents.onCustomInteractiveMessageReceived.next(message);
-                break;
+          case CometChatUIKitConstants.MessageTypes.form:
+            CometChatMessageEvents.onFormMessageReceived.next(message);
+            break;
+          case CometChatUIKitConstants.MessageTypes.card:
+            CometChatMessageEvents.onCardMessageReceived.next(message);
+            break;
+          default:
+            CometChatMessageEvents.onCustomInteractiveMessageReceived.next(message);
+            break;
         }
-    },
+      },
       onAIAssistantMessageReceived: (message: CometChat.AIAssistantMessage) => {
         CometChatMessageEvents.onAIAssistantMessageReceived.next(message);
-
       },
       onAIToolResultReceived: (message: CometChat.AIToolResultMessage) => {
         CometChatMessageEvents.onAIToolResultReceived.next(message);

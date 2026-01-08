@@ -1,6 +1,3 @@
-
-
-
 .cometchat-sticker-keyboard {
   display: flex;
   width: 100%;
@@ -9,9 +6,11 @@
   flex-direction: column;
   gap: 0px;
   border-radius: var(--cometchat-radius-4, 16px);
-  border: 1px solid var(--cometchat-border-color-light, #F5F5F5);
-  background: var(--cometchat-background-color-01, #FFF);
-  box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
+  border: 1px solid var(--cometchat-border-color-light, #f5f5f5);
+  background: var(--cometchat-background-color-01, #fff);
+  box-shadow:
+    0px 12px 16px -4px rgba(16, 24, 40, 0.08),
+    0px 4px 6px -2px rgba(16, 24, 40, 0.03);
 }
 
 .cometchat-sticker-keyboard__tabs {
@@ -19,23 +18,21 @@
   height: 40px;
   display: flex;
   gap: var(--cometchat-padding-2, 8px);
-  border-bottom: 1px solid var(--cometchat-border-color-default, #E8E8E8);
+  border-bottom: 1px solid var(--cometchat-border-color-default, #e8e8e8);
   overflow-x: auto;
   overflow-y: hidden;
-    /* Force hardware acceleration */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    will-change: scroll-position; /* Hint the browser for performance optimization */
+  /* Force hardware acceleration */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: scroll-position; /* Hint the browser for performance optimization */
 }
 
-
-.cometchat-sticker-keyboard__tab{
-  padding: var(--cometchat-padding-1,4px);
+.cometchat-sticker-keyboard__tab {
+  padding: var(--cometchat-padding-1, 4px);
 }
-.cometchat-sticker-keyboard__tab-active{
-  border-bottom: 2px solid var(--cometchat-primary-color, #6852D6);
+.cometchat-sticker-keyboard__tab-active {
+  border-bottom: 2px solid var(--cometchat-primary-color, #6852d6);
 }
-
 
 .cometchat-sticker-keyboard__tab > img {
   display: flex;
@@ -50,7 +47,7 @@
 }
 
 .cometchat-sticker-keyboard__tab-active > img {
-  background: var(--cometchat-extended-primary-color-100, #EDEAFA);
+  background: var(--cometchat-extended-primary-color-100, #edeafa);
 }
 
 .cometchat-sticker-keyboard__list {
@@ -62,7 +59,6 @@
   background: inherit;
   padding: var(--cometchat-padding-3) var(--cometchat-padding-3) 0px var(--cometchat-padding-3);
 }
-
 
 .cometchat-sticker-keyboard__list-item {
   min-width: 80px;
@@ -77,16 +73,12 @@
   cursor: pointer;
 }
 
-
-
-
 .cometchat-sticker-keyboard__shimmer-tabs {
   display: flex;
   padding: var(--cometchat-padding-2, 8px);
   align-items: center;
   gap: var(--cometchat-padding-2, 8px);
-  border-bottom: 1px solid var(--cometchat-border-color-default, #E8E8E8);
-
+  border-bottom: 1px solid var(--cometchat-border-color-default, #e8e8e8);
 }
 
 .cometchat-sticker-keyboard__shimmer-tab {
@@ -97,25 +89,28 @@
   justify-content: center;
   align-items: center;
   border-radius: var(--cometchat-radius-max, 800);
-  background: var(--cometchat-shimmer-gradient-color, linear-gradient(90deg, #E0E0E0 0%, #EEE 100%));
+  background: var(
+    --cometchat-shimmer-gradient-color,
+    linear-gradient(90deg, #e0e0e0 0%, #eee 100%)
+  );
   animation: shimmerAnimation 10s infinite linear;
 }
 
 .cometchat-sticker-keyboard__shimmer-list {
-  gap: var(--cometchat-padding-3,12px);
+  gap: var(--cometchat-padding-3, 12px);
 }
 
-
 .cometchat-sticker-keyboard__shimmer-list-item {
-  background: var(--cometchat-shimmer-gradient-color, linear-gradient(90deg, #E0E0E0 0%, #EEE 100%));
+  background: var(
+    --cometchat-shimmer-gradient-color,
+    linear-gradient(90deg, #e0e0e0 0%, #eee 100%)
+  );
   animation: shimmerAnimation 5s infinite linear;
   border-radius: 8px;
   min-width: 70px;
   min-height: 70px;
   width: 70px;
   height: 70px;
-
-
 }
 
 .cometchat-sticker-keyboard__empty-view {
@@ -148,19 +143,16 @@
 .cometchat-sticker-keyboard__empty-view-icon {
   width: 60px;
   height: 60px;
-  -webkit-mask-image: url("../../assets/sticker.svg") center center no-repeat;
-  mask-image: url("../../assets/sticker.svg") center center no-repeat;
+  -webkit-mask-image: url('../../assets/sticker.svg') center center no-repeat;
+  mask-image: url('../../assets/sticker.svg') center center no-repeat;
   -webkit-mask-size: 100%;
   mask-size: 100%;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   -webkit-mask-position: center;
   mask-position: center;
-  background-color: var(--cometchat-icon-color-tertiary, #DCDCDC);
+  background-color: var(--cometchat-icon-color-tertiary, #dcdcdc);
 }
-
-
-
 
 @keyframes shimmerAnimation {
   0% {

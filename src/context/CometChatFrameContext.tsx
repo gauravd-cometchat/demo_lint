@@ -14,7 +14,7 @@ interface CometChatFrameProviderProps {
 const CometChatFrameContext = createContext<CometChatFrameContextValue>({
   iframeDocument: null,
   iframeWindow: null,
-  iframe: null
+  iframe: null,
 });
 
 export const useCometChatFrameContext = () => {
@@ -25,7 +25,10 @@ export const useCometChatFrameContext = () => {
   return context;
 };
 
-export const CometChatFrameProvider: React.FC<CometChatFrameProviderProps> = ({ children, iframeId }) => {
+export const CometChatFrameProvider: React.FC<CometChatFrameProviderProps> = ({
+  children,
+  iframeId,
+}) => {
   const [iframeDocument, setIframeDocument] = useState<Document | null>(null);
   const [iframeWindow, setIframeWindow] = useState<Window | null>(null);
   const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null);
@@ -119,7 +122,7 @@ export const CometChatFrameProvider: React.FC<CometChatFrameProviderProps> = ({ 
       // Observe changes to the document body and its subtree
       mutationObserver.observe(document.body, {
         childList: true,
-        subtree: true
+        subtree: true,
       });
     };
 
@@ -163,13 +166,11 @@ export const CometChatFrameProvider: React.FC<CometChatFrameProviderProps> = ({ 
   const contextValue: CometChatFrameContextValue = {
     iframeDocument,
     iframeWindow,
-    iframe
+    iframe,
   };
 
   return (
-    <CometChatFrameContext.Provider value={contextValue}>
-      {children}
-    </CometChatFrameContext.Provider>
+    <CometChatFrameContext.Provider value={contextValue}>{children}</CometChatFrameContext.Provider>
   );
 };
 

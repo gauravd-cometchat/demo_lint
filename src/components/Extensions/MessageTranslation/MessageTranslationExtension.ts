@@ -1,21 +1,20 @@
-import { MessageTranslationExtensionDecorator } from "./MessageTranslationExtensionDecorator";
-import { ChatConfigurator } from "../../../utils/ChatConfigurator";
-import { ExtensionsDataSource } from "../ExtensionsDataSource";
-import { ExtensionsId } from "../ExtensionsId";
+import { MessageTranslationExtensionDecorator } from './MessageTranslationExtensionDecorator';
+import { ChatConfigurator } from '../../../utils/ChatConfigurator';
+import { ExtensionsDataSource } from '../ExtensionsDataSource';
+import { ExtensionsId } from '../ExtensionsId';
 
 /**
  * Class for handling message translation extensions.
- * 
+ *
  * @class MessageTranslationExtension
  * @extends {ExtensionsDataSource}
  */
 export class MessageTranslationExtension extends ExtensionsDataSource {
-
   /**
-  * Creates an instance of MessageTranslationExtension.
-  * 
-  * @param {MessageTranslationConfiguration} [configuration] - Optional configuration for message translation.
-  */
+   * Creates an instance of MessageTranslationExtension.
+   *
+   * @param {MessageTranslationConfiguration} [configuration] - Optional configuration for message translation.
+   */
   constructor() {
     super();
   }
@@ -23,7 +22,7 @@ export class MessageTranslationExtension extends ExtensionsDataSource {
   /**
    * Adds the message translation extension by enabling the ChatConfigurator with
    * a new MessageTranslationExtensionDecorator instance.
-   * 
+   *
    * @override
    * @returns {void}
    */
@@ -35,7 +34,7 @@ export class MessageTranslationExtension extends ExtensionsDataSource {
 
   /**
    * Retrieves the unique identifier for the message translation extension.
-   * 
+   *
    * @override
    * @returns {string} The unique identifier for the message translation extension.
    */

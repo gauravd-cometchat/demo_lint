@@ -3,59 +3,53 @@ interface LinkPreviewProps {
   /**
    * URL of the link.
    */
-  URL?: string,
+  URL?: string;
   /**
    * Description of the link.
    */
-  description?: string,
+  description?: string;
   /**
    * Title of the link.
    */
-  title?: string,
+  title?: string;
   /**
    * URL of the image to display.
    */
 
-  image?: string,
+  image?: string;
   /**
    * URL of the favicon to display.
    */
-  favIconURL?: string,
+  favIconURL?: string;
 
   /**
    * Optional children to be displayed inside the link preview.
    */
-  children?: React.ReactNode,
+  children?: React.ReactNode;
   /**
    * Function to handle click events on the link.
    */
-  ccLinkClicked?: (url: string) => void,
+  ccLinkClicked?: (url: string) => void;
 
-  /** 
-   * boolean value to toggle styling for sender and receiver message 
+  /**
+   * boolean value to toggle styling for sender and receiver message
    */
-  isSentByMe?: boolean
+  isSentByMe?: boolean;
 }
 
 const defaultProps: Partial<LinkPreviewProps> = {
-  favIconURL: "",
-  title: "",
-  description: "",
-  URL: "",
-  isSentByMe: true
+  favIconURL: '',
+  title: '',
+  description: '',
+  URL: '',
+  isSentByMe: true,
 };
 
 const LinkPreview = (props: LinkPreviewProps) => {
-  const {
-    URL,
-    description,
-    title,
-    image,
-    favIconURL,
-    children,
-    isSentByMe,
-    ccLinkClicked,
-  } = { ...defaultProps, ...props };
+  const { URL, description, title, image, favIconURL, children, isSentByMe, ccLinkClicked } = {
+    ...defaultProps,
+    ...props,
+  };
 
   const [showFavIcon, setShowFavIcon] = useState(false);
 
@@ -72,11 +66,11 @@ const LinkPreview = (props: LinkPreviewProps) => {
     }
   };
 
-
   return (
     <div className="cometchat">
       <div
-        className={`cometchat-link-bubble ${!isSentByMe ? "cometchat-link-bubble-incoming" : "cometchat-link-bubble-outgoing"}`}>
+        className={`cometchat-link-bubble ${!isSentByMe ? 'cometchat-link-bubble-incoming' : 'cometchat-link-bubble-outgoing'}`}
+      >
         {image && (
           <img
             className="cometchat-link-bubble__preview-image"
@@ -86,26 +80,17 @@ const LinkPreview = (props: LinkPreviewProps) => {
           />
         )}
         <div
-          className={`cometchat-link-bubble__preview-body ${!image ? "cometchat-link-bubble__preview-body-rounded" : ""}`}
+          className={`cometchat-link-bubble__preview-body ${!image ? 'cometchat-link-bubble__preview-body-rounded' : ''}`}
         >
           <div className="cometchat-link-bubble__preview-body-content" onClick={handleClick}>
-            <div
-              className="cometchat-link-bubble__preview-body-content-title"
-
-            >
-              {title}
-            </div>
-            <div
-              className="cometchat-link-bubble__preview-body-content-description"
-            >
+            <div className="cometchat-link-bubble__preview-body-content-title">{title}</div>
+            <div className="cometchat-link-bubble__preview-body-content-description">
               {description}
             </div>
-            <div
-              className="cometchat-link-bubble__preview-body-content-link"
-            >
+            <div className="cometchat-link-bubble__preview-body-content-link">
               {
-             // Extract the domain name from the URL
-              URL?.replace(/(^\w+:|^)\/\//, '').split('/')[0]
+                // Extract the domain name from the URL
+                URL?.replace(/(^\w+:|^)\/\//, '').split('/')[0]
               }
             </div>
           </div>
@@ -118,11 +103,7 @@ const LinkPreview = (props: LinkPreviewProps) => {
             />
           )}
         </div>
-        <div
-          className="cometchat-link-bubble__body"
-        >
-          {children}
-        </div>
+        <div className="cometchat-link-bubble__body">{children}</div>
       </div>
     </div>
   );

@@ -1,13 +1,13 @@
-import { BaseMessage, CometChat } from "@cometchat/chat-sdk-javascript";
+import { BaseMessage, CometChat } from '@cometchat/chat-sdk-javascript';
 
 interface metadataType {
   metadata: {
-    "@injected": {
-      "extensions": {
-        [key: string]: {}[],
-      }
-    },
-  }
+    '@injected': {
+      extensions: {
+        [key: string]: {}[];
+      };
+    };
+  };
 }
 interface MessageExtensionType {
   hasXSS?: string;
@@ -15,15 +15,15 @@ interface MessageExtensionType {
   data?: {
     sensitive_data: string;
     message_masked: string;
-  }
+  };
   profanity?: string;
   message_clean?: string;
 }
 /**
-  * Utility class for CometChat UIKit, providing various helper methods 
-  * such as deep cloning, ID generation, Unix timestamp retrieval, 
-  * and message extension data handling.
-  */
+ * Utility class for CometChat UIKit, providing various helper methods
+ * such as deep cloning, ID generation, Unix timestamp retrieval,
+ * and message extension data handling.
+ */
 export class CometChatUIKitUtility {
   /**
    * Creates a deep copy of the value provided
@@ -42,7 +42,7 @@ export class CometChatUIKitUtility {
       Cannot copy private properties (those that start with a "#" symbol inside a class block)
       Functions are copied by reference
   */
-    if (typeof arg !== "object" || !arg) {
+    if (typeof arg !== 'object' || !arg) {
       return arg;
     }
 
@@ -65,11 +65,11 @@ export class CometChatUIKitUtility {
       for (const k of Reflect.ownKeys(descriptor)) {
         const curDescriptor = descriptor[k as string];
 
-        if (curDescriptor.hasOwnProperty("value")) {
+        if (curDescriptor.hasOwnProperty('value')) {
           // Property is a data property
           Object.defineProperty(res, k, {
             ...curDescriptor,
-            value: CometChatUIKitUtility.clone(curDescriptor["value"]),
+            value: CometChatUIKitUtility.clone(curDescriptor['value']),
           });
         } else {
           // Property is an accessor property
@@ -93,14 +93,13 @@ export class CometChatUIKitUtility {
     return Object.prototype.hasOwnProperty.call(obj, key);
   };
 
-
   /**
    * Generates a unique ID.
    *
    * @returns A unique string identifier.
    */
   static ID = () => {
-    return "_" + Math.random().toString(36).substr(2, 9);
+    return '_' + Math.random().toString(36).substr(2, 9);
   };
 
   /**
@@ -121,49 +120,36 @@ export class CometChatUIKitUtility {
   static getExtensionData(messageObject: CometChat.BaseMessage) {
     let messageText;
     //xss extensions data
-    const xssData: (object & MessageExtensionType) | undefined = CometChatUIKitUtility.checkMessageForExtensionsData(
-      messageObject,
-      "xss-filter"
-    );
+    const xssData: (object & MessageExtensionType) | undefined =
+      CometChatUIKitUtility.checkMessageForExtensionsData(messageObject, 'xss-filter');
     if (
       xssData &&
-      CometChatUIKitUtility.checkHasOwnProperty(xssData, "sanitized_text") &&
-      CometChatUIKitUtility.checkHasOwnProperty(xssData, "hasXSS") &&
-      xssData.hasXSS === "yes"
+      CometChatUIKitUtility.checkHasOwnProperty(xssData, 'sanitized_text') &&
+      CometChatUIKitUtility.checkHasOwnProperty(xssData, 'hasXSS') &&
+      xssData.hasXSS === 'yes'
     ) {
       messageText = xssData?.sanitized_text;
     }
     //datamasking extensions data
-    const maskedData: (object & MessageExtensionType) | undefined = CometChatUIKitUtility.checkMessageForExtensionsData(
-      messageObject,
-      "data-masking"
-    );
+    const maskedData: (object & MessageExtensionType) | undefined =
+      CometChatUIKitUtility.checkMessageForExtensionsData(messageObject, 'data-masking');
     if (
       maskedData &&
-      CometChatUIKitUtility.checkHasOwnProperty(maskedData, "data") &&
-      CometChatUIKitUtility.checkHasOwnProperty(
-        maskedData.data,
-        "sensitive_data"
-      ) &&
-      CometChatUIKitUtility.checkHasOwnProperty(
-        maskedData.data,
-        "message_masked"
-      ) &&
-      maskedData.data?.sensitive_data === "yes"
+      CometChatUIKitUtility.checkHasOwnProperty(maskedData, 'data') &&
+      CometChatUIKitUtility.checkHasOwnProperty(maskedData.data, 'sensitive_data') &&
+      CometChatUIKitUtility.checkHasOwnProperty(maskedData.data, 'message_masked') &&
+      maskedData.data?.sensitive_data === 'yes'
     ) {
       messageText = maskedData?.data?.message_masked;
     }
     //profanity extensions data
     const profaneData: (object & MessageExtensionType) | undefined =
-      CometChatUIKitUtility.checkMessageForExtensionsData(
-        messageObject,
-        "profanity-filter"
-      );
+      CometChatUIKitUtility.checkMessageForExtensionsData(messageObject, 'profanity-filter');
     if (
       profaneData &&
-      CometChatUIKitUtility.checkHasOwnProperty(profaneData, "profanity") &&
-      CometChatUIKitUtility.checkHasOwnProperty(profaneData, "message_clean") &&
-      profaneData.profanity === "yes"
+      CometChatUIKitUtility.checkHasOwnProperty(profaneData, 'profanity') &&
+      CometChatUIKitUtility.checkHasOwnProperty(profaneData, 'message_clean') &&
+      profaneData.profanity === 'yes'
     ) {
       messageText = profaneData?.message_clean;
     }
@@ -183,21 +169,18 @@ export class CometChatUIKitUtility {
   ) => {
     try {
       let output: object & MessageExtensionType = {};
-      if (message!.hasOwnProperty("metadata")) {
-        const metadata = (message as BaseMessage & metadataType)?.["metadata"];
-        const injectedObject = metadata["@injected"];
-        if (injectedObject && injectedObject.hasOwnProperty("extensions")) {
-          const extensionsObject = injectedObject["extensions"];
-          if (
-            extensionsObject &&
-            extensionsObject.hasOwnProperty(extensionKey)
-          ) {
+      if (message!.hasOwnProperty('metadata')) {
+        const metadata = (message as BaseMessage & metadataType)?.['metadata'];
+        const injectedObject = metadata['@injected'];
+        if (injectedObject && injectedObject.hasOwnProperty('extensions')) {
+          const extensionsObject = injectedObject['extensions'];
+          if (extensionsObject && extensionsObject.hasOwnProperty(extensionKey)) {
             output = extensionsObject[extensionKey];
           }
         }
       }
       return output;
-    } catch (error: unknown) { }
+    } catch (error: unknown) {}
   };
 
   /**
@@ -209,7 +192,7 @@ export class CometChatUIKitUtility {
     if (!text || typeof text !== 'string') return text;
 
     return text.replace(/<[^>]*>/g, (match) => {
-      const inner = match.slice(1,-1).trim();
+      const inner = match.slice(1, -1).trim();
 
       // Proper HTML tags: optional / then letter
       if (/^\/?[a-zA-Z]/.test(inner)) {
@@ -228,27 +211,27 @@ export class CometChatUIKitUtility {
 
   static convertBlobToWav = async (audioBlob: { arrayBuffer: () => any }) => {
     const arrayBuffer = await audioBlob.arrayBuffer();
-    const audioContext = new (window.AudioContext)();
+    const audioContext = new window.AudioContext();
     const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
     const wavBuffer = CometChatUIKitUtility.audioBufferToWav(audioBuffer);
     const wavBlob = new Blob([wavBuffer], { type: 'audio/wav' });
-  
-    return {wavBlob};
+
+    return { wavBlob };
   };
-  
+
   static audioBufferToWav = (audioBuffer: AudioBuffer) => {
     const numOfChannels = audioBuffer.numberOfChannels;
     const sampleRate = audioBuffer.sampleRate;
     const length = audioBuffer.length * numOfChannels * 2 + 44; // 44 bytes for WAV header
     const buffer = new ArrayBuffer(length);
     const view = new DataView(buffer);
-  
+
     CometChatUIKitUtility.writeString(view, 0, 'RIFF');
     view.setUint32(4, 36 + audioBuffer.length * numOfChannels * 2, true); // File size - 8
     CometChatUIKitUtility.writeString(view, 8, 'WAVE');
     CometChatUIKitUtility.writeString(view, 12, 'fmt ');
     view.setUint32(16, 16, true); // Subchunk1 size (PCM)
-    view.setUint16(20, 1, true);  // Audio format (1 = PCM)
+    view.setUint16(20, 1, true); // Audio format (1 = PCM)
     view.setUint16(22, numOfChannels, true); // Num channels
     view.setUint32(24, sampleRate, true); // Sample rate
     view.setUint32(28, sampleRate * numOfChannels * 2, true); // Byte rate (SampleRate * NumChannels * BitsPerSample/8)
@@ -260,27 +243,32 @@ export class CometChatUIKitUtility {
     for (let i = 0; i < audioBuffer.length; i++) {
       for (let channel = 0; channel < numOfChannels; channel++) {
         const sample = audioBuffer.getChannelData(channel)[i];
-        const intSample = Math.max(-1, Math.min(1, sample)) * 0x7FFF;
+        const intSample = Math.max(-1, Math.min(1, sample)) * 0x7fff;
         view.setInt16(offset, intSample, true);
         offset += 2;
       }
     }
-  
+
     return buffer;
   };
-  
+
   static writeString = (view: DataView, offset: number, string: string) => {
     for (let i = 0; i < string.length; i++) {
       view.setUint8(offset + i, string.charCodeAt(i));
     }
   };
-  
+
   static convertToWav = async (audioBlob: Blob) => {
-    const {wavBlob} = await CometChatUIKitUtility.convertBlobToWav(audioBlob);
+    const { wavBlob } = await CometChatUIKitUtility.convertBlobToWav(audioBlob);
     const file = new File([wavBlob], 'audio.wav', { type: 'audio/wav' });
-    const mediaMessage = new CometChat.MediaMessage('superhero2', file, CometChat.MESSAGE_TYPE.AUDIO, CometChat.RECEIVER_TYPE.USER);
+    const mediaMessage = new CometChat.MediaMessage(
+      'superhero2',
+      file,
+      CometChat.MESSAGE_TYPE.AUDIO,
+      CometChat.RECEIVER_TYPE.USER
+    );
     const message = await CometChat.sendMediaMessage(mediaMessage);
     const url = (message as CometChat.MediaMessage).getAttachment().getUrl();
     return url;
-  }
+  };
 }

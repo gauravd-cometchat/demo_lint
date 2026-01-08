@@ -1,4 +1,3 @@
-
 import { Subject } from 'rxjs';
 import { CometChat } from '@cometchat/chat-sdk-javascript';
 /**
@@ -10,7 +9,7 @@ export class CometChatUserEvents {
   /**
    * Publishes a user event (like blocking/unblocking a user).
    * This function will emit the event using the 'next()' method of the Subject.
-   * 
+   *
    * @param {Subject<CometChat.User>} event - The user event to be published (e.g., block or unblock).
    * @param {any} item - The item (user) associated with the event.
    */

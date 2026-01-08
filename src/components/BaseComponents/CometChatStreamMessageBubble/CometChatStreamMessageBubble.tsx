@@ -3,23 +3,30 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { CometChatUIKitConstants } from '../../../constants/CometChatUIKitConstants';
-import { getAIAssistantTools, IStreamData, messageStream, stopStreamingMessage, streamingState$ } from '../../../services/stream-message.service';
+import {
+  getAIAssistantTools,
+  IStreamData,
+  messageStream,
+  stopStreamingMessage,
+  streamingState$,
+} from '../../../services/stream-message.service';
 import { getLocalizedString } from '../../../resources/CometChatLocalize/cometchat-localize';
 import CometChatErrorView from '../CometChatErrorView/CometChatErrorView';
 import remarkGfm from 'remark-gfm';
 import { getThemeMode } from '../../../utils/util';
 interface CometChatStreamMessageBubbleProps {
-  message?: CometChat.AIAssistantBaseEvent
+  message?: CometChat.AIAssistantBaseEvent;
 }
-
 
 const CometChatStreamMessageBubble: React.FC<CometChatStreamMessageBubbleProps> = ({ message }) => {
   const initialMessageRef = useRef<CometChat.AIAssistantBaseEvent | undefined>(message);
-  const [data, setData] = useState<CometChat.AIAssistantBaseEvent | null>(initialMessageRef.current || null);
-  const [fullMessage, setFullMessage] = useState<string>("");
-    const [executionText, setExecutionText] = useState<string>("");
-  const toolCallNameRef = useRef<string>("")
-  const toolCallDataRef = useRef<object>({})
+  const [data, setData] = useState<CometChat.AIAssistantBaseEvent | null>(
+    initialMessageRef.current || null
+  );
+  const [fullMessage, setFullMessage] = useState<string>('');
+  const [executionText, setExecutionText] = useState<string>('');
+  const toolCallNameRef = useRef<string>('');
+  const toolCallDataRef = useRef<object>({});
 
   const [isStreaming, setIsStreaming] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -27,8 +34,8 @@ const CometChatStreamMessageBubble: React.FC<CometChatStreamMessageBubbleProps> 
     CometChatUIKitConstants.streamMessageTypes.tool_call_args,
     CometChatUIKitConstants.streamMessageTypes.tool_call_end,
     CometChatUIKitConstants.streamMessageTypes.tool_call_result,
-    CometChatUIKitConstants.streamMessageTypes.tool_call_start
-  ]
+    CometChatUIKitConstants.streamMessageTypes.tool_call_start,
+  ];
   function getMarkDownTheme() {
     return getThemeMode() === 'dark' ? oneDark : oneLight;
   }
@@ -48,33 +55,41 @@ const CometChatStreamMessageBubble: React.FC<CometChatStreamMessageBubbleProps> 
 
   const connectionStatusListener = useCallback(() => {
     const status = navigator.onLine ? 'online' : 'offline';
-    if (status === "offline") {
+    if (status === 'offline') {
       setHasError(true);
       stopStreamingMessage();
     }
-  },[]);
+  }, []);
   useEffect(() => {
-   
-  window.addEventListener('online', connectionStatusListener);
-  window.addEventListener('offline', connectionStatusListener);
+    window.addEventListener('online', connectionStatusListener);
+    window.addEventListener('offline', connectionStatusListener);
     const streamState = streamingState$.subscribe(setIsStreaming);
 
     const subscription = messageStream.subscribe((data: IStreamData) => {
       // If messageId is provided, only update this specific message
-      if (initialMessageRef.current?.getMessageId() && data.message.getMessageId() !== initialMessageRef.current?.getMessageId()) {
+      if (
+        initialMessageRef.current?.getMessageId() &&
+        data.message.getMessageId() !== initialMessageRef.current?.getMessageId()
+      ) {
         return;
       }
 
       // Handle tool call events
       const eventType = data.message.getType();
       if (toolEventsMap.includes(eventType)) {
-        if(eventType === CometChatUIKitConstants.streamMessageTypes.tool_call_start){
-          toolCallNameRef.current = (data.message as CometChat.AIAssistantToolStartedEvent).getToolCallName();
-          setExecutionText(data.message.getData()?.executionText || getLocalizedString("ai_assistant_chat_executing_tool"));
+        if (eventType === CometChatUIKitConstants.streamMessageTypes.tool_call_start) {
+          toolCallNameRef.current = (
+            data.message as CometChat.AIAssistantToolStartedEvent
+          ).getToolCallName();
+          setExecutionText(
+            data.message.getData()?.executionText ||
+              getLocalizedString('ai_assistant_chat_executing_tool')
+          );
         }
         if (eventType === CometChatUIKitConstants.streamMessageTypes.tool_call_args) {
-          toolCallDataRef.current = JSON.parse((data.message as CometChat.AIAssistantToolArgumentEvent).getDelta());
-
+          toolCallDataRef.current = JSON.parse(
+            (data.message as CometChat.AIAssistantToolArgumentEvent).getDelta()
+          );
         }
         if (eventType === CometChatUIKitConstants.streamMessageTypes.tool_call_end) {
           const assistantTools = getAIAssistantTools();
@@ -87,9 +102,12 @@ const CometChatStreamMessageBubble: React.FC<CometChatStreamMessageBubbleProps> 
         }
       }
 
-      if (!initialMessageRef.current?.getMessageId() || (data.message.getMessageId()) === initialMessageRef.current?.getMessageId()) {
+      if (
+        !initialMessageRef.current?.getMessageId() ||
+        data.message.getMessageId() === initialMessageRef.current?.getMessageId()
+      ) {
         setData(data.message);
-        if (data.streamedMessages && data.streamedMessages != "") {
+        if (data.streamedMessages && data.streamedMessages != '') {
           setFullMessage(data.streamedMessages);
         }
       }
@@ -108,28 +126,32 @@ const CometChatStreamMessageBubble: React.FC<CometChatStreamMessageBubbleProps> 
     };
   }, []);
   return (
-    <div className='cometchat'
+    <div
+      className="cometchat"
       style={{
         height: '100%',
         width: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}
     >
-      <div
-        className='cometchat-stream-message-bubble'
-      >
-        
-        {(!data || (isStreaming && data && data.getType() === CometChatUIKitConstants.streamMessageTypes.run_started)) && (
+      <div className="cometchat-stream-message-bubble">
+        {(!data ||
+          (isStreaming &&
+            data &&
+            data.getType() === CometChatUIKitConstants.streamMessageTypes.run_started)) && (
           <span className="cometchat-stream-message-bubble__thinking">
-            <span className="cometchat-stream-message-bubble__thinking-text">{getLocalizedString("ai_assistant_chat_thinking")}</span>
+            <span className="cometchat-stream-message-bubble__thinking-text">
+              {getLocalizedString('ai_assistant_chat_thinking')}
+            </span>
           </span>
         )}
-        {data && data.getType() !== CometChatUIKitConstants.streamMessageTypes.run_started && toolEventsMap.includes(data?.getType()) ?   <span className='cometchat-stream-message-bubble__tool-call-text cometchat-stream-message-bubble__thinking '>
-          <span className='cometchat-stream-message-bubble__thinking-text'>
-            {executionText}
+        {data &&
+        data.getType() !== CometChatUIKitConstants.streamMessageTypes.run_started &&
+        toolEventsMap.includes(data?.getType()) ? (
+          <span className="cometchat-stream-message-bubble__tool-call-text cometchat-stream-message-bubble__thinking ">
+            <span className="cometchat-stream-message-bubble__thinking-text">{executionText}</span>
           </span>
-        </span> : null}
-     
+        ) : null}
 
         {fullMessage && (
           <ReactMarkdown
@@ -140,10 +162,12 @@ const CometChatStreamMessageBubble: React.FC<CometChatStreamMessageBubbleProps> 
                 const match = /language-(\w+)/.exec(className || '');
                 const isInline = !className || !match;
                 return !isInline && match ? (
-                  <SyntaxHighlighter 
-                          className="cometchat-stream-message-bubble__code-block"
-
-                  language={match[1]} PreTag="div" style={theme}>
+                  <SyntaxHighlighter
+                    className="cometchat-stream-message-bubble__code-block"
+                    language={match[1]}
+                    PreTag="div"
+                    style={theme}
+                  >
                     {String(children).replace(/\n$/, '')}
                   </SyntaxHighlighter>
                 ) : (
@@ -158,7 +182,7 @@ const CometChatStreamMessageBubble: React.FC<CometChatStreamMessageBubbleProps> 
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className='cometchat-stream-message-bubble__link'
+                    className="cometchat-stream-message-bubble__link"
                     {...props}
                   >
                     {children}
@@ -169,9 +193,7 @@ const CometChatStreamMessageBubble: React.FC<CometChatStreamMessageBubbleProps> 
                 return (
                   <>
                     <span className="cometchat-stream-message-bubble__image-intersection-start"></span>
-                    <img
-                      {...props}
-                    />
+                    <img {...props} />
                     <span className="cometchat-stream-message-bubble__image-intersection-end"></span>
                   </>
                 );
@@ -179,15 +201,12 @@ const CometChatStreamMessageBubble: React.FC<CometChatStreamMessageBubbleProps> 
             }}
           />
         )}
-
       </div>
-        {hasError && <CometChatErrorView message={getLocalizedString("ai_assistant_chat_no_internet")} />}
-
+      {hasError && (
+        <CometChatErrorView message={getLocalizedString('ai_assistant_chat_no_internet')} />
+      )}
     </div>
   );
-
-
 };
-
 
 export { CometChatStreamMessageBubble };

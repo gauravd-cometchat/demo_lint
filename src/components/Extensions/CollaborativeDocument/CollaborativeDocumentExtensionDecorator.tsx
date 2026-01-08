@@ -1,24 +1,22 @@
-import { CometChat } from "@cometchat/chat-sdk-javascript";
-import { DataSource } from "../../../utils/DataSource";
-import { DataSourceDecorator } from "../../../utils/DataSourceDecorator";
-import { CollaborativeDocumentConfiguration } from "./CollaborativeDocumentConfiguration";
-import DocumentIcon from "../../../assets/collabrative_document.svg";
-import { CollaborativeDocumentConstants } from "./CollaborativeDocumentConstants";
-import { CometChatUIKitUtility } from "../../../CometChatUIKit/CometChatUIKitUtility";
-import { CometChatUIKitConstants } from "../../../constants/CometChatUIKitConstants";
-import { MessageBubbleAlignment, MessageStatus } from "../../../Enums/Enums";
-import { getLocalizedString } from "../../../resources/CometChatLocalize/cometchat-localize";
-import { CometChatMessageComposerAction, CometChatMessageTemplate } from "../../../modals";
-import { CometChatDocumentBubble } from "../../BaseComponents/CometChatDocumentBubble/CometChatDocumentBubble";
-import bannerImageUrlLight from "../../../assets/Collaborative_Document_Light.png";
-import bannerImageUrlDark from "../../../assets/Collaborative_Document_Dark.png";
-import { CometChatUIKitLoginListener } from "../../../CometChatUIKit/CometChatUIKitLoginListener";
-import { getThemeMode, isMessageSentByMe } from "../../../utils/util";
-import { CometChatUIKit } from "../../../CometChatUIKit/CometChatUIKit";
-import { CometChatMessageEvents } from "../../../events/CometChatMessageEvents";
-import { ChatConfigurator } from "../../../utils/ChatConfigurator";
-
-
+import { CometChat } from '@cometchat/chat-sdk-javascript';
+import { DataSource } from '../../../utils/DataSource';
+import { DataSourceDecorator } from '../../../utils/DataSourceDecorator';
+import { CollaborativeDocumentConfiguration } from './CollaborativeDocumentConfiguration';
+import DocumentIcon from '../../../assets/collabrative_document.svg';
+import { CollaborativeDocumentConstants } from './CollaborativeDocumentConstants';
+import { CometChatUIKitUtility } from '../../../CometChatUIKit/CometChatUIKitUtility';
+import { CometChatUIKitConstants } from '../../../constants/CometChatUIKitConstants';
+import { MessageBubbleAlignment, MessageStatus } from '../../../Enums/Enums';
+import { getLocalizedString } from '../../../resources/CometChatLocalize/cometchat-localize';
+import { CometChatMessageComposerAction, CometChatMessageTemplate } from '../../../modals';
+import { CometChatDocumentBubble } from '../../BaseComponents/CometChatDocumentBubble/CometChatDocumentBubble';
+import bannerImageUrlLight from '../../../assets/Collaborative_Document_Light.png';
+import bannerImageUrlDark from '../../../assets/Collaborative_Document_Dark.png';
+import { CometChatUIKitLoginListener } from '../../../CometChatUIKit/CometChatUIKitLoginListener';
+import { getThemeMode, isMessageSentByMe } from '../../../utils/util';
+import { CometChatUIKit } from '../../../CometChatUIKit/CometChatUIKit';
+import { CometChatMessageEvents } from '../../../events/CometChatMessageEvents';
+import { ChatConfigurator } from '../../../utils/ChatConfigurator';
 
 /**
  * The `CollaborativeDocumentExtensionDecorator` class extends `DataSourceDecorator`
@@ -26,14 +24,13 @@ import { ChatConfigurator } from "../../../utils/ChatConfigurator";
  * It integrates with the CometChat UIKit to enable document collaboration in chat.
  */
 export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator {
-
   /**
-  * The configuration for the collaborative document extension.
-  * This configuration object allows customizing the appearance and behavior
-  * of the document collaboration features.
-  *
-  * @type {CollaborativeDocumentConfiguration | undefined}
-  */
+   * The configuration for the collaborative document extension.
+   * This configuration object allows customizing the appearance and behavior
+   * of the document collaboration features.
+   *
+   * @type {CollaborativeDocumentConfiguration | undefined}
+   */
   public configuration?: CollaborativeDocumentConfiguration;
 
   /**
@@ -44,11 +41,9 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
    */
   public newDataSource!: DataSource;
 
-
-
   /**
-  * The user who is currently logged in.
-  */
+   * The user who is currently logged in.
+   */
   protected loggedInUser?: CometChat.User | null | undefined =
     CometChatUIKitLoginListener.getLoggedInUser();
 
@@ -58,10 +53,7 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
    * @param {DataSource} dataSource - The data source object to be decorated.
    * @param {CollaborativeDocumentConfiguration} [configuration] - An optional configuration object for the extension.
    */
-  constructor(
-    dataSource: DataSource,
-    configuration?: CollaborativeDocumentConfiguration
-  ) {
+  constructor(dataSource: DataSource, configuration?: CollaborativeDocumentConfiguration) {
     super(dataSource);
     this.newDataSource = dataSource;
     this.configuration = configuration!;
@@ -69,11 +61,11 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
   }
 
   /**
-  * Retrieves all message types supported by the extension, including custom document messages.
-  *
-  * @returns {string[]} An array of message types.
-  * @override
-  */
+   * Retrieves all message types supported by the extension, including custom document messages.
+   *
+   * @returns {string[]} An array of message types.
+   * @override
+   */
   override getAllMessageTypes(): string[] {
     const types = super.getAllMessageTypes();
     if (!types.includes(CollaborativeDocumentConstants.extension_document)) {
@@ -83,13 +75,13 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
   }
 
   /**
-  * Retrieves the unique ID of the collaborative document extension.
-  *
-  * @returns {string} The unique ID for the extension.
-  * @override
-  */
+   * Retrieves the unique ID of the collaborative document extension.
+   *
+   * @returns {string} The unique ID for the extension.
+   * @override
+   */
   override getId(): string {
-    return "collaborativedocument";
+    return 'collaborativedocument';
   }
 
   /**
@@ -98,7 +90,7 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
    * @returns {string[]} An array of message categories.
    * @override
    */
-  override getAllMessageCategories(additionalConfigurations?: Object | undefined): string[] {
+  override getAllMessageCategories(additionalConfigurations?: object | undefined): string[] {
     const categories = super.getAllMessageCategories(additionalConfigurations);
     if (!categories.includes(CometChatUIKitConstants.MessageCategory.custom)) {
       categories.push(CometChatUIKitConstants.MessageCategory.custom);
@@ -113,10 +105,7 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
    * @param {string} type - The message type to check for.
    * @returns {boolean} `true` if the template exists, otherwise `false`.
    */
-  checkIfTemplateExist(
-    template: CometChatMessageTemplate[],
-    type: string
-  ): boolean {
+  checkIfTemplateExist(template: CometChatMessageTemplate[], type: string): boolean {
     return template.some((obj) => obj.type === type);
   }
 
@@ -127,18 +116,9 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
    * @returns {CometChatMessageTemplate[]} An array of message templates.
    * @override
    */
-  override getAllMessageTemplates(
-    additionalConfigurations?: any
-  ): CometChatMessageTemplate[] {
-    const templates = super.getAllMessageTemplates(
-      additionalConfigurations
-    );
-    if (
-      !this.checkIfTemplateExist(
-        templates,
-        CollaborativeDocumentConstants.extension_document
-      )
-    ) {
+  override getAllMessageTemplates(additionalConfigurations?: any): CometChatMessageTemplate[] {
+    const templates = super.getAllMessageTemplates(additionalConfigurations);
+    if (!this.checkIfTemplateExist(templates, CollaborativeDocumentConstants.extension_document)) {
       templates.push(this.getDocumentTemplate());
     }
     return templates;
@@ -157,18 +137,17 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
       replyView: (
         message: CometChat.BaseMessage,
         _alignment?: MessageBubbleAlignment,
-        onReplyViewClicked?:(messageToReply: CometChat.BaseMessage) => void
+        onReplyViewClicked?: (messageToReply: CometChat.BaseMessage) => void
       ) => {
-        let documentMessage: CometChat.CustomMessage =
-          message as CometChat.CustomMessage;
-        return ChatConfigurator.getDataSource().getReplyView(documentMessage, _alignment, onReplyViewClicked);
+        const documentMessage: CometChat.CustomMessage = message as CometChat.CustomMessage;
+        return ChatConfigurator.getDataSource().getReplyView(
+          documentMessage,
+          _alignment,
+          onReplyViewClicked
+        );
       },
-      contentView: (
-        message: CometChat.BaseMessage,
-        _alignment: MessageBubbleAlignment
-      ) => {
-        let documentMessage: CometChat.CustomMessage =
-          message as CometChat.CustomMessage;
+      contentView: (message: CometChat.BaseMessage, _alignment: MessageBubbleAlignment) => {
+        const documentMessage: CometChat.CustomMessage = message as CometChat.CustomMessage;
         if (documentMessage.getDeletedAt()) {
           return super.getDeleteMessageBubble(documentMessage, undefined, _alignment);
         }
@@ -178,19 +157,11 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
         loggedInUser: CometChat.User,
         messageObject: CometChat.BaseMessage,
         group?: CometChat.Group,
-        additionalParams?: Object | undefined
+        additionalParams?: object | undefined
       ) => {
-        return super.getCommonOptions(
-          loggedInUser,
-          messageObject,
-          group,
-          additionalParams
-        );
+        return super.getCommonOptions(loggedInUser, messageObject, group, additionalParams);
       },
-      bottomView: (
-        message: CometChat.BaseMessage,
-        alignment: MessageBubbleAlignment
-      ) => {
+      bottomView: (message: CometChat.BaseMessage, alignment: MessageBubbleAlignment) => {
         return super.getBottomView(message, alignment);
       },
     });
@@ -203,14 +174,16 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
    * @returns {JSX.Element} The document content view component.
    */
   getDocumentContentView(
-    documentMessage: CometChat.CustomMessage, alignment?: MessageBubbleAlignment) {
+    documentMessage: CometChat.CustomMessage,
+    alignment?: MessageBubbleAlignment
+  ) {
     const documentURL = this.getDocumentURL(documentMessage);
-    const documentTitle = getLocalizedString("message_list_collaborative_document_title");
-    const documentButtonText = getLocalizedString("message_list_collaborative_document_open");
-    const documentSubitle = getLocalizedString("message_list_collaborative_document_subtitile");
-    const isSentByMe = isMessageSentByMe(documentMessage, this.loggedInUser!)
+    const documentTitle = getLocalizedString('message_list_collaborative_document_title');
+    const documentButtonText = getLocalizedString('message_list_collaborative_document_open');
+    const documentSubitle = getLocalizedString('message_list_collaborative_document_subtitile');
+    const isSentByMe = isMessageSentByMe(documentMessage, this.loggedInUser!);
 
-    const isDarkMode = getThemeMode() == "dark" ? true : false;
+    const isDarkMode = getThemeMode() == 'dark' ? true : false;
     const bannerImage = !isDarkMode ? bannerImageUrlLight : bannerImageUrlDark;
     return (
       <div className="cometchat-collaborative-document">
@@ -228,12 +201,12 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
   }
 
   /**
-  * Launches the collaborative document in a new fullscreen window.
-  *
-  * @param {string} documentURL - The URL of the document to open.
-  */
+   * Launches the collaborative document in a new fullscreen window.
+   *
+   * @param {string} documentURL - The URL of the document to open.
+   */
   launchCollaborativeDocument(documentURL: string) {
-    window.open(documentURL, "", "fullscreen=yes, scrollbars=auto");
+    window.open(documentURL, '', 'fullscreen=yes, scrollbars=auto');
   }
 
   /**
@@ -248,23 +221,19 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
         const data: any = message.getData();
         if (data?.metadata) {
           const metadata = data?.metadata;
-          if (
-            CometChatUIKitUtility.checkHasOwnProperty(metadata, "@injected")
-          ) {
-            const injectedObject = metadata["@injected"];
+          if (CometChatUIKitUtility.checkHasOwnProperty(metadata, '@injected')) {
+            const injectedObject = metadata['@injected'];
             if (injectedObject?.extensions) {
               const extensionObject = injectedObject.extensions;
               return extensionObject[CollaborativeDocumentConstants.document]
-                ? extensionObject[CollaborativeDocumentConstants.document]
-                  .document_url
-                : extensionObject[CollaborativeDocumentConstants.document]
-                  .board_url;
+                ? extensionObject[CollaborativeDocumentConstants.document].document_url
+                : extensionObject[CollaborativeDocumentConstants.document].board_url;
             }
           }
         }
       }
     } catch (error: any) {
-      console.log("error in fetching document url", error);
+      console.log('error in fetching document url', error);
     }
   }
 
@@ -276,44 +245,55 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
    */
   override getAttachmentOptions(id: any, additionalConfigurations?: any) {
     if (!id?.parentMessageId && !additionalConfigurations?.hideCollaborativeDocumentOption) {
-      let replyToMessageRef = additionalConfigurations.messageToReplyRef;
-      const replyToMessage: CometChat.BaseMessage | undefined =replyToMessageRef ? replyToMessageRef.current : null;
-      let isUser = id?.user ? true : false;
-      let receiverType: string = isUser
+      const replyToMessageRef = additionalConfigurations.messageToReplyRef;
+      const replyToMessage: CometChat.BaseMessage | undefined = replyToMessageRef
+        ? replyToMessageRef.current
+        : null;
+      const isUser = id?.user ? true : false;
+      const receiverType: string = isUser
         ? CometChatUIKitConstants.MessageReceiverType.user
         : CometChatUIKitConstants.MessageReceiverType.group;
-      let receiverId: string | undefined = isUser ? id.user : id.group;
-      const messageComposerActions: CometChatMessageComposerAction[] =
-        super.getAttachmentOptions(id, additionalConfigurations);
-      let newAction: CometChatMessageComposerAction =
-        new CometChatMessageComposerAction({
-          id: CollaborativeDocumentConstants.document,
-          title: getLocalizedString("messsage_composer_collaborative_document"),
-          iconURL: this.configuration?.getOptionIconURL()
-            ? this.configuration?.getOptionIconURL()
-            : DocumentIcon,
-          onClick: () => {
-            const payload: any = {
-              receiver: receiverId,
-              receiverType: receiverType,
-            };
+      const receiverId: string | undefined = isUser ? id.user : id.group;
+      const messageComposerActions: CometChatMessageComposerAction[] = super.getAttachmentOptions(
+        id,
+        additionalConfigurations
+      );
+      const newAction: CometChatMessageComposerAction = new CometChatMessageComposerAction({
+        id: CollaborativeDocumentConstants.document,
+        title: getLocalizedString('messsage_composer_collaborative_document'),
+        iconURL: this.configuration?.getOptionIconURL()
+          ? this.configuration?.getOptionIconURL()
+          : DocumentIcon,
+        onClick: () => {
+          const payload: any = {
+            receiver: receiverId,
+            receiverType: receiverType,
+          };
 
-            if (replyToMessage) {
-              payload.quotedMessageId = replyToMessage.getId();
-            }
-            if(additionalConfigurations.closeReplyPreview){
-              additionalConfigurations.closeReplyPreview();
-            }
-            CometChat.callExtension(CollaborativeDocumentConstants.document, CollaborativeDocumentConstants.post, CollaborativeDocumentConstants.v1_create, payload).then(
-              (res: any) => {
-                if(replyToMessageRef){
-                  CometChatMessageEvents.ccReplyToMessage.next({message: replyToMessageRef.current, status: MessageStatus.success});
-                }
-              },
-              (error: any) => { }
-            );
-          },
-        });
+          if (replyToMessage) {
+            payload.quotedMessageId = replyToMessage.getId();
+          }
+          if (additionalConfigurations.closeReplyPreview) {
+            additionalConfigurations.closeReplyPreview();
+          }
+          CometChat.callExtension(
+            CollaborativeDocumentConstants.document,
+            CollaborativeDocumentConstants.post,
+            CollaborativeDocumentConstants.v1_create,
+            payload
+          ).then(
+            (res: any) => {
+              if (replyToMessageRef) {
+                CometChatMessageEvents.ccReplyToMessage.next({
+                  message: replyToMessageRef.current,
+                  status: MessageStatus.success,
+                });
+              }
+            },
+            (error: any) => {}
+          );
+        },
+      });
       messageComposerActions.push(newAction);
       return messageComposerActions;
     } else {
@@ -334,20 +314,15 @@ export class CollaborativeDocumentExtensionDecorator extends DataSourceDecorator
     loggedInUser: CometChat.User,
     additionalConfigurations?: any
   ): string {
-    const message: CometChat.BaseMessage | undefined =
-      conversation.getLastMessage();
+    const message: CometChat.BaseMessage | undefined = conversation.getLastMessage();
     if (
       message != null &&
       message.getType() === CollaborativeDocumentConstants.extension_document &&
       message.getCategory() === CometChatUIKitConstants.MessageCategory.custom
     ) {
-      return getLocalizedString("conversation_subtitle_collaborative_document");
+      return getLocalizedString('conversation_subtitle_collaborative_document');
     } else {
-      return super.getLastConversationMessage(
-        conversation,
-        loggedInUser,
-        additionalConfigurations
-      );
+      return super.getLastConversationMessage(conversation, loggedInUser, additionalConfigurations);
     }
   }
 }

@@ -1,21 +1,21 @@
-import { useCallback, useRef, useState } from "react";
-import { CometChat } from "@cometchat/chat-sdk-javascript";
-import { CometChatOutgoingCall } from "../CometChatOutgoingCall/CometChatOutgoingCall";
-import { CometChatOngoingCall } from "../CometChatOngoingCall/CometChatOngoingCall";
-import { useCallButtons } from "./useCallButtons";
-import { useCometChatErrorHandler, useRefSync } from "../../../CometChatCustomHooks";
-import { CometChatUIKitCalls } from "../../../CometChatUIKit/CometChatCalls";
-import { CometChatSoundManager } from "../../../resources/CometChatSoundManager/CometChatSoundManager";
-import { CometChatUIKitUtility } from "../../../CometChatUIKit/CometChatUIKitUtility";
-import {getLocalizedString} from "../../../resources/CometChatLocalize/cometchat-localize";
-import { CometChatUIKitConstants } from "../../../constants/CometChatUIKitConstants";
-import { CallWorkflow, MessageStatus } from "../../../Enums/Enums";
-import { CometChatButton } from "../../BaseComponents/CometChatButton/CometChatButton";
-import audioCall from "../../../assets/audio_call_button.svg";
-import videoCall from "../../../assets/video_call_button.svg";
-import { OutgoingCallConfiguration } from "../OutgoingCallConfiguration";
-import { CometChatCallEvents } from "../../../events/CometChatCallEvents";
-import { CometChatMessageEvents } from "../../../events/CometChatMessageEvents";
+import { useCallback, useRef, useState } from 'react';
+import { CometChat } from '@cometchat/chat-sdk-javascript';
+import { CometChatOutgoingCall } from '../CometChatOutgoingCall/CometChatOutgoingCall';
+import { CometChatOngoingCall } from '../CometChatOngoingCall/CometChatOngoingCall';
+import { useCallButtons } from './useCallButtons';
+import { useCometChatErrorHandler, useRefSync } from '../../../CometChatCustomHooks';
+import { CometChatUIKitCalls } from '../../../CometChatUIKit/CometChatCalls';
+import { CometChatSoundManager } from '../../../resources/CometChatSoundManager/CometChatSoundManager';
+import { CometChatUIKitUtility } from '../../../CometChatUIKit/CometChatUIKitUtility';
+import { getLocalizedString } from '../../../resources/CometChatLocalize/cometchat-localize';
+import { CometChatUIKitConstants } from '../../../constants/CometChatUIKitConstants';
+import { CallWorkflow, MessageStatus } from '../../../Enums/Enums';
+import { CometChatButton } from '../../BaseComponents/CometChatButton/CometChatButton';
+import audioCall from '../../../assets/audio_call_button.svg';
+import videoCall from '../../../assets/video_call_button.svg';
+import { OutgoingCallConfiguration } from '../OutgoingCallConfiguration';
+import { CometChatCallEvents } from '../../../events/CometChatCallEvents';
+import { CometChatMessageEvents } from '../../../events/CometChatMessageEvents';
 
 interface CallButtonsProps {
   /**
@@ -34,7 +34,11 @@ interface CallButtonsProps {
    * @param user - The user object for the call (optional).
    * @param group - The group object for the call (optional).
    */
-  callSettingsBuilder?: (isAudioOnlyCall: boolean, user?: CometChat.User, group?: CometChat.Group) => typeof CometChatUIKitCalls.CallSettingsBuilder;
+  callSettingsBuilder?: (
+    isAudioOnlyCall: boolean,
+    user?: CometChat.User,
+    group?: CometChat.Group
+  ) => typeof CometChatUIKitCalls.CallSettingsBuilder;
 
   /**
    * Configuration object for managing outgoing call settings, such as call parameters, UI behaviors, or any pre-call settings.
@@ -75,8 +79,7 @@ interface CallButtonsGroupProps extends CallButtonsProps {
   group?: CometChat.Group;
 }
 
-
-type CallButtonsPropsType = CallButtonsUserProps | CallButtonsGroupProps
+type CallButtonsPropsType = CallButtonsUserProps | CallButtonsGroupProps;
 
 const defaultProps = {
   onVoiceCallClick: undefined,
@@ -111,28 +114,24 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
   const [disableButtons, setDisableButtons] = useState(false);
 
   const callRef = useRef<CometChat.Call | null>(null);
-  const sessionIdRef = useRef<string>("");
+  const sessionIdRef = useRef<string>('');
   const isGroupAudioCallRef = useRef<boolean>(false);
   const onVoiceCallClickRef = useRefSync(onVoiceCallClick);
   const onVideoCallClickRef = useRefSync(onVideoCallClick);
 
-  let callbuttonsListenerId: string = "callbuttons_" + new Date().getTime();
+  const callbuttonsListenerId: string = 'callbuttons_' + new Date().getTime();
   const subscribeToEvents = useCallback(() => {
     try {
-      const ccCallRejected = CometChatCallEvents.ccCallRejected.subscribe(
-        () => {
-          setDisableButtons(false);
-        }
-      );
-      const ccOutgoingCall = CometChatCallEvents.ccOutgoingCall.subscribe(
-        () => {
-          setDisableButtons(true);
-        }
-      );
+      const ccCallRejected = CometChatCallEvents.ccCallRejected.subscribe(() => {
+        setDisableButtons(false);
+      });
+      const ccOutgoingCall = CometChatCallEvents.ccOutgoingCall.subscribe(() => {
+        setDisableButtons(true);
+      });
       const ccCallEnded = CometChatCallEvents.ccCallEnded.subscribe(() => {
         setDisableButtons(false);
         callRef.current = null;
-        sessionIdRef.current = "";
+        sessionIdRef.current = '';
         setShowOngoingCall(false);
         setShowOutgoingCallScreen(false);
       });
@@ -141,10 +140,9 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
         ccCallEnded?.unsubscribe();
         ccCallRejected?.unsubscribe();
         ccOutgoingCall?.unsubscribe();
-
       };
     } catch (e) {
-      errorHandler(e, "subscribeToEvents");
+      errorHandler(e, 'subscribeToEvents');
     }
   }, []);
 
@@ -164,16 +162,17 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
             setShowOutgoingCallScreen(false);
             setDisableButtons(false);
             callRef.current = null;
-            sessionIdRef.current = "";
+            sessionIdRef.current = '';
           },
           onOutgoingCallAccepted: (call: CometChat.Call) => {
-            if (call.getSender()?.getUid() === loggedInUser?.getUid()
-              || call.getSessionId() !== callRef.current?.getSessionId()
+            if (
+              call.getSender()?.getUid() === loggedInUser?.getUid() ||
+              call.getSessionId() !== callRef.current?.getSessionId()
             ) {
               setShowOutgoingCallScreen(false);
               setDisableButtons(false);
               callRef.current = null;
-              sessionIdRef.current = "";
+              sessionIdRef.current = '';
               return;
             }
             sessionIdRef.current = call.getSessionId();
@@ -185,7 +184,7 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
         })
       );
     } catch (e) {
-      errorHandler(e, "attachListeners");
+      errorHandler(e, 'attachListeners');
     }
   }, [callbuttonsListenerId]);
 
@@ -194,8 +193,7 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
     try {
       CometChat.removeCallListener(callbuttonsListenerId);
     } catch (e) {
-      errorHandler(e, "removeListener");
-
+      errorHandler(e, 'removeListener');
     }
   }, [callbuttonsListenerId]);
 
@@ -203,7 +201,7 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
   const closeCallScreen = () => {
     setDisableButtons(false);
     callRef.current = null;
-    sessionIdRef.current = "";
+    sessionIdRef.current = '';
     setShowOngoingCall(false);
     setShowOutgoingCallScreen(false);
   };
@@ -211,13 +209,16 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
   /* This function updates and returns the call builder with required configs and listeners attached. */
   function getCallBuilder(): typeof CometChatUIKitCalls.CallSettings {
     try {
-      let audioOnlyCall: boolean =
-        activeUser ? callRef.current?.getType() === CometChatUIKitConstants.MessageTypes.audio
+      const audioOnlyCall: boolean = activeUser
+        ? callRef.current?.getType() === CometChatUIKitConstants.MessageTypes.audio
           ? true
-          : false : isGroupAudioCallRef.current;
-      let callsBuilder = callSettingsBuilder ? callSettingsBuilder(audioOnlyCall, user!, group!) : new CometChatUIKitCalls.CallSettingsBuilder()
-        .enableDefaultLayout(true)
-        .setIsAudioOnlyCall(audioOnlyCall);
+          : false
+        : isGroupAudioCallRef.current;
+      const callsBuilder = callSettingsBuilder
+        ? callSettingsBuilder(audioOnlyCall, user!, group!)
+        : new CometChatUIKitCalls.CallSettingsBuilder()
+            .enableDefaultLayout(true)
+            .setIsAudioOnlyCall(audioOnlyCall);
 
       const sessionId = sessionIdRef.current;
       callsBuilder.setCallListener(
@@ -242,26 +243,24 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
                 .then((call: CometChat.Call) => {
                   CometChatUIKitCalls.endSession();
                   CometChatCallEvents.ccCallEnded.next(call);
-                  closeCallScreen()
+                  closeCallScreen();
                 })
                 .catch((err: CometChat.CometChatException) => {
-                  errorHandler(err, "endCall");
+                  errorHandler(err, 'endCall');
                 });
             } else {
               closeCallScreen();
             }
           },
           onError: (error: unknown) => {
-            errorHandler(error, "callSettingsBuilder");
+            errorHandler(error, 'callSettingsBuilder');
           },
         })
       );
       return callsBuilder;
     } catch (error) {
-      errorHandler(error, "getCallBuilder");
-
+      errorHandler(error, 'getCallBuilder');
     }
-
   }
 
   /* This function initiates the call process on click of call buttons. */
@@ -276,11 +275,7 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
           ? activeUser?.getUid()
           : activeGroup?.getGuid();
 
-        const callObj: CometChat.Call = new CometChat.Call(
-          receiverId,
-          type,
-          receiverType
-        );
+        const callObj: CometChat.Call = new CometChat.Call(receiverId, type, receiverType);
 
         CometChat.initiateCall(callObj).then(
           (outgoingCall: CometChat.Call) => {
@@ -289,11 +284,11 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
             CometChatCallEvents.ccOutgoingCall.next(outgoingCall);
           },
           (error: CometChat.CometChatException) => {
-            errorHandler(error, "initiateCall")
+            errorHandler(error, 'initiateCall');
           }
         );
       } catch (e) {
-        errorHandler(e, "initiateCall")
+        errorHandler(e, 'initiateCall');
       }
     },
     [activeUser, activeGroup]
@@ -312,65 +307,68 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
         setShowOngoingCall(true);
       }
     } catch (e) {
-      errorHandler(e, "initiateAudioCall")
+      errorHandler(e, 'initiateAudioCall');
     }
   }, [activeUser, initiateCall]);
 
   /* This function sends the custom message on group after the call is started. */
-  const sendCustomMessage = useCallback((callType?: string) => {
-    try {
-      const receiverType: string = activeUser
-        ? CometChatUIKitConstants.MessageReceiverType.user
-        : CometChatUIKitConstants.MessageReceiverType.group;
+  const sendCustomMessage = useCallback(
+    (callType?: string) => {
+      try {
+        const receiverType: string = activeUser
+          ? CometChatUIKitConstants.MessageReceiverType.user
+          : CometChatUIKitConstants.MessageReceiverType.group;
 
-      const receiverId: string | undefined = activeUser
-        ? activeUser?.getUid()
-        : activeGroup?.getGuid();
-      const sessionID = sessionIdRef.current;
+        const receiverId: string | undefined = activeUser
+          ? activeUser?.getUid()
+          : activeGroup?.getGuid();
+        const sessionID = sessionIdRef.current;
 
-      const customData = {
-        sessionID: sessionID,
-        sessionId: sessionID,
-        callType: callType,
-      };
+        const customData = {
+          sessionID: sessionID,
+          sessionId: sessionID,
+          callType: callType,
+        };
 
-      const customType = CometChatUIKitConstants.calls.meeting;
-      const conversationId = `group_${sessionID}`;
+        const customType = CometChatUIKitConstants.calls.meeting;
+        const conversationId = `group_${sessionID}`;
 
-      const customMessage: any = new CometChat.CustomMessage(
-        receiverId,
-        receiverType,
-        customType,
-        customData
-      );
+        const customMessage: any = new CometChat.CustomMessage(
+          receiverId,
+          receiverType,
+          customType,
+          customData
+        );
 
-      customMessage.setMetadata({ incrementUnreadCount: true });
-      customMessage.shouldUpdateConversation(true);
-      customMessage.setSender(loggedInUser!);
-      customMessage.setConversationId(conversationId);
-      customMessage.sentAt = CometChatUIKitUtility.getUnixTimestamp();
-      customMessage.muid = CometChatUIKitUtility.ID();
+        customMessage.setMetadata({ incrementUnreadCount: true });
+        customMessage.shouldUpdateConversation(true);
+        customMessage.setSender(loggedInUser!);
+        customMessage.setConversationId(conversationId);
+        customMessage.sentAt = CometChatUIKitUtility.getUnixTimestamp();
+        customMessage.muid = CometChatUIKitUtility.ID();
 
-      CometChatMessageEvents.ccMessageSent.next({
-        message: customMessage,
-        status: MessageStatus.inprogress,
-      });
+        CometChatMessageEvents.ccMessageSent.next({
+          message: customMessage,
+          status: MessageStatus.inprogress,
+        });
 
-      CometChat.sendCustomMessage(customMessage).then(
-        (m) => {
-          CometChatMessageEvents.ccMessageSent.next({
-            message: m,
-            status: MessageStatus.success,
-          });
-        },
-        (error: CometChat.CometChatException) => {
-          errorHandler(error, "sendCustomMessage")
-        }
-      );
-    } catch (e) {
-      errorHandler(e, "sendCustomMessage")
-    }
-  }, [activeUser, activeGroup, loggedInUser]);
+        CometChat.sendCustomMessage(customMessage).then(
+          (m) => {
+            CometChatMessageEvents.ccMessageSent.next({
+              message: m,
+              status: MessageStatus.success,
+            });
+          },
+          (error: CometChat.CometChatException) => {
+            errorHandler(error, 'sendCustomMessage');
+          }
+        );
+      } catch (e) {
+        errorHandler(e, 'sendCustomMessage');
+      }
+    },
+    [activeUser, activeGroup, loggedInUser]
+  );
 
   /* This function initiates the video call on click of the button. */
   const initiateVideoCall = useCallback(() => {
@@ -385,7 +383,7 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
         setShowOngoingCall(true);
       }
     } catch (e) {
-      errorHandler(e, "initiateVideoCall")
+      errorHandler(e, 'initiateVideoCall');
     }
   }, [activeUser, activeGroup, sendCustomMessage, initiateCall]);
 
@@ -397,10 +395,7 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
     }
     try {
       CometChatSoundManager.pause();
-      CometChat.rejectCall(
-        call.getSessionId(),
-        CometChatUIKitConstants.calls.cancelled
-      ).then(
+      CometChat.rejectCall(call.getSessionId(), CometChatUIKitConstants.calls.cancelled).then(
         (call: CometChat.Call) => {
           setDisableButtons(false);
           setShowOutgoingCallScreen(false);
@@ -408,12 +403,12 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
           callRef.current = null;
         },
         (error: CometChat.CometChatException) => {
-          errorHandler(error, "rejectCall")
+          errorHandler(error, 'rejectCall');
         }
       );
       setShowOutgoingCallScreen(false);
     } catch (e) {
-      errorHandler(e, "cancelOutgoingCall")
+      errorHandler(e, 'cancelOutgoingCall');
     }
   }, []);
 
@@ -433,9 +428,7 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
     onVideoCallClickRef,
     subscribeToEvents
   );
-  const ccBtnDisabledPropSpreadObject = disableButtons
-    ? { disabled: true }
-    : {};
+  const ccBtnDisabledPropSpreadObject = disableButtons ? { disabled: true } : {};
 
   return (
     <>
@@ -444,7 +437,7 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
           <div className="cometchat-call-button__voice">
             <CometChatButton
               {...ccBtnDisabledPropSpreadObject}
-              hoverText={getLocalizedString("call_button_voice_hover")}
+              hoverText={getLocalizedString('call_button_voice_hover')}
               iconURL={audioCall}
               onClick={audioCallButtonClicked}
             />
@@ -455,7 +448,7 @@ const CometChatCallButtons = (props: CallButtonsPropsType) => {
           <div className="cometchat-call-button__video">
             <CometChatButton
               {...ccBtnDisabledPropSpreadObject}
-              hoverText={getLocalizedString("call_button_video_hover")}
+              hoverText={getLocalizedString('call_button_video_hover')}
               iconURL={videoCall}
               onClick={videoCallButtonClicked}
             />

@@ -54,38 +54,33 @@
     max-width: 320px;
   }
 }
-.cometchat-toolcall-result-bubble pre   *{
+.cometchat-toolcall-result-bubble pre * {
   /* font: var(--cometchat-font-body-regular) !important; */
   font-size: 14px;
-
 }
 
 /* Target all <p> tags without a class */
-.cometchat-toolcall-result-bubble >  p:not([class]) {
+.cometchat-toolcall-result-bubble > p:not([class]) {
   text-align: left;
   line-height: 1.4 !important;
   /* color: var(--cometchat-text-color-secondary); */
 }
-.cometchat-toolcall-result-bubble >  ol:not([class]){
+.cometchat-toolcall-result-bubble > ol:not([class]) {
   padding-left: 0px !important;
   margin-top: 0px !important;
   text-align: left !important;
-    /* color: var(--cometchat-text-color-secondary); */
-
+  /* color: var(--cometchat-text-color-secondary); */
 }
-.cometchat-toolcall-result-bubble >  ol:not([class]) ul:not([class]) {
+.cometchat-toolcall-result-bubble > ol:not([class]) ul:not([class]) {
   padding-left: 20px !important;
   text-align: left !important;
-    /* color: var(--cometchat-text-color-secondary); */
-
+  /* color: var(--cometchat-text-color-secondary); */
 }
-.cometchat-toolcall-result-bubble    li:not([class]){
+.cometchat-toolcall-result-bubble li:not([class]) {
   text-align: left !important;
-    /* color: var(--cometchat-text-color-secondary); */
-
+  /* color: var(--cometchat-text-color-secondary); */
 }
-.cometchat-toolcall-result-bubble >   ul:not([class]){
+.cometchat-toolcall-result-bubble > ul:not([class]) {
   text-align: left !important;
-    /* color: var(--cometchat-text-color-secondary); */
-
+  /* color: var(--cometchat-text-color-secondary); */
 }

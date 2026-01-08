@@ -1,4 +1,3 @@
-
 .cometchat-conversations {
   display: flex;
   width: 100%;
@@ -7,29 +6,28 @@
   align-items: flex-start;
   gap: 0px;
   flex-shrink: 0;
-  background: var(--cometchat-background-color-01, #FFF);
+  background: var(--cometchat-background-color-01, #fff);
   position: relative;
 }
-.cometchat-conversations .cometchat-conversations-header{
-min-height: 64px;
-box-sizing: border-box;
+.cometchat-conversations .cometchat-conversations-header {
+  min-height: 64px;
+  box-sizing: border-box;
 }
-.cometchat-conversations .cometchat-list__body>div:not([class]):first-child {
+.cometchat-conversations .cometchat-list__body > div:not([class]):first-child {
   display: none;
 }
-
 
 .cometchat-conversations .cometchat-list-item {
   padding: var(--cometchat-padding-3, 12px) var(--cometchat-padding-4, 16px);
   cursor: pointer;
-} 
+}
 
 .cometchat-conversations .cometchat-list-item__body {
   padding: 0px;
   min-height: 43px;
 }
 
-.cometchat-conversations .cometchat-list-item__trailing-view{
+.cometchat-conversations .cometchat-list-item__trailing-view {
   width: auto;
   height: 40px;
 }
@@ -46,47 +44,44 @@ box-sizing: border-box;
   align-items: center;
   justify-content: center;
   border: none;
-  align-self: center;  
-  background:var(--cometchat-icon-color-secondary, #A1A1A1);
+  align-self: center;
+  background: var(--cometchat-icon-color-secondary, #a1a1a1);
   flex-shrink: 0;
 }
 
-
-.cometchat-conversations__subtitle-receipts-sent{
-  -webkit-mask: url("../../assets/conversations_sent.svg") center center no-repeat;
-  mask: url("../../assets/conversations_sent.svg") center center no-repeat;
+.cometchat-conversations__subtitle-receipts-sent {
+  -webkit-mask: url('../../assets/conversations_sent.svg') center center no-repeat;
+  mask: url('../../assets/conversations_sent.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-
-.cometchat-conversations__subtitle-receipts-wait{
-  -webkit-mask: url("../../assets/status_sending.svg") center center no-repeat;
-  mask: url("../../assets/status_sending.svg") center center no-repeat;
+.cometchat-conversations__subtitle-receipts-wait {
+  -webkit-mask: url('../../assets/status_sending.svg') center center no-repeat;
+  mask: url('../../assets/status_sending.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-.cometchat-conversations__subtitle-receipts-error{
-  -webkit-mask: url("../../assets/error_icon.svg") center center no-repeat;
-  mask: url("../../assets/error_icon.svg") center center no-repeat;
+.cometchat-conversations__subtitle-receipts-error {
+  -webkit-mask: url('../../assets/error_icon.svg') center center no-repeat;
+  mask: url('../../assets/error_icon.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
   background-color: var(--cometchat-error-color);
 }
 
-.cometchat-conversations__subtitle-receipts-delivered{
-  -webkit-mask: url("../../assets/conversations_delivered.svg") center center no-repeat;
-  mask: url("../../assets/conversations_delivered.svg") center center no-repeat;
+.cometchat-conversations__subtitle-receipts-delivered {
+  -webkit-mask: url('../../assets/conversations_delivered.svg') center center no-repeat;
+  mask: url('../../assets/conversations_delivered.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-
-.cometchat-conversations__subtitle-receipts-read{
-  -webkit-mask: url("../../assets/conversations_read.svg") center center no-repeat;
-  mask: url("../../assets/conversations_read.svg") center center no-repeat;
-  background: var(--cometchat-message-seen-color,#56E8A7);
+.cometchat-conversations__subtitle-receipts-read {
+  -webkit-mask: url('../../assets/conversations_read.svg') center center no-repeat;
+  mask: url('../../assets/conversations_read.svg') center center no-repeat;
+  background: var(--cometchat-message-seen-color, #56e8a7);
   -webkit-mask-size: contain;
   mask-size: contain;
 }
@@ -107,17 +102,17 @@ box-sizing: border-box;
   text-overflow: ellipsis;
   font: var(--cometchat-font-body-medium);
   font-style: normal;
-  flex-shrink:0;
- }
+  flex-shrink: 0;
+}
 
-.cometchat-conversations__subtitle-text{
+.cometchat-conversations__subtitle-text {
   overflow: hidden;
   color: var(--cometchat-text-color-secondary, #727272);
   text-overflow: ellipsis;
   white-space: nowrap;
   font: var(--cometchat-font-body-regular);
   font-style: normal;
-  width: 100%; 
+  width: 100%;
 }
 
 .cometchat-conversations__subtitle-icon {
@@ -128,126 +123,122 @@ box-sizing: border-box;
   mask-size: contain;
   border: none;
   align-self: center;
-  background: var(--cometchat-icon-color-secondary, #A1A1A1);
+  background: var(--cometchat-icon-color-secondary, #a1a1a1);
   height: 16px;
   width: 16px;
   flex-shrink: 0;
 }
 
-.cometchat-conversations__subtitle-icon-incoming-audio-call{
-  -webkit-mask: url("../../assets/conversations_missed-voice-call.svg") center center no-repeat;
-  mask: url("../../assets/conversations_missed-voice-call.svg") center center no-repeat;
-  background-color: var(--cometchat-error-color,#F44649);
+.cometchat-conversations__subtitle-icon-incoming-audio-call {
+  -webkit-mask: url('../../assets/conversations_missed-voice-call.svg') center center no-repeat;
+  mask: url('../../assets/conversations_missed-voice-call.svg') center center no-repeat;
+  background-color: var(--cometchat-error-color, #f44649);
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-.cometchat-conversations__subtitle-icon-incoming-video-call{
-  -webkit-mask: url("../../assets/conversations_missed-video-call.svg") center center no-repeat;
-  mask: url("../../assets/conversations_missed-video-call.svg") center center no-repeat;
-  background-color: var(--cometchat-error-color,#F44649);
+.cometchat-conversations__subtitle-icon-incoming-video-call {
+  -webkit-mask: url('../../assets/conversations_missed-video-call.svg') center center no-repeat;
+  mask: url('../../assets/conversations_missed-video-call.svg') center center no-repeat;
+  background-color: var(--cometchat-error-color, #f44649);
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-.cometchat-conversations__subtitle-icon-outgoing-audio-call{
-  -webkit-mask: url("../../assets/conversations_outgoing-voice-call.svg") center center no-repeat;
-  mask: url("../../assets/conversations_outgoing-voice-call.svg") center center no-repeat;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-
-}
-
-.cometchat-conversations__subtitle-icon-outgoing-video-call{
-  -webkit-mask: url("../../assets/conversations_outgoing-video-call.svg") center center no-repeat;
-  mask: url("../../assets/conversations_outgoing-video-call.svg") center center no-repeat;
+.cometchat-conversations__subtitle-icon-outgoing-audio-call {
+  -webkit-mask: url('../../assets/conversations_outgoing-voice-call.svg') center center no-repeat;
+  mask: url('../../assets/conversations_outgoing-voice-call.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-
-.cometchat-conversations__subtitle-icon-image{
-  -webkit-mask: url("../../assets/conversations_image-message.svg") center center no-repeat;
-  mask: url("../../assets/conversations_image-message.svg") center center no-repeat;
+.cometchat-conversations__subtitle-icon-outgoing-video-call {
+  -webkit-mask: url('../../assets/conversations_outgoing-video-call.svg') center center no-repeat;
+  mask: url('../../assets/conversations_outgoing-video-call.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-.cometchat-conversations__subtitle-icon-file{
-  -webkit-mask: url("../../assets/conversations_file-message.svg") center center no-repeat;
-  mask: url("../../assets/conversations_file-message.svg") center center no-repeat;
+.cometchat-conversations__subtitle-icon-image {
+  -webkit-mask: url('../../assets/conversations_image-message.svg') center center no-repeat;
+  mask: url('../../assets/conversations_image-message.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-.cometchat-conversations__subtitle-icon-video{
-  -webkit-mask: url("../../assets/conversations_video-message.svg") center center no-repeat;
-  mask: url("../../assets/conversations_video-message.svg") center center no-repeat;
+.cometchat-conversations__subtitle-icon-file {
+  -webkit-mask: url('../../assets/conversations_file-message.svg') center center no-repeat;
+  mask: url('../../assets/conversations_file-message.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-.cometchat-conversations__subtitle-icon-audio{
-  -webkit-mask: url("../../assets/conversations_audio-message.svg") center center no-repeat;
-  mask: url("../../assets/conversations_audio-message.svg") center center no-repeat;
+.cometchat-conversations__subtitle-icon-video {
+  -webkit-mask: url('../../assets/conversations_video-message.svg') center center no-repeat;
+  mask: url('../../assets/conversations_video-message.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-.cometchat-conversations__subtitle-icon-poll{
-  -webkit-mask: url("../../assets/conversations_poll-message.svg") center center no-repeat;
-  mask: url("../../assets/conversations_poll-message.svg") center center no-repeat;
+.cometchat-conversations__subtitle-icon-audio {
+  -webkit-mask: url('../../assets/conversations_audio-message.svg') center center no-repeat;
+  mask: url('../../assets/conversations_audio-message.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-
-.cometchat-conversations__subtitle-icon-sticker{
-  -webkit-mask: url("../../assets/conversations_sticker-message.svg") center center no-repeat;
-  mask: url("../../assets/conversations_sticker-message.svg") center center no-repeat;
+.cometchat-conversations__subtitle-icon-poll {
+  -webkit-mask: url('../../assets/conversations_poll-message.svg') center center no-repeat;
+  mask: url('../../assets/conversations_poll-message.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-
-.cometchat-conversations__subtitle-icon-collaborative-document{
-  -webkit-mask: url("../../assets/conversations_collaborative-document-message.svg") center center no-repeat;
-  mask: url("../../assets/conversations_collaborative-document-message.svg") center center no-repeat;
+.cometchat-conversations__subtitle-icon-sticker {
+  -webkit-mask: url('../../assets/conversations_sticker-message.svg') center center no-repeat;
+  mask: url('../../assets/conversations_sticker-message.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-
-.cometchat-conversations__subtitle-icon-collaborative-whiteboard{
-  -webkit-mask: url("../../assets/collaborative_whiteboard.svg") center center no-repeat;
-  mask: url("../../assets/collaborative_whiteboard.svg") center center no-repeat;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-}
-.cometchat-conversations__subtitle-icon-deleted{
-  -webkit-mask: url("../../assets/conversations_delete.svg") center center no-repeat;
-  mask: url("../../assets/conversations_delete.svg") center center no-repeat;
+.cometchat-conversations__subtitle-icon-collaborative-document {
+  -webkit-mask: url('../../assets/conversations_collaborative-document-message.svg') center center
+    no-repeat;
+  mask: url('../../assets/conversations_collaborative-document-message.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
-.cometchat-conversations__subtitle-icon-link{
-  -webkit-mask: url("../../assets/conversations_link.svg") center center no-repeat;
-  mask: url("../../assets/conversations_link.svg") center center no-repeat;
+.cometchat-conversations__subtitle-icon-collaborative-whiteboard {
+  -webkit-mask: url('../../assets/collaborative_whiteboard.svg') center center no-repeat;
+  mask: url('../../assets/collaborative_whiteboard.svg') center center no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+.cometchat-conversations__subtitle-icon-deleted {
+  -webkit-mask: url('../../assets/conversations_delete.svg') center center no-repeat;
+  mask: url('../../assets/conversations_delete.svg') center center no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.cometchat-conversations__subtitle-icon-link {
+  -webkit-mask: url('../../assets/conversations_link.svg') center center no-repeat;
+  mask: url('../../assets/conversations_link.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
 .cometchat-conversations__subtitle-icon-unsupported {
-  -webkit-mask: url("../../assets/file_unsupported.svg") center center no-repeat;
-  mask: url("../../assets/file_unsupported.svg") center center no-repeat;
+  -webkit-mask: url('../../assets/file_unsupported.svg') center center no-repeat;
+  mask: url('../../assets/file_unsupported.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
 
 .cometchat-conversations__subtitle-icon-thread {
-  -webkit-mask: url("../../assets/conversations_thread.svg") center center no-repeat;
-  mask: url("../../assets/conversations_thread.svg") center center no-repeat;
+  -webkit-mask: url('../../assets/conversations_thread.svg') center center no-repeat;
+  mask: url('../../assets/conversations_thread.svg') center center no-repeat;
   -webkit-mask-size: contain;
   mask-size: contain;
 }
@@ -259,13 +250,13 @@ box-sizing: border-box;
 .cometchat-conversations__trailing-view {
   display: flex;
   flex-direction: column;
-  gap: var(--cometchat-padding-1,4px);
+  gap: var(--cometchat-padding-1, 4px);
 }
 
 .cometchat-conversations__trailing-view-badge {
   display: flex;
   justify-content: flex-end;
-  gap: var(--cometchat-padding-1,4px);
+  gap: var(--cometchat-padding-1, 4px);
 }
 
 .cometchat-conversations__trailing-view-badge-count {
@@ -276,15 +267,14 @@ box-sizing: border-box;
   justify-content: center;
   align-items: center;
   border-radius: 20px;
-  background: var(--cometchat-primary-color, #6852D6);
+  background: var(--cometchat-primary-color, #6852d6);
   overflow: hidden;
-  color: var( --cometchat-static-white, #FFF);
+  color: var(--cometchat-static-white, #fff);
   text-align: center;
   text-overflow: ellipsis;
-  font:var(--cometchat-font-caption1-regular);
+  font: var(--cometchat-font-caption1-regular);
   font-style: normal;
 }
-
 
 .cometchat-conversations__subtitle {
   display: flex;
@@ -299,8 +289,8 @@ box-sizing: border-box;
   width: 100%;
 }
 
-.cometchat-conversations__list-item-active .cometchat-list-item{
-  background-color:var(--cometchat-white-pressed,#E8E8E8)
+.cometchat-conversations__list-item-active .cometchat-list-item {
+  background-color: var(--cometchat-white-pressed, #e8e8e8);
 }
 
 .cometchat-conversations__list-item-online .cometchat-list-item__status {
@@ -311,16 +301,15 @@ box-sizing: border-box;
   top: 20px;
   right: 15px;
   border-radius: var(--cometchat-radius-max, 1000px);
-  background:  var(--cometchat-success-color,#09C26F);
+  background: var(--cometchat-success-color, #09c26f);
   min-width: 14px;
-  border: 2px solid var(--cometchat-neutral-color-50,#FFFFFF);
+  border: 2px solid var(--cometchat-neutral-color-50, #ffffff);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-
-.cometchat-conversations__list-item-password .cometchat-list-item__status{
+.cometchat-conversations__list-item-password .cometchat-list-item__status {
   width: 14px;
   height: 14px;
   margin-right: -14px;
@@ -329,14 +318,14 @@ box-sizing: border-box;
   right: 15px;
   border-radius: var(--cometchat-radius-max, 1000px);
   min-width: 14px;
-  border: 2px solid var(--cometchat-neutral-color-50, #FFF);
+  border: 2px solid var(--cometchat-neutral-color-50, #fff);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--cometchat-success-color,#09C26F);
+  background-color: var(--cometchat-success-color, #09c26f);
 }
 
-.cometchat-conversations__list-item-private .cometchat-list-item__status{
+.cometchat-conversations__list-item-private .cometchat-list-item__status {
   width: 14px;
   height: 14px;
   margin-right: -14px;
@@ -345,31 +334,16 @@ box-sizing: border-box;
   right: 15px;
   border-radius: var(--cometchat-radius-max, 1000px);
   min-width: 14px;
-  border: 2px solid var(--cometchat-neutral-color-50, #FFF);
+  border: 2px solid var(--cometchat-neutral-color-50, #fff);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--cometchat-warning-color,#FFAB00);
+  background-color: var(--cometchat-warning-color, #ffab00);
 }
 
 .cometchat-conversations__list-item-password .cometchat-list-item__status-icon {
-  -webkit-mask: url("../../assets/lock.svg") center center no-repeat;
-  mask: url("../../assets/lock.svg") center center no-repeat;
-  height: 8px;
-  width: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  border: none;
-  align-self: center;  
-  background:var(--cometchat-static-white,#FFF);
-}
-
-.cometchat-conversations__list-item-private .cometchat-list-item__status-icon {
-  -webkit-mask: url("../../assets/shield.svg") center center no-repeat;
-  mask: url("../../assets/shield.svg") center center no-repeat;
+  -webkit-mask: url('../../assets/lock.svg') center center no-repeat;
+  mask: url('../../assets/lock.svg') center center no-repeat;
   height: 8px;
   width: 8px;
   display: flex;
@@ -379,7 +353,22 @@ box-sizing: border-box;
   mask-size: contain;
   border: none;
   align-self: center;
-  background:var(--cometchat-static-white,#FFF);
+  background: var(--cometchat-static-white, #fff);
+}
+
+.cometchat-conversations__list-item-private .cometchat-list-item__status-icon {
+  -webkit-mask: url('../../assets/shield.svg') center center no-repeat;
+  mask: url('../../assets/shield.svg') center center no-repeat;
+  height: 8px;
+  width: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  border: none;
+  align-self: center;
+  background: var(--cometchat-static-white, #fff);
 }
 
 .cometchat-conversations__trailing-view-options-delete-backdrop {
@@ -395,12 +384,11 @@ box-sizing: border-box;
   justify-content: center;
 }
 
-
 .cometchat-conversations__trailing-view-options .cometchat-menu-list__menu {
   background-color: transparent;
 }
 
-.cometchat-conversations__trailing-view-options .cometchat-menu-list__main-menu-item{
+.cometchat-conversations__trailing-view-options .cometchat-menu-list__main-menu-item {
   background-color: transparent;
   box-shadow: none;
 }
@@ -409,20 +397,19 @@ box-sizing: border-box;
   border-bottom: none;
 }
 .cometchat-conversations__trailing-view-options .cometchat-menu-list__main-menu-item-icon-delete {
- -webkit-mask: url("../../assets/delete_icon.svg") center center no-repeat;
-  mask: url("../../assets/delete_icon.svg") center center no-repeat;
-  background: var(--cometchat-error-color,#F44649);
+  -webkit-mask: url('../../assets/delete_icon.svg') center center no-repeat;
+  mask: url('../../assets/delete_icon.svg') center center no-repeat;
+  background: var(--cometchat-error-color, #f44649);
   width: 24px;
   height: 24px;
   -webkit-mask-size: contain;
 }
 
 .cometchat-conversations__trailing-view-options .cometchat-menu-list__sub-menu-icon {
-width: 20px;
-height: 20px;
-background: var(--cometchat-icon-color-secondary, #A1A1A1);
+  width: 20px;
+  height: 20px;
+  background: var(--cometchat-icon-color-secondary, #a1a1a1);
 }
-
 
 .cometchat-conversations__trailing-view-options .cometchat-menu-list__sub-menu {
   display: flex;
@@ -431,33 +418,31 @@ background: var(--cometchat-icon-color-secondary, #A1A1A1);
   justify-content: center;
   align-items: center;
   border-radius: var(--cometchat-radius-1, 4px);
-  background: var( --cometchat-background-color-04, #E8E8E8);
+  background: var(--cometchat-background-color-04, #e8e8e8);
 }
 
-.cometchat-conversations__subtitle-text .cometchat-mentions{
+.cometchat-conversations__subtitle-text .cometchat-mentions {
   border-radius: var(--cometchat-radius, 2px);
-  background: rgba(104, 82, 214, 0.20);
+  background: rgba(104, 82, 214, 0.2);
   padding: 0px var(--cometchat-padding, 2px);
-
 }
-.cometchat-conversations__subtitle-text .cometchat-mentions-you{
+.cometchat-conversations__subtitle-text .cometchat-mentions-you {
   border-radius: var(--cometchat-radius, 2px);
-  background: rgba(255, 171, 0, 0.20);
+  background: rgba(255, 171, 0, 0.2);
   padding: 0px var(--cometchat-padding, 2px);
-
 }
-.cometchat-conversations__subtitle-text .cometchat-mentions > span{ 
-  color: var(--cometchat-text-color-highlight,#6852D6);
+.cometchat-conversations__subtitle-text .cometchat-mentions > span {
+  color: var(--cometchat-text-color-highlight, #6852d6);
   font: var(--cometchat-font-body-regular);
 }
-.cometchat-conversations__subtitle-text .cometchat-mentions-you > span{ 
-  color: var(--cometchat-warning-color,#FFAB00);
+.cometchat-conversations__subtitle-text .cometchat-mentions-you > span {
+  color: var(--cometchat-warning-color, #ffab00);
   font: var(--cometchat-font-body-regular);
 }
 
 .cometchat-conversations__subtitle-typing {
   overflow: hidden;
-  color: var(--cometchat-text-color-highlight, #6852D6);
+  color: var(--cometchat-text-color-highlight, #6852d6);
   text-overflow: ellipsis;
   white-space: nowrap;
   font: var(--cometchat-font-body-regular);
@@ -476,18 +461,17 @@ background: var(--cometchat-icon-color-secondary, #A1A1A1);
   gap: var(--cometchat-padding-5, 20px);
   justify-content: center;
   align-items: center;
-  background: var(--cometchat-background-color-01, #FFF);
+  background: var(--cometchat-background-color-01, #fff);
 }
 
 .cometchat-conversations__empty-state-view-icon {
-  -webkit-mask: url("../../assets/conversations_empty_state.svg") center center no-repeat;
-  mask: url("../../assets/conversations_empty_state.svg") center center no-repeat;
+  -webkit-mask: url('../../assets/conversations_empty_state.svg') center center no-repeat;
+  mask: url('../../assets/conversations_empty_state.svg') center center no-repeat;
 }
 
-
 .cometchat-conversations__error-state-view-icon {
-  -webkit-mask: url("../../assets/list_error_state_icon.svg") center center no-repeat;
-  mask: url("../../assets/list_error_state_icon.svg") center center no-repeat;
+  -webkit-mask: url('../../assets/list_error_state_icon.svg') center center no-repeat;
+  mask: url('../../assets/list_error_state_icon.svg') center center no-repeat;
 }
 
 .cometchat-conversations__empty-state-view-body,
@@ -518,10 +502,11 @@ background: var(--cometchat-icon-color-secondary, #A1A1A1);
 .cometchat-conversations__shimmer {
   width: 100%;
   height: 100%;
-  background: var(--cometchat-background-color-01, #FFF);
-
+  background: var(--cometchat-background-color-01, #fff);
 }
-.cometchat-conversations .cometchat-conversations__list-item-agent .cometchat-list-item__title-container {
+.cometchat-conversations
+  .cometchat-conversations__list-item-agent
+  .cometchat-list-item__title-container {
   max-width: 90%;
 }
 
@@ -541,26 +526,25 @@ background: var(--cometchat-icon-color-secondary, #A1A1A1);
   flex-shrink: 0;
   width: 48px;
   height: 48px;
-  border-radius: var(--cometchat-radius-max,1000px);
+  border-radius: var(--cometchat-radius-max, 1000px);
   background: var(
     --cometchat-shimmer-gradient-color,
     linear-gradient(90deg, #e0e0e0 0%, #eee 100%)
   );
 }
 
- .cometchat-conversations__shimmer-item-body {
+.cometchat-conversations__shimmer-item-body {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--cometchat-padding-2, 8px);
-
 }
 
 .cometchat-conversations__shimmer-item-body-title-wrapper {
   display: flex;
   justify-content: space-between;
-width: 100%;
+  width: 100%;
 }
 
 .cometchat-conversations__shimmer-item-body-title {
@@ -573,11 +557,10 @@ width: 100%;
     linear-gradient(90deg, #e0e0e0 0%, #eee 100%)
   );
   animation: shimmerAnimation 1.5s infinite linear;
-
 }
 
 .cometchat-conversations__shimmer-item-body-subtitle {
-  width:100%;
+  width: 100%;
   height: 12px;
   flex-shrink: 0;
   border-radius: var(--cometchat-radius-2, 8px);
@@ -586,7 +569,6 @@ width: 100%;
     linear-gradient(90deg, #e0e0e0 0%, #eee 100%)
   );
   animation: shimmerAnimation 1.5s infinite linear;
-
 }
 
 .cometchat-conversations__shimmer-item-body-tail {
@@ -600,17 +582,19 @@ width: 100%;
   );
   animation: shimmerAnimation 10.5s infinite linear;
 }
-.cometchat-conversations .cometchat-menu-list__sub-menu-list-item .cometchat-menu-list__sub-menu-list-item-icon {
+.cometchat-conversations
+  .cometchat-menu-list__sub-menu-list-item
+  .cometchat-menu-list__sub-menu-list-item-icon {
   display: none;
-  }
+}
 
-.cometchat-conversations .cometchat-search-bar__input{
+.cometchat-conversations .cometchat-search-bar__input {
   cursor: pointer;
 }
-.cometchat-conversations .cometchat-list-item__body{
+.cometchat-conversations .cometchat-list-item__body {
   position: relative;
 }
-.cometchat-conversations .cometchat-list-item__menu-view{
+.cometchat-conversations .cometchat-list-item__menu-view {
   position: absolute;
   top: 0;
   right: 0;
@@ -621,11 +605,11 @@ width: 100%;
   display: initial;
 }
 @keyframes shimmerAnimation {
-    0% {
-      background-position: -468px 0;
-    }
-  
-    100% {
-      background-position: 468px 0;
-    }
+  0% {
+    background-position: -468px 0;
   }
+
+  100% {
+    background-position: 468px 0;
+  }
+}

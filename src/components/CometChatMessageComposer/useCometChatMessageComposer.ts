@@ -1,19 +1,19 @@
-import { Action } from "./CometChatMessageComposer";
+import { Action } from './CometChatMessageComposer';
 import {
   CometChat,
   Group,
   GroupMembersRequestBuilder,
   User,
   UsersRequestBuilder,
-} from "@cometchat/chat-sdk-javascript";
-import React, { useCallback, useEffect, useRef } from "react";
-import { CometChatMentionsFormatter } from "../../formatters/CometChatFormatters/CometChatMentionsFormatter/CometChatMentionsFormatter";
-import { CometChatTextFormatter } from "../../formatters/CometChatFormatters/CometChatTextFormatter";
-import { MentionsTargetElement, MessageStatus, UserMemberListType } from "../../Enums/Enums";
-import { CometChatMessageEvents, IMessages } from "../../events/CometChatMessageEvents";
-import { CometChatUIEvents, IMentionsCountWarning, IModal } from "../../events/CometChatUIEvents";
-import { isMobileDevice } from "../../utils/util";
-import { CometChatUIKitUtility } from "../../CometChatUIKit/CometChatUIKitUtility";
+} from '@cometchat/chat-sdk-javascript';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { CometChatMentionsFormatter } from '../../formatters/CometChatFormatters/CometChatMentionsFormatter/CometChatMentionsFormatter';
+import { CometChatTextFormatter } from '../../formatters/CometChatFormatters/CometChatTextFormatter';
+import { MentionsTargetElement, MessageStatus, UserMemberListType } from '../../Enums/Enums';
+import { CometChatMessageEvents, IMessages } from '../../events/CometChatMessageEvents';
+import { CometChatUIEvents, IMentionsCountWarning, IModal } from '../../events/CometChatUIEvents';
+import { isMobileDevice } from '../../utils/util';
+import { CometChatUIKitUtility } from '../../CometChatUIKit/CometChatUIKitUtility';
 
 type Args = {
   dispatch: React.Dispatch<Action>;
@@ -24,9 +24,7 @@ type Args = {
   textFormatters: Array<CometChatTextFormatter>;
   textFormatterArray: Array<CometChatTextFormatter>;
   mentionsTextFormatterInstanceRef: React.MutableRefObject<CometChatMentionsFormatter>;
-  setTextFormatters: React.Dispatch<
-    React.SetStateAction<CometChatTextFormatter[]>
-  >;
+  setTextFormatters: React.Dispatch<React.SetStateAction<CometChatTextFormatter[]>>;
   CometChatUIKitLoginListener: any;
   group: CometChat.Group | undefined;
   user: CometChat.User | undefined;
@@ -35,15 +33,11 @@ type Args = {
   setShowListForMentions: Function;
   searchMentions: Function;
   mentionsFormatterInstanceId: string;
-  setUsersRequestBuilder: React.Dispatch<
-    React.SetStateAction<UsersRequestBuilder | undefined>
-  >;
+  setUsersRequestBuilder: React.Dispatch<React.SetStateAction<UsersRequestBuilder | undefined>>;
   setGroupMembersRequestBuilder: React.Dispatch<
     React.SetStateAction<GroupMembersRequestBuilder | undefined>
   >;
-  setUserMemberListType: React.Dispatch<
-    React.SetStateAction<UserMemberListType | undefined>
-  >;
+  setUserMemberListType: React.Dispatch<React.SetStateAction<UserMemberListType | undefined>>;
   textInputRef: React.MutableRefObject<any>;
   createPollViewRef: React.MutableRefObject<any>;
   setSelection: Function;
@@ -52,18 +46,17 @@ type Args = {
   emptyInputField: Function;
   propsText: string | undefined;
   currentSelectionForRegex: React.MutableRefObject<any>;
-  currentSelectionForRegexRange: React.MutableRefObject<any>
+  currentSelectionForRegexRange: React.MutableRefObject<any>;
   text: string;
-  getCurrentInput: Function
+  getCurrentInput: Function;
   isPartOfCurrentChatForUIEvent: (message: CometChat.BaseMessage) => boolean | undefined;
-  textMessageToEdit:CometChat.TextMessage | null;
+  textMessageToEdit: CometChat.TextMessage | null;
   getCurrentWindow: () => Window;
   getCurrentDocument: () => Document;
-  onTextChange:((text: string) => void) | undefined;
+  onTextChange: ((text: string) => void) | undefined;
   messageToReplyRef: React.MutableRefObject<CometChat.BaseMessage | null>;
   mentionsUsersRequestBuilder?: CometChat.UsersRequestBuilder;
   mentionsGroupMembersRequestBuilder?: CometChat.GroupMembersRequestBuilder;
-
 };
 
 export function useCometChatMessageComposer(args: Args) {
@@ -98,39 +91,54 @@ export function useCometChatMessageComposer(args: Args) {
     setUserMemberListType,
     getComposerId,
     isPartOfCurrentChatForUIEvent,
-    parentMessageIdPropRef, getCurrentInput,textMessageToEdit,getCurrentWindow,getCurrentDocument,onTextChange,messageToReplyRef,mentionsUsersRequestBuilder,mentionsGroupMembersRequestBuilder } = args;
+    parentMessageIdPropRef,
+    getCurrentInput,
+    textMessageToEdit,
+    getCurrentWindow,
+    getCurrentDocument,
+    onTextChange,
+    messageToReplyRef,
+    mentionsUsersRequestBuilder,
+    mentionsGroupMembersRequestBuilder,
+  } = args;
   const isPreviewVisible = useRef<boolean>(false);
   const autoFocusCompleted = useRef<boolean>(false);
 
-
-
   function handleMessageDeleted(message: CometChat.BaseMessage) {
-    let user = CometChatUIKitLoginListener.getLoggedInUser();
-    if (textMessageToEdit && textMessageToEdit.getId() == message.getId() && message.getSender().getUid() == user?.getUid()) {
-      dispatch({ type: "setTextMessageToEdit", textMessageToEdit: null });
-      dispatch({ type: "setText", text: "" });
-      emptyInputField()
-      mySetAddToMsgInputText("");
+    const user = CometChatUIKitLoginListener.getLoggedInUser();
+    if (
+      textMessageToEdit &&
+      textMessageToEdit.getId() == message.getId() &&
+      message.getSender().getUid() == user?.getUid()
+    ) {
+      dispatch({ type: 'setTextMessageToEdit', textMessageToEdit: null });
+      dispatch({ type: 'setText', text: '' });
+      emptyInputField();
+      mySetAddToMsgInputText('');
     }
   }
 
   useEffect(() => {
-    const ccMessageDeleted = CometChatMessageEvents.ccMessageDeleted.subscribe((message: CometChat.BaseMessage) => {
-      handleMessageDeleted(message)
-    })
-    const onMessageDeleted = CometChatMessageEvents.onMessageDeleted.subscribe((deletedMessage: CometChat.BaseMessage) => {
-      handleMessageDeleted(deletedMessage);
-    });
+    const ccMessageDeleted = CometChatMessageEvents.ccMessageDeleted.subscribe(
+      (message: CometChat.BaseMessage) => {
+        handleMessageDeleted(message);
+      }
+    );
+    const onMessageDeleted = CometChatMessageEvents.onMessageDeleted.subscribe(
+      (deletedMessage: CometChat.BaseMessage) => {
+        handleMessageDeleted(deletedMessage);
+      }
+    );
     return () => {
       ccMessageDeleted?.unsubscribe();
       onMessageDeleted?.unsubscribe();
     };
-  }, [user, group, textMessageToEdit])
+  }, [user, group, textMessageToEdit]);
 
   /**
-    * Subscribes to message edited UI event and handles cases 
-    * when a text message is being edited, updating the input field accordingly.
-    */
+   * Subscribes to message edited UI event and handles cases
+   * when a text message is being edited, updating the input field accordingly.
+   */
   useEffect(
     /**
      * Subscribes to message edited Message UI event
@@ -139,10 +147,13 @@ export function useCometChatMessageComposer(args: Args) {
       try {
         const subMessageEdited = CometChatMessageEvents.ccMessageEdited.subscribe(
           (object: IMessages) => {
-            let parentId = object?.message?.getParentMessageId()
-            if ((parentMessageIdPropRef.current && parentId
-              && parentId === parentMessageIdPropRef.current)
-              || (!parentMessageIdPropRef.current && !parentId)) {
+            const parentId = object?.message?.getParentMessageId();
+            if (
+              (parentMessageIdPropRef.current &&
+                parentId &&
+                parentId === parentMessageIdPropRef.current) ||
+              (!parentMessageIdPropRef.current && !parentId)
+            ) {
               if (isPartOfCurrentChatForUIEvent(object.message)) {
                 if (
                   object.status === MessageStatus.inprogress &&
@@ -150,18 +161,18 @@ export function useCometChatMessageComposer(args: Args) {
                 ) {
                   isPreviewVisible.current = true;
                   dispatch({
-                    type: "setMessageToReply",
+                    type: 'setMessageToReply',
                     messageToReply: null,
                   });
                   dispatch({
-                    type: "setTextMessageToEdit",
+                    type: 'setTextMessageToEdit',
                     textMessageToEdit: object.message,
                   });
                   dispatch({
-                    type: "setText",
+                    type: 'setText',
                     text: object.message.getData().text,
                   });
-                  emptyInputField()
+                  emptyInputField();
                   if (renderSanitizedHtml) {
                     const sel = getCurrentWindow()?.getSelection();
                     setSelection(sel);
@@ -169,16 +180,18 @@ export function useCometChatMessageComposer(args: Args) {
                     if (textFormatterArray && textFormatterArray.length) {
                       for (let i = 0; i < textFormatterArray.length; i++) {
                         if (textFormatterArray[i] instanceof CometChatMentionsFormatter) {
-                          (textFormatterArray[i] as CometChatMentionsFormatter).setCometChatUserGroupMembers(object.message.getMentionedUsers())
+                          (
+                            textFormatterArray[i] as CometChatMentionsFormatter
+                          ).setCometChatUserGroupMembers(object.message.getMentionedUsers());
                           if (!object.message.getDeletedAt()) {
                             const channelRegex = /<@all:(.*?)>/g;
                             const text = object.message.getText();
-                            const matches = Array.from(
-                              text.matchAll(channelRegex)
-                            );
+                            const matches = Array.from(text.matchAll(channelRegex));
                             const mentionedChannels = matches.map((m) => m[1]);
-                            
-                            (textFormatterArray[i] as CometChatMentionsFormatter).setCometChatMentionedChannels(mentionedChannels);
+
+                            (
+                              textFormatterArray[i] as CometChatMentionsFormatter
+                            ).setCometChatMentionedChannels(mentionedChannels);
                           }
                         }
 
@@ -192,71 +205,67 @@ export function useCometChatMessageComposer(args: Args) {
                           currentSelectionForRegex.current,
                           currentSelectionForRegexRange.current
                         );
-                        finalText = textFormatterArray[i].getFormattedText(
-                          finalText!,
-                          { mentionsTargetElement: MentionsTargetElement.textinput }
-
-                        );
+                        finalText = textFormatterArray[i].getFormattedText(finalText!, {
+                          mentionsTargetElement: MentionsTargetElement.textinput,
+                        });
                       }
                     }
-                    renderSanitizedHtml(finalText as string)
+                    renderSanitizedHtml(finalText as string);
                   }
                 }
-                if ((object.status === MessageStatus.success &&
-                  object.message instanceof CometChat.TextMessage) || object.status === MessageStatus.cancelled) {
+                if (
+                  (object.status === MessageStatus.success &&
+                    object.message instanceof CometChat.TextMessage) ||
+                  object.status === MessageStatus.cancelled
+                ) {
                   dispatch({
-                    type: "setTextMessageToEdit",
+                    type: 'setTextMessageToEdit',
                     textMessageToEdit: null,
                   });
                   emptyInputField();
                   isPreviewVisible.current = false;
-                }
-                else {
+                } else {
                   isPreviewVisible.current = true;
                 }
               }
             }
           }
         );
-        const subComposeMessage = CometChatUIEvents.ccComposeMessage.subscribe(
-          (text: string) => {
-            dispatch({ type: "setText", text: "" });
-            emptyInputField()
-            pasteHtmlAtCaret(text);
-            if (onTextChange) {
-              onTextChange(text); // Call the onTextChange callback if provided
+        const subComposeMessage = CometChatUIEvents.ccComposeMessage.subscribe((text: string) => {
+          dispatch({ type: 'setText', text: '' });
+          emptyInputField();
+          pasteHtmlAtCaret(text);
+          if (onTextChange) {
+            onTextChange(text); // Call the onTextChange callback if provided
+          }
+          dispatch({ type: 'setText', text: text });
+        });
+        mentionsTextFormatterInstanceRef.current.setId(mentionsFormatterInstanceId);
+
+        const ccShowMentionsCountWarning = CometChatUIEvents.ccShowMentionsCountWarning.subscribe(
+          (data: IMentionsCountWarning) => {
+            if (data.id === mentionsFormatterInstanceId) {
+              if (data.showWarning) {
+                dispatch({
+                  type: 'setShowMentionsCountWarning',
+                  showMentionsCountWarning: true,
+                });
+                return;
+              }
+              dispatch({
+                type: 'setShowMentionsCountWarning',
+                showMentionsCountWarning: false,
+              });
             }
-            dispatch({ type: "setText", text: text });
           }
         );
-        mentionsTextFormatterInstanceRef.current.setId(
-          mentionsFormatterInstanceId
-        );
-
-        const ccShowMentionsCountWarning =
-          CometChatUIEvents.ccShowMentionsCountWarning.subscribe(
-            (data: IMentionsCountWarning) => {
-              if (data.id === mentionsFormatterInstanceId) {
-                if (data.showWarning) {
-                  dispatch({
-                    type: "setShowMentionsCountWarning",
-                    showMentionsCountWarning: true,
-                  });
-                  return;
-                }
-                dispatch({
-                  type: "setShowMentionsCountWarning",
-                  showMentionsCountWarning: false,
-                });
-              }
-            })
         return () => {
           subMessageEdited.unsubscribe();
           subComposeMessage.unsubscribe();
           ccShowMentionsCountWarning.unsubscribe();
         };
       } catch (error) {
-        errorHandler(error, "useEffect")
+        errorHandler(error, 'useEffect');
       }
     },
     [
@@ -265,71 +274,71 @@ export function useCometChatMessageComposer(args: Args) {
       textInputRef,
       mentionsFormatterInstanceId,
       text,
-      textFormatterArray
+      textFormatterArray,
     ]
   );
 
   useEffect(() => {
     const subMessageToReply = CometChatMessageEvents.ccReplyToMessage.subscribe(
       (object: IMessages) => {
-        let parentId = object?.message?.getParentMessageId();
-        if ((parentMessageIdPropRef.current && parentId
-          && parentId === parentMessageIdPropRef.current)
-          || (!parentMessageIdPropRef.current && !parentId)) {
-            if (
-              object.status === MessageStatus.inprogress &&
-              object.message
-            ) {
-              dispatch({
-                type: "setTextMessageToEdit",
-                textMessageToEdit: null,
-              });
-              dispatch({
-                type: "setMessageToReply",
-                messageToReply: object.message,
-              });
-              emptyInputField()
-              if (pasteHtmlAtCaret) {
-                const sel = getCurrentWindow()?.getSelection();
-                setSelection(sel);
-                pasteHtmlAtCaret('')
-              }
-            }
-            if ((object.status === MessageStatus.success &&
-              object.message) || object.status === MessageStatus.cancelled) {
-              dispatch({
-                type: "setMessageToReply",
-                messageToReply: null,
-              });
-              messageToReplyRef.current = null;
-              emptyInputField();
-              isPreviewVisible.current = false;
-            }
-            else {
-              isPreviewVisible.current = true;
+        const parentId = object?.message?.getParentMessageId();
+        if (
+          (parentMessageIdPropRef.current &&
+            parentId &&
+            parentId === parentMessageIdPropRef.current) ||
+          (!parentMessageIdPropRef.current && !parentId)
+        ) {
+          if (object.status === MessageStatus.inprogress && object.message) {
+            dispatch({
+              type: 'setTextMessageToEdit',
+              textMessageToEdit: null,
+            });
+            dispatch({
+              type: 'setMessageToReply',
+              messageToReply: object.message,
+            });
+            emptyInputField();
+            if (pasteHtmlAtCaret) {
+              const sel = getCurrentWindow()?.getSelection();
+              setSelection(sel);
+              pasteHtmlAtCaret('');
             }
           }
+          if (
+            (object.status === MessageStatus.success && object.message) ||
+            object.status === MessageStatus.cancelled
+          ) {
+            dispatch({
+              type: 'setMessageToReply',
+              messageToReply: null,
+            });
+            messageToReplyRef.current = null;
+            emptyInputField();
+            isPreviewVisible.current = false;
+          } else {
+            isPreviewVisible.current = true;
+          }
         }
+      }
     );
     return () => {
       subMessageToReply.unsubscribe();
-    }
-  },[])
+    };
+  }, []);
   /**
-  * Update text input when the conversation changes, preserving initial text from props
-  */
+   * Update text input when the conversation changes, preserving initial text from props
+   */
 
   useEffect(() => {
     try {
       // Maintain the initial text passed from props when the conversation changes
       if (propsText && (user?.getUid() || group?.getGuid())) {
-        dispatch({ type: "setAddToMsgInputText", addToMsgInputText: propsText });
+        dispatch({ type: 'setAddToMsgInputText', addToMsgInputText: propsText });
       }
     } catch (error) {
-      errorHandler(error, "setAddToMsgInputText")
+      errorHandler(error, 'setAddToMsgInputText');
     }
   }, [user, group, propsText, dispatch]);
-
 
   useEffect(
     /**
@@ -337,37 +346,31 @@ export function useCometChatMessageComposer(args: Args) {
      */
     () => {
       try {
-        const subShowModal = CometChatUIEvents.ccShowModal.subscribe(
-          (data: IModal) => {
-            const { composerId } = data;
-            const parentMessageId = parentMessageIdPropRef?.current;
-            const userId = userPropRef.current?.getUid();
-            const groupId = groupPropRef.current?.getGuid();
+        const subShowModal = CometChatUIEvents.ccShowModal.subscribe((data: IModal) => {
+          const { composerId } = data;
+          const parentMessageId = parentMessageIdPropRef?.current;
+          const userId = userPropRef.current?.getUid();
+          const groupId = groupPropRef.current?.getGuid();
 
+          if (composerId) {
             if (
-              composerId
+              (composerId.parentMessageId &&
+                parentMessageId &&
+                composerId.parentMessageId === parentMessageId) ||
+              (!parentMessageId && (composerId.user === userId || composerId.group === groupId)) ||
+              (!composerId.parentMessageId && !composerId.user && !composerId.group)
             ) {
-              if (
-                (composerId.parentMessageId && parentMessageId && composerId.parentMessageId === parentMessageId) ||
-                (!parentMessageId && (composerId.user === userId || composerId.group === groupId)) ||
-                (!composerId.parentMessageId && !composerId.user && !composerId.group)
-              ) {
-                dispatch({ type: "setShowPoll", showPoll: true });
-                createPollViewRef.current = data.child;
-              }
-
-            }
-            else {
-              dispatch({ type: "setShowPoll", showPoll: true });
+              dispatch({ type: 'setShowPoll', showPoll: true });
               createPollViewRef.current = data.child;
             }
-
-
+          } else {
+            dispatch({ type: 'setShowPoll', showPoll: true });
+            createPollViewRef.current = data.child;
           }
-        );
+        });
 
         const subHideModal = CometChatUIEvents.ccHideModal.subscribe(() => {
-          dispatch({ type: "setShowPoll", showPoll: false });
+          dispatch({ type: 'setShowPoll', showPoll: false });
           createPollViewRef.current = null;
         });
         return () => {
@@ -375,7 +378,7 @@ export function useCometChatMessageComposer(args: Args) {
           subHideModal.unsubscribe();
         };
       } catch (error) {
-        errorHandler(error, "ccShowModal")
+        errorHandler(error, 'ccShowModal');
       }
     },
     [createPollViewRef, dispatch]
@@ -387,90 +390,84 @@ export function useCometChatMessageComposer(args: Args) {
   useEffect(() => {
     function triggerSelection(): void {
       try {
-        let sel = getCurrentWindow()?.getSelection();
+        const sel = getCurrentWindow()?.getSelection();
         setSelection(sel);
       } catch (error) {
-        errorHandler(error, "triggerSelection")
+        errorHandler(error, 'triggerSelection');
       }
     }
     try {
       const contentEditable = getCurrentInput();
       const preventPaste = (e: ClipboardEvent) => {
         e.preventDefault();
-        let clipboardData = e.clipboardData!.getData("text/plain");
+        const clipboardData = e.clipboardData!.getData('text/plain');
         const sanitizedData = CometChatUIKitUtility.sanitizeText(clipboardData);
         if (sanitizedData) {
           pasteHtmlAtCaret(sanitizedData);
           if (onTextChange) {
             onTextChange(sanitizedData);
           }
-          dispatch({ type: "setText", text: sanitizedData });
+          dispatch({ type: 'setText', text: sanitizedData });
         }
-      }
+      };
 
-      contentEditable.addEventListener("paste", preventPaste);
-      getCurrentDocument()?.addEventListener("selectionchange", triggerSelection);
+      contentEditable.addEventListener('paste', preventPaste);
+      getCurrentDocument()?.addEventListener('selectionchange', triggerSelection);
       if (!isMobileDevice() && !autoFocusCompleted.current) {
         contentEditable?.focus();
         autoFocusCompleted.current = true;
       }
-        if (textFormatterArray.length ) {
-          let mentionsFormatter = textFormatterArray.find(
-            formatter => formatter instanceof CometChatMentionsFormatter
-          ) as CometChatMentionsFormatter | undefined;
-          if (mentionsFormatter) {
-            mentionsTextFormatterInstanceRef.current = mentionsFormatter
-          }
-            mentionsTextFormatterInstanceRef.current.setLoggedInUser(
-              CometChatUIKitLoginListener.getLoggedInUser()
-            );
-
-            if (
-              mentionsTextFormatterInstanceRef.current.getKeyDownCallBack() === undefined
-            ) {
-              mentionsTextFormatterInstanceRef.current.setKeyDownCallBack(searchMentions);
-              mentionsTextFormatterInstanceRef.current.setKeyUpCallBack(searchMentions);
-            }
-            setTextFormatters(prevFormatters => {
-              const newFormatter = mentionsTextFormatterInstanceRef.current;
-              if (!prevFormatters.includes(newFormatter)) {
-                return [...prevFormatters, newFormatter];
-              }
-              return prevFormatters;
-            });
-            
-          
-        } else {
-          mentionsTextFormatterInstanceRef.current.setLoggedInUser(
-            CometChatUIKitLoginListener.getLoggedInUser()
-          );
-
-          if (
-            mentionsTextFormatterInstanceRef.current.getKeyDownCallBack() === undefined
-          ) {
-            mentionsTextFormatterInstanceRef.current.setKeyDownCallBack(searchMentions);
-            mentionsTextFormatterInstanceRef.current.setKeyUpCallBack(searchMentions);
-          }
-          setTextFormatters(prevFormatters => {
-            const newFormatter = mentionsTextFormatterInstanceRef.current;
-            if (!prevFormatters.includes(newFormatter)) {
-              return [newFormatter];
-            }
-            return prevFormatters;
-          });
+      if (textFormatterArray.length) {
+        const mentionsFormatter = textFormatterArray.find(
+          (formatter) => formatter instanceof CometChatMentionsFormatter
+        ) as CometChatMentionsFormatter | undefined;
+        if (mentionsFormatter) {
+          mentionsTextFormatterInstanceRef.current = mentionsFormatter;
         }
-   
-      if(getCurrentWindow()?.getSelection()){
+        mentionsTextFormatterInstanceRef.current.setLoggedInUser(
+          CometChatUIKitLoginListener.getLoggedInUser()
+        );
+
+        if (mentionsTextFormatterInstanceRef.current.getKeyDownCallBack() === undefined) {
+          mentionsTextFormatterInstanceRef.current.setKeyDownCallBack(searchMentions);
+          mentionsTextFormatterInstanceRef.current.setKeyUpCallBack(searchMentions);
+        }
+        setTextFormatters((prevFormatters) => {
+          const newFormatter = mentionsTextFormatterInstanceRef.current;
+          if (!prevFormatters.includes(newFormatter)) {
+            return [...prevFormatters, newFormatter];
+          }
+          return prevFormatters;
+        });
+      } else {
+        mentionsTextFormatterInstanceRef.current.setLoggedInUser(
+          CometChatUIKitLoginListener.getLoggedInUser()
+        );
+
+        if (mentionsTextFormatterInstanceRef.current.getKeyDownCallBack() === undefined) {
+          mentionsTextFormatterInstanceRef.current.setKeyDownCallBack(searchMentions);
+          mentionsTextFormatterInstanceRef.current.setKeyUpCallBack(searchMentions);
+        }
+        setTextFormatters((prevFormatters) => {
+          const newFormatter = mentionsTextFormatterInstanceRef.current;
+          if (!prevFormatters.includes(newFormatter)) {
+            return [newFormatter];
+          }
+          return prevFormatters;
+        });
+      }
+
+      if (getCurrentWindow()?.getSelection()) {
         setSelection(getCurrentWindow()?.getSelection());
       }
       return () => {
-        contentEditable.removeEventListener("paste", preventPaste);
-        getCurrentDocument()?.removeEventListener("selectionchange", triggerSelection);
+        contentEditable.removeEventListener('paste', preventPaste);
+        getCurrentDocument()?.removeEventListener('selectionchange', triggerSelection);
       };
     } catch (error) {
-      errorHandler(error, "preventPaste")
+      errorHandler(error, 'preventPaste');
     }
-  }, [setTextFormatters,textFormatters]);
+  }, [setTextFormatters, textFormatters]);
 
   /**
    * Handle user or group changes and reset the composer input accordingly.
@@ -478,101 +475,83 @@ export function useCometChatMessageComposer(args: Args) {
   useEffect(() => {
     try {
       const shouldClearText =
-        (userPropRef.current &&
-          user &&
-          userPropRef.current.getUid() !== user.getUid()) ||
-        (groupPropRef.current &&
-          group &&
-          groupPropRef?.current.getGuid() !== group.getGuid());
+        (userPropRef.current && user && userPropRef.current.getUid() !== user.getUid()) ||
+        (groupPropRef.current && group && groupPropRef?.current.getGuid() !== group.getGuid());
 
       if (shouldClearText) {
-        dispatch({ type: "setText", text: "" });
-        mySetAddToMsgInputText("");
+        dispatch({ type: 'setText', text: '' });
+        mySetAddToMsgInputText('');
       }
 
       if (userPropRef.current) {
-        setShowListForMentions(
-          user && userPropRef.current.getUid() !== user.getUid()
-        );
+        setShowListForMentions(user && userPropRef.current.getUid() !== user.getUid());
       }
       if (groupPropRef.current) {
-        setShowListForMentions(
-          group && groupPropRef?.current.getGuid() !== group.getGuid()
-        );
+        setShowListForMentions(group && groupPropRef?.current.getGuid() !== group.getGuid());
       }
       for (let i = 0; i < textFormatterArray.length; i++) {
         textFormatterArray[i].setComposerConfig(user, group, getComposerId());
       }
     } catch (error) {
-      errorHandler(error, "useEffect")
+      errorHandler(error, 'useEffect');
     }
-  }, [
-    user,
-    group,
-    userPropRef,
-    groupPropRef,
-    dispatch,
-    textInputRef,
-    mySetAddToMsgInputText,
-  ]);
+  }, [user, group, userPropRef, groupPropRef, dispatch, textInputRef, mySetAddToMsgInputText]);
 
-  /** 
-  * Reset the message composer when a new user or group is selected.
-  */
+  /**
+   * Reset the message composer when a new user or group is selected.
+   */
   useEffect(() => {
     try {
       if (textInputRef.current) {
-        dispatch({ type: "setTextMessageToEdit", textMessageToEdit: null });
-        dispatch({ type: "setText", text: "" });
+        dispatch({ type: 'setTextMessageToEdit', textMessageToEdit: null });
+        dispatch({ type: 'setText', text: '' });
         if (!isMobileDevice()) {
           emptyInputField();
+        } else {
+          const contentEditable: any = getCurrentInput();
+          contentEditable.textContent = '';
         }
-        else {
-          let contentEditable: any = getCurrentInput();
-          contentEditable.textContent = "";
-        }
-        mySetAddToMsgInputText("");
+        mySetAddToMsgInputText('');
         isPreviewVisible.current = false;
       }
+    } catch (error) {
+      errorHandler(error, 'useEffect');
     }
-    catch (error) {
-      errorHandler(error, "useEffect");
-    }
-  }, [user, group, parentMessageIdPropRef
-  ]);
+  }, [user, group, parentMessageIdPropRef]);
 
   /**
-    * Update text when the message composer detects pasted HTML content.
-    * Handles mentions or user-group requests for the message being composed.
-    */
+   * Update text when the message composer detects pasted HTML content.
+   * Handles mentions or user-group requests for the message being composed.
+   */
   useEffect(() => {
     try {
       if (pasteHtmlAtCaret && propsText) {
-        pasteHtmlAtCaret(propsText)
+        pasteHtmlAtCaret(propsText);
       }
-        if (group) {
-          const listType = UserMemberListType.groupmembers;
+      if (group) {
+        const listType = UserMemberListType.groupmembers;
 
-          setUserMemberListType(listType);
+        setUserMemberListType(listType);
 
-          // Use custom request builder if provided, otherwise create default one
-          const requestBuilder = mentionsGroupMembersRequestBuilder || 
-            new CometChat.GroupMembersRequestBuilder(group.getGuid()).setLimit(15);
-          setGroupMembersRequestBuilder(requestBuilder);
-        }
+        // Use custom request builder if provided, otherwise create default one
+        const requestBuilder =
+          mentionsGroupMembersRequestBuilder ||
+          new CometChat.GroupMembersRequestBuilder(group.getGuid()).setLimit(15);
+        setGroupMembersRequestBuilder(requestBuilder);
+      }
 
-        if (user) {
-          const listType = UserMemberListType.users;
+      if (user) {
+        const listType = UserMemberListType.users;
 
-          setUserMemberListType(listType);
+        setUserMemberListType(listType);
 
-          // Use custom request builder if provided, otherwise create default one
-          const requestBuilder = mentionsUsersRequestBuilder || 
-            new CometChat.UsersRequestBuilder().setLimit(15);
-          setUsersRequestBuilder(requestBuilder);
-        }
+        // Use custom request builder if provided, otherwise create default one
+        const requestBuilder =
+          mentionsUsersRequestBuilder || new CometChat.UsersRequestBuilder().setLimit(15);
+        setUsersRequestBuilder(requestBuilder);
+      }
     } catch (error) {
-      errorHandler(error, "useEffect")
+      errorHandler(error, 'useEffect');
     }
   }, [user, group, mentionsUsersRequestBuilder, mentionsGroupMembersRequestBuilder]);
 }

@@ -6,18 +6,12 @@ interface CometChatErrorViewProps {
   message: string;
 }
 
-export const CometChatErrorView: React.FC<CometChatErrorViewProps> = ({
-  message
-}) => {
+export const CometChatErrorView: React.FC<CometChatErrorViewProps> = ({ message }) => {
   return (
-    <div 
-      className="cometchat-error-view"
-    >
+    <div className="cometchat-error-view">
       <div className="cometchat-error-view__container">
         <div className="cometchat-error-view__content">
-          <div className="cometchat-error-view__message">
-            {message}
-          </div>
+          <div className="cometchat-error-view__message">{message}</div>
         </div>
       </div>
     </div>

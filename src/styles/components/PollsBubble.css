@@ -8,17 +8,17 @@
   width: 240px;
   max-width: 240px;
 }
-.cometchat-polls-bubble  * {
+.cometchat-polls-bubble * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 .cometchat-polls-bubble-incoming {
-  background: var(--cometchat-neutral-color-300, #E8E8E8);
+  background: var(--cometchat-neutral-color-300, #e8e8e8);
 }
 
 .cometchat-polls-bubble-outgoing {
-  background: var(--cometchat-primary-color, #6852D6);
+  background: var(--cometchat-primary-color, #6852d6);
 }
 
 .cometchat-polls-bubble .cometchat-avatar {
@@ -27,7 +27,6 @@
   height: 20px;
 }
 
-
 .cometchat-polls-bubble .cometchat-avatar img {
   width: 20px;
   height: 20px;
@@ -35,11 +34,11 @@
 }
 
 .cometchat-polls-bubble-incoming .cometchat-avatar img {
-  border: 1px solid var(--cometchat-neutral-color-300, #E8E8E8);
+  border: 1px solid var(--cometchat-neutral-color-300, #e8e8e8);
 }
 
 .cometchat-polls-bubble-outgoing .cometchat-avatar img {
-  border: 1px solid var(--cometchat-primary-color, #6852D6);
+  border: 1px solid var(--cometchat-primary-color, #6852d6);
 }
 
 .cometchat-polls-bubble .cometchat-avatar .cometchat-avatar__text {
@@ -50,9 +49,9 @@
   align-items: center;
   flex-shrink: 0;
   border-radius: var(--cometchat-radius-max, 1000px);
-  background: var(--cometchat-extended-primary-color-600, #AA9EE8);
+  background: var(--cometchat-extended-primary-color-600, #aa9ee8);
   font: var(--cometchat-font-caption2-regular);
-  color: var(--cometchat-static-white, #FFF);
+  color: var(--cometchat-static-white, #fff);
 }
 
 .cometchat-polls-bubble__question {
@@ -69,7 +68,7 @@
 }
 
 .cometchat-polls-bubble-outgoing .cometchat-polls-bubble__question {
-  color: var(--cometchat-static-white, #FFF);
+  color: var(--cometchat-static-white, #fff);
 }
 
 .cometchat-polls-bubble__options {
@@ -84,13 +83,12 @@
   align-self: stretch;
 }
 
-.cometchat-polls-bubble__options>li {
+.cometchat-polls-bubble__options > li {
   display: flex;
   gap: var(--cometchat-padding-2, 8px);
   width: 100%;
   position: relative;
 }
-
 
 .cometchat-polls-bubble__option-item {
   width: 100%;
@@ -111,40 +109,43 @@
 }
 
 .cometchat-polls-bubble-incoming .cometchat-poll-bubble__option-item-leading-view-radio-button {
-  border: 1.5px solid var(--cometchat-icon-color-secondary, #A1A1A1);
+  border: 1.5px solid var(--cometchat-icon-color-secondary, #a1a1a1);
 }
 
 .cometchat-polls-bubble-outgoing .cometchat-poll-bubble__option-item-leading-view-radio-button {
-  border: 1.5px solid var(--cometchat-static-white, #FFFFFF);
+  border: 1.5px solid var(--cometchat-static-white, #ffffff);
 }
 
-.cometchat-polls-bubble-incoming .cometchat-poll-bubble__option-item-leading-view-radio-button.checked {
-  background: var(--cometchat-icon-color-highlight, #6852D6);
-  color: var(--cometchat-background-color-01, #FFF);
-  border: var(--cometchat-icon-color-highlight, #6852D6);
+.cometchat-polls-bubble-incoming
+  .cometchat-poll-bubble__option-item-leading-view-radio-button.checked {
+  background: var(--cometchat-icon-color-highlight, #6852d6);
+  color: var(--cometchat-background-color-01, #fff);
+  border: var(--cometchat-icon-color-highlight, #6852d6);
 }
 
-.cometchat-polls-bubble-outgoing .cometchat-poll-bubble__option-item-leading-view-radio-button.checked {
-  background-color: var(--cometchat-static-white, #FFF);
-  color: #6852D6;
-  border: 1px solid var(--cometchat-icon-color-highlight, #6852D6);
+.cometchat-polls-bubble-outgoing
+  .cometchat-poll-bubble__option-item-leading-view-radio-button.checked {
+  background-color: var(--cometchat-static-white, #fff);
+  color: #6852d6;
+  border: 1px solid var(--cometchat-icon-color-highlight, #6852d6);
 }
 
-.cometchat-polls-bubble-incoming .cometchat-poll-bubble__option-item-leading-view-radio-button.checked::after,
+.cometchat-polls-bubble-incoming
+  .cometchat-poll-bubble__option-item-leading-view-radio-button.checked::after,
 .cometchat-poll-bubble__option-item-leading-view-radio-button.checked::after {
   content: '✓';
   font-size: 12px;
   font-weight: 900;
 }
 
-.cometchat-polls-bubble-incoming .cometchat-poll-bubble__option-item-leading-view-radio-button.checked::after {
-  color: var(--cometchat-background-color-01, #FFFFFF);
+.cometchat-polls-bubble-incoming
+  .cometchat-poll-bubble__option-item-leading-view-radio-button.checked::after {
+  color: var(--cometchat-background-color-01, #ffffff);
 }
 
 .cometchat-poll-bubble__option-item-leading-view-radio-button.checked::after {
-  color: var(--cometchat-primary-color, #6852D6);
+  color: var(--cometchat-primary-color, #6852d6);
 }
-
 
 .cometchat-poll-bubble__option-item-body {
   width: 100%;
@@ -174,7 +175,7 @@
 }
 
 .cometchat-polls-bubble-outgoing .cometchat-poll-bubble__option-item-body-content-title {
-  color: var(--cometchat-static-white, #FFF);
+  color: var(--cometchat-static-white, #fff);
 }
 
 .cometchat-poll-bubble__option-item-body-content-tail {
@@ -209,7 +210,7 @@
 }
 
 .cometchat-polls-bubble-outgoing .cometchat-poll-bubble__option-item-body-content-tail-count {
-  color: var(--cometchat-static-white, #FFF);
+  color: var(--cometchat-static-white, #fff);
 }
 
 .cometchat-poll-bubble__option-item-body-progress {
@@ -222,11 +223,11 @@
 }
 
 .cometchat-polls-bubble-incoming .cometchat-poll-bubble__option-item-body-progress {
-  background: var(--cometchat-neutral-color-400, #DCDCDC);
+  background: var(--cometchat-neutral-color-400, #dcdcdc);
 }
 
 .cometchat-polls-bubble-outgoing .cometchat-poll-bubble__option-item-body-progress {
-  background: var(--cometchat-extended-primary-color-700, #8978DF);
+  background: var(--cometchat-extended-primary-color-700, #8978df);
 }
 
 .cometchat-poll-bubble__option-item-body-progress-background {
@@ -236,26 +237,28 @@
 }
 
 .cometchat-polls-bubble-incoming .cometchat-poll-bubble__option-item-body-progress-background {
-  background: var(--cometchat-primary-color, #6852D6);
+  background: var(--cometchat-primary-color, #6852d6);
 }
 
 .cometchat-polls-bubble-outgoing .cometchat-poll-bubble__option-item-body-progress-background {
-  background: var(--cometchat-static-white, #FFF);
+  background: var(--cometchat-static-white, #fff);
 }
 
-
 .cometchat-polls-bubble-incoming .cometchat-radiobutton__selected {
-  border: 1.5px solid var(--cometchat-primary-color, #6852D6);
+  border: 1.5px solid var(--cometchat-primary-color, #6852d6);
 }
 
 .cometchat-polls-bubble-outgoing .cometchat-radiobutton__selected {
-  border: 1.5px solid var(--cometchat-static-white, #FFF);
+  border: 1.5px solid var(--cometchat-static-white, #fff);
 }
 
-.cometchat-polls-bubble-outgoing .cometchat-radiobutton input[type="radio"]:checked+.cometchat-radiobutton__selected {
-  border: 1.5px solid var(--cometchat-static-white, #FFF);
+.cometchat-polls-bubble-outgoing
+  .cometchat-radiobutton
+  input[type='radio']:checked
+  + .cometchat-radiobutton__selected {
+  border: 1.5px solid var(--cometchat-static-white, #fff);
 }
 
 .cometchat-polls-bubble-outgoing .cometchat-radiobutton__selected::after {
-  background-color: var(--cometchat-static-white, #FFF);
+  background-color: var(--cometchat-static-white, #fff);
 }

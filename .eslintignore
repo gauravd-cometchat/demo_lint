@@ -1,0 +1,9 @@
+node_modules
+dist
+build
+coverage
+*.config.js
+sample-app/
+types/
+rollup.config.js
+webpack.config.js

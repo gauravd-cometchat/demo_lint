@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from "react";
+import { useEffect } from 'react';
 // import { CometChatUIKit } from "../../../CometChatUIKit/CometChatUIKit";
-import { CometChatUIKitLoginListener } from "../../../CometChatUIKit/CometChatUIKitLoginListener";
+import { CometChatUIKitLoginListener } from '../../../CometChatUIKit/CometChatUIKitLoginListener';
 
 function useCometChatCallLogs(
   loggedInUser: CometChat.User | null,
@@ -12,7 +11,7 @@ function useCometChatCallLogs(
   attachListeners: Function,
   subscribeToEvents: Function,
   detachListeners: Function,
-  onErrorCallback: (error: unknown, source?: string | undefined) => void,
+  onErrorCallback: (error: unknown, source?: string | undefined) => void
 ) {
   useEffect(() => {
     /**
@@ -26,7 +25,7 @@ function useCometChatCallLogs(
      * Initializes the call builder, fetches the call list, attaches listeners, and subscribes to events when the user logs in.
      *
      * @returns {Function} - Cleanup function to detach listeners when the component unmounts or when the user changes.
-    */
+     */
     try {
       if (loggedInUser) {
         requestBuilder.current = setCallBuilder();

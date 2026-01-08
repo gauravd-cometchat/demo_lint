@@ -1,9 +1,9 @@
-import React, { JSX, useEffect, useRef } from "react";
+import React, { JSX, useEffect, useRef } from 'react';
 
-import { Action } from "./CometChatGroupMembers";
-import { GroupMembersManager } from "./controller";
-import { CometChatUIKitLoginListener } from "../../CometChatUIKit/CometChatUIKitLoginListener";
-import { CometChatGroupEvents } from "../../events/CometChatGroupEvents";
+import { Action } from './CometChatGroupMembers';
+import { GroupMembersManager } from './controller';
+import { CometChatUIKitLoginListener } from '../../CometChatUIKit/CometChatUIKitLoginListener';
+import { CometChatGroupEvents } from '../../events/CometChatGroupEvents';
 
 type Args = {
   groupMemberRequestBuilder: CometChat.GroupMembersRequestBuilder | null;
@@ -39,7 +39,7 @@ export function Hooks(args: Args) {
     searchKeyword,
     disableLoadingState,
     groupMembersSearchText,
-    hideUserStatus
+    hideUserStatus,
   } = args;
 
   useEffect(() => {
@@ -55,8 +55,8 @@ export function Hooks(args: Args) {
            This was causing an issue in mentions since the previous search keyword remained in the request builder reference in 
            composer.
         */
-        groupMemberRequestBuilder?.setSearchKeyword("")
-      }
+        groupMemberRequestBuilder?.setSearchKeyword('');
+      };
     } catch (error) {
       errorHandler(error, 'useEffect');
     }
@@ -89,14 +89,13 @@ export function Hooks(args: Args) {
           groupMemberRequestBuilder,
           searchRequestBuilder,
           groupGuid,
-          groupMembersSearchText
-
+          groupMembersSearchText,
         });
         if (!disableLoadingState) {
-          dispatch({ type: "setGroupMemberList", groupMemberList: [] });
+          dispatch({ type: 'setGroupMemberList', groupMemberList: [] });
         }
         fetchNextAndAppendGroupMembers(
-          (fetchNextIdRef.current = "initialFetchNext_" + String(Date.now()))
+          (fetchNextIdRef.current = 'initialFetchNext_' + String(Date.now()))
         );
       } catch (error) {
         errorHandler(error, 'useEffect');
@@ -114,7 +113,6 @@ export function Hooks(args: Args) {
     ]
   );
 
-
   useEffect(
     /**
      * Attaches an SDK user listener
@@ -125,7 +123,7 @@ export function Hooks(args: Args) {
       try {
         if (!hideUserStatus) {
           return GroupMembersManager.attachUserListener((user: CometChat.User) =>
-            dispatch({ type: "updateGroupMemberStatusIfPresent", user })
+            dispatch({ type: 'updateGroupMemberStatusIfPresent', user })
           );
         }
       } catch (error) {
@@ -153,46 +151,41 @@ export function Hooks(args: Args) {
      */
     () => {
       try {
-        const groupMemberKickedSub =
-          CometChatGroupEvents.ccGroupMemberKicked.subscribe((item) => {
-            const { kickedUser } = item;
-            dispatch({
-              type: "removeGroupMemberIfPresent",
-              groupMemberUid: kickedUser.getUid(),
-            });
+        const groupMemberKickedSub = CometChatGroupEvents.ccGroupMemberKicked.subscribe((item) => {
+          const { kickedUser } = item;
+          dispatch({
+            type: 'removeGroupMemberIfPresent',
+            groupMemberUid: kickedUser.getUid(),
           });
-        const groupMemberBannedSub =
-          CometChatGroupEvents.ccGroupMemberBanned.subscribe((item) => {
-            const { kickedUser } = item;
-            dispatch({
-              type: "removeGroupMemberIfPresent",
-              groupMemberUid: kickedUser.getUid(),
-            });
+        });
+        const groupMemberBannedSub = CometChatGroupEvents.ccGroupMemberBanned.subscribe((item) => {
+          const { kickedUser } = item;
+          dispatch({
+            type: 'removeGroupMemberIfPresent',
+            groupMemberUid: kickedUser.getUid(),
           });
-        const groupMemberChangeScopeSub =
-          CometChatGroupEvents.ccGroupMemberScopeChanged.subscribe((item) => {
+        });
+        const groupMemberChangeScopeSub = CometChatGroupEvents.ccGroupMemberScopeChanged.subscribe(
+          (item) => {
             const { updatedUser, scopeChangedTo } = item;
             dispatch({
-              type: "updateGroupMemberScopeIfPresent",
+              type: 'updateGroupMemberScopeIfPresent',
               groupMemberUid: updatedUser.getUid(),
               newScope: scopeChangedTo,
             });
+          }
+        );
+        const groupMemberAddedSub = CometChatGroupEvents.ccGroupMemberAdded.subscribe((item) => {
+          const { usersAdded, userAddedIn } = item;
+          const groupMembersManager: GroupMembersManager | null = groupMembersManagerRef.current;
+          dispatch({
+            type: 'appendGroupMembers',
+            groupMembersManager,
+            groupMembers: usersAdded.map((user) =>
+              GroupMembersManager.createParticipantGroupMember(user, userAddedIn)
+            ),
           });
-        const groupMemberAddedSub =
-          CometChatGroupEvents.ccGroupMemberAdded.subscribe((item) => {
-            const { usersAdded, userAddedIn } = item;
-            let groupMembersManager: GroupMembersManager | null = groupMembersManagerRef.current;
-            dispatch({
-              type: "appendGroupMembers",
-              groupMembersManager,
-              groupMembers: usersAdded.map((user) =>
-                GroupMembersManager.createParticipantGroupMember(
-                  user,
-                  userAddedIn
-                )
-              ),
-            });
-          });
+        });
         return () => {
           groupMemberKickedSub.unsubscribe();
           groupMemberBannedSub.unsubscribe();
@@ -207,6 +200,6 @@ export function Hooks(args: Args) {
   );
 
   useEffect(() => {
-    dispatch({ type: "setSearchText", searchText: searchKeyword });
+    dispatch({ type: 'setSearchText', searchText: searchKeyword });
   }, [searchKeyword, dispatch]);
 }

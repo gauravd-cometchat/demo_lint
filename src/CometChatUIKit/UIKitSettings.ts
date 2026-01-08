@@ -1,12 +1,11 @@
-
-import { CometChat } from "@cometchat/chat-sdk-javascript";
-import { CallingExtension } from "../components/Calling/CallingExtension";
-import { ExtensionsDataSource } from "../components/Extensions/ExtensionsDataSource";
+import { CometChat } from '@cometchat/chat-sdk-javascript';
+import { CallingExtension } from '../components/Calling/CallingExtension';
+import { ExtensionsDataSource } from '../components/Extensions/ExtensionsDataSource';
 
 /**
  * Represents the settings required to initialize the CometChat SDK.
  * This class holds various configuration options, such as app credentials, socket connection settings, and feature toggles.
- * 
+ *
  * @class UIKitSettings
  */
 export class UIKitSettings {
@@ -83,17 +82,17 @@ export class UIKitSettings {
    * @type {ExtensionsDataSource[]}
    */
   readonly extensions?: ExtensionsDataSource[];
-    /**
+  /**
    * Data source for managing  calls.
    * @type {ExtensionsDataSource}
    */
-    readonly callingExtension?:CallingExtension;
+  readonly callingExtension?: CallingExtension;
 
   /**
    * Storage mode for persisting data.
    * @type {CometChat.StorageMode}
    */
-  readonly storageMode: CometChat.StorageMode
+  readonly storageMode: CometChat.StorageMode;
 
   /**
    * Private constructor to initialize the settings using the provided builder.
@@ -111,7 +110,7 @@ export class UIKitSettings {
     this.adminHost = builder.adminHost;
     this.clientHost = builder.clientHost;
     this.extensions = builder.extensions;
-    this.callingExtension  = builder.callingExtension;
+    this.callingExtension = builder.callingExtension;
     this.roles = builder.roles;
     this.storageMode = builder.storageMode || CometChat.StorageMode.LOCAL;
   }
@@ -126,17 +125,17 @@ export class UIKitSettings {
   }
 
   /**
-    * Retrieves the app ID.
-    * @returns {string} The unique ID of the app.
-    */
+   * Retrieves the app ID.
+   * @returns {string} The unique ID of the app.
+   */
   public getAppId(): string {
     return this.appId!;
   }
 
   /**
-  * Retrieves the region.
-  * @returns {string} The region of the app.
-  */
+   * Retrieves the region.
+   * @returns {string} The region of the app.
+   */
   public getRegion(): string {
     return this.region!;
   }
@@ -178,7 +177,7 @@ export class UIKitSettings {
    * @returns {string} The admin host URL.
    */
   public getAdminHost(): string {
-    return this.adminHost!
+    return this.adminHost!;
   }
 
   /**
@@ -186,7 +185,7 @@ export class UIKitSettings {
    * @returns {string} The client host URL.
    */
   public getClientHost(): string {
-    return this.clientHost!
+    return this.clientHost!;
   }
 
   /**
@@ -194,15 +193,15 @@ export class UIKitSettings {
    * @returns {ExtensionsDataSource[]} The list of UI extensions.
    */
   public getExtensions(): ExtensionsDataSource[] {
-    return this.extensions!
+    return this.extensions!;
   }
-    /**
+  /**
    * Retrieves the calling extension.
    * @returns {ExtensionsDataSource[]}
    */
-    public getCallsExtension(): ExtensionsDataSource {
-      return this.callingExtension!;
-    }
+  public getCallsExtension(): ExtensionsDataSource {
+    return this.callingExtension!;
+  }
 
   /**
    * Retrieves the storage mode.
@@ -267,12 +266,11 @@ export class UIKitSettingsBuilder {
    * @type {ExtensionsDataSource[]}
    */
   extensions?: ExtensionsDataSource[];
-    /**
+  /**
    * Data source for managing calls extension.
    * @type {CallingExtension}
    */
-    callingExtension?: CallingExtension;
-  
+  callingExtension?: CallingExtension;
 
   /**
    * Flag to disable the calling feature.
@@ -293,25 +291,25 @@ export class UIKitSettingsBuilder {
    */
   clientHost?: string;
 
-  /** 
+  /**
    * Storage mode for persisting data.
    * @type {CometChat.StorageMode}
    */
-  storageMode?: CometChat.StorageMode
+  storageMode?: CometChat.StorageMode;
 
   /**
-  * Builds and returns an instance of UIKitSettings.
-  * @returns {UIKitSettings} A new instance of UIKitSettings with the specified configuration.
-  */
+   * Builds and returns an instance of UIKitSettings.
+   * @returns {UIKitSettings} A new instance of UIKitSettings with the specified configuration.
+   */
   build(): UIKitSettings {
     return UIKitSettings.fromBuilder(this);
   }
 
   /**
-  * Sets the app ID.
-  * @param {string} appId - The unique ID of the app.
-  * @returns {UIKitSettingsBuilder} The builder instance.
-  */
+   * Sets the app ID.
+   * @param {string} appId - The unique ID of the app.
+   * @returns {UIKitSettingsBuilder} The builder instance.
+   */
   public setAppId(appId: string): UIKitSettingsBuilder {
     this.appId = appId;
     return this;
@@ -395,7 +393,7 @@ export class UIKitSettingsBuilder {
    * @returns {UIKitSettingsBuilder} The builder instance.
    */
   public setAdminHost(adminHost: string): UIKitSettingsBuilder {
-    this.adminHost = adminHost
+    this.adminHost = adminHost;
     return this;
   }
 
@@ -405,7 +403,7 @@ export class UIKitSettingsBuilder {
    * @returns {UIKitSettingsBuilder} The builder instance.
    */
   public setClientHost(clientHost: string): UIKitSettingsBuilder {
-    this.clientHost = clientHost
+    this.clientHost = clientHost;
     return this;
   }
 
@@ -415,24 +413,24 @@ export class UIKitSettingsBuilder {
    * @returns {UIKitSettingsBuilder} The builder instance.
    */
   public setExtensions(extensions: ExtensionsDataSource[]): UIKitSettingsBuilder {
-    this.extensions = extensions
-    return this
+    this.extensions = extensions;
+    return this;
   }
-    /**
+  /**
    * Sets the calling extension.
    * @param {ExtensionsDataSource} calling.
    * @returns {UIKitSettingsBuilder} The builder instance.
    */
-    public setCallsExtension(callingExtension: CallingExtension): UIKitSettingsBuilder {
-      this.callingExtension = callingExtension;
-      return this
-    }
+  public setCallsExtension(callingExtension: CallingExtension): UIKitSettingsBuilder {
+    this.callingExtension = callingExtension;
+    return this;
+  }
 
-  /** 
+  /**
    * Sets the storage mode.
    * @param {CometChat.StorageMode} storageMode - The storage mode.
    * @returns {UIKitSettingsBuilder} The builder instance.
-  */
+   */
   public setStorageMode(storageMode: CometChat.StorageMode): UIKitSettingsBuilder {
     this.storageMode = storageMode;
     return this;

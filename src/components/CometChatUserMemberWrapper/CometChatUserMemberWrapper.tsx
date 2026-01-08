@@ -20,7 +20,7 @@ export interface MentionsProps {
 
   /**
    * A custom view to render each user or group member item in the list.
-   * 
+   *
    * @param item - An instance of CometChat.User or CometChat.GroupMember to be rendered
    * @returns A JSX element representing the custom item view
    */
@@ -50,7 +50,7 @@ export interface MentionsProps {
 
   /**
    * Callback function invoked when the list is empty (no users or group members found).
-   * 
+   *
    * @returns void
    */
   onEmpty?: () => void;
@@ -62,14 +62,14 @@ export interface MentionsProps {
 
   /**
    * Callback function invoked when an error occurs while fetching users or group members.
-   * 
+   *
    * @returns void
    */
   onError?: () => void;
 
   /**
    * Controls the visibility of the scrollbar in the list.
-   * 
+   *
    * @defaultValue `false`
    */
   showScrollbar?: boolean;
@@ -86,9 +86,9 @@ export interface MentionsProps {
    */
   disableMentionAll?: boolean;
 
-  /** The mentionAll label for the app used to render "@all" mentions 
+  /** The mentionAll label for the app used to render "@all" mentions
    * @defaultValue "all"
-  */
+   */
   mentionAllLabel?: string;
 }
 
@@ -107,18 +107,18 @@ export function CometChatUserMemberWrapper(props: MentionsProps) {
     showScrollbar = false,
     disableMentions = false,
     disableMentionAll = false,
-    mentionAllLabel = "all"
+    mentionAllLabel = 'all',
   } = props;
 
   const shouldShowMentionAll = useMemo(() => {
-    if (searchKeyword && searchKeyword.trim().length > 0 && !mentionAllLabel.toLowerCase().startsWith(searchKeyword.trim().toLowerCase())) {
+    if (
+      searchKeyword &&
+      searchKeyword.trim().length > 0 &&
+      !mentionAllLabel.toLowerCase().startsWith(searchKeyword.trim().toLowerCase())
+    ) {
       return false;
     }
-    return (
-      !disableMentionAll &&
-      userMemberListType === UserMemberListType.groupmembers &&
-      group
-    );
+    return !disableMentionAll && userMemberListType === UserMemberListType.groupmembers && group;
   }, [searchKeyword, mentionAllLabel, disableMentionAll, userMemberListType, group]);
 
   const handleOnEmpty = useCallback(() => {
@@ -151,17 +151,13 @@ export function CometChatUserMemberWrapper(props: MentionsProps) {
                 className="cometchat-special-mentions-list__item"
                 onClick={() => onItemClick?.(null)}
               >
-                <CometChatAvatar
-                  name={group.getName()}
-                  image={group.getIcon()}
-                />
+                <CometChatAvatar name={group.getName()} image={group.getIcon()} />
                 <span className="cometchat-special-mentions-list__item-name">
                   @
-                  {getLocalizedString(
-                    `message_composer_mention_${mentionAllLabel}`
-                  ) || mentionAllLabel}{" "}
+                  {getLocalizedString(`message_composer_mention_${mentionAllLabel}`) ||
+                    mentionAllLabel}{' '}
                   <span className="cometchat-special-mentions-list__item-name-subtext">
-                    {getLocalizedString("message_composer_mention_notify_everyone_label")}
+                    {getLocalizedString('message_composer_mention_notify_everyone_label')}
                   </span>
                 </span>
               </div>

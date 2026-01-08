@@ -1,5 +1,5 @@
-import { MouseEvent, useCallback, useEffect, useState } from "react"
-import { useCometChatFrameContext } from "../../../context/CometChatFrameContext";
+import { MouseEvent, useCallback, useEffect, useState } from 'react';
+import { useCometChatFrameContext } from '../../../context/CometChatFrameContext';
 interface ICometChatListItem {
   id?: string;
   onListItemClicked?: (input: { id: string }) => void;
@@ -7,16 +7,16 @@ interface ICometChatListItem {
 }
 
 export const useCometChatListItem = ({
-  id = "",
-  onListItemClicked = ({id: string = ""}) => {},
+  id = '',
+  onListItemClicked = ({ id: string = '' }) => {},
   menuRef,
-}:ICometChatListItem) => {
+}: ICometChatListItem) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const IframeContext = useCometChatFrameContext();
 
   const getCurrentDocument = () => {
     return IframeContext?.iframeDocument || document;
-  }
+  };
   /* 
       This function is triggered on list item click. 
       It triggers the callback function with the id as input. 
@@ -37,25 +37,24 @@ export const useCometChatListItem = ({
   };
   useEffect(() => {
     const handleOutsideClick = (event: globalThis.MouseEvent) => {
-        if (isHovering && menuRef.current && !menuRef.current.contains(event.target as Node)) {
-            setIsHovering(false)
-        }
+      if (isHovering && menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsHovering(false);
+      }
     };
 
     if (isHovering) {
-        getCurrentDocument().addEventListener("click", handleOutsideClick);
+      getCurrentDocument().addEventListener('click', handleOutsideClick);
     } else {
-        getCurrentDocument().removeEventListener("click", handleOutsideClick);
+      getCurrentDocument().removeEventListener('click', handleOutsideClick);
     }
 
-    return () => getCurrentDocument().removeEventListener("click", handleOutsideClick);
-}, [isHovering]);
-
+    return () => getCurrentDocument().removeEventListener('click', handleOutsideClick);
+  }, [isHovering]);
 
   return {
     listItemClick,
     isHovering,
     showTail,
-    hideTail
-  }
-}
+    hideTail,
+  };
+};

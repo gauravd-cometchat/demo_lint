@@ -1,8 +1,7 @@
-
-import { CometChatUIKitLoginListener } from "../../CometChatUIKit/CometChatUIKitLoginListener";
-import { MentionsTargetElement, MessageBubbleAlignment } from "../../Enums/Enums";
-import { CometChatUtilityConstants } from "../../constants/CometChatUtilityConstants";
-import { ComposerId } from "../../utils/MessagesDataSource";
+import { CometChatUIKitLoginListener } from '../../CometChatUIKit/CometChatUIKitLoginListener';
+import { MentionsTargetElement, MessageBubbleAlignment } from '../../Enums/Enums';
+import { CometChatUtilityConstants } from '../../constants/CometChatUtilityConstants';
+import { ComposerId } from '../../utils/MessagesDataSource';
 
 /**
  * Abstract class that provides methods for formatting text in CometChat.
@@ -49,12 +48,12 @@ export abstract class CometChatTextFormatter {
   /**
    * Mapping of CSS classes for styling the text.
    */
-  protected cssClassMapping: Array<string> = ["custom-class"];
+  protected cssClassMapping: Array<string> = ['custom-class'];
 
   /**
    * The character to track once typed in the text input field.
    */
-  protected trackCharacter: string = "#";
+  protected trackCharacter: string = '#';
 
   /**
    * Callback function to be triggered on the 'keyup' event.
@@ -84,18 +83,16 @@ export abstract class CometChatTextFormatter {
   group?: CometChat.Group;
   composerId?: ComposerId;
 
-
   /**
    * The user who is currently logged in.
    */
-  protected loggedInUser?: CometChat.User | null =
-    CometChatUIKitLoginListener.getLoggedInUser();
+  protected loggedInUser?: CometChat.User | null = CometChatUIKitLoginListener.getLoggedInUser();
 
   protected id?: string;
 
   protected textStyle: { [key: string]: string } = {
-    formattedTextColor: "rgb(51, 153, 255)",
-    formattedTextFont: "",
+    formattedTextColor: 'rgb(51, 153, 255)',
+    formattedTextFont: '',
   };
 
   /**
@@ -104,10 +101,7 @@ export abstract class CometChatTextFormatter {
    * @param {Selection} currentCaretPosition - The current caret position.
    * @param {Range} currentRange - The current selection range.
    */
-  setCaretPositionAndRange(
-    currentCaretPosition: Selection,
-    currentRange: Range
-  ) {
+  setCaretPositionAndRange(currentCaretPosition: Selection, currentRange: Range) {
     this.currentCaretPosition = currentCaretPosition;
     this.currentRange = currentRange?.cloneRange();
   }
@@ -227,10 +221,7 @@ export abstract class CometChatTextFormatter {
    * @param {Object} styleObject - The CSS style object.
    * @param {string} styleObject.formattedTextColor - The color to use for formatted text.
    */
-  setStyle(styleObject: {
-    formattedTextColor: string;
-    formattedTextFont: string;
-  }) {
+  setStyle(styleObject: { formattedTextColor: string; formattedTextFont: string }) {
     this.textStyle = styleObject;
   }
 
@@ -246,14 +237,17 @@ export abstract class CometChatTextFormatter {
     return this.id;
   }
 
-  cleanup() { }
+  cleanup() {}
 
   /**
    * If the input text is provided, it returns the formatted text. Otherwise, it edits the text using the current cursor position.
    * @param {string|null} inputText - The text to format.
    * @return {string|void} - The original or formatted input text, or void if editing was done based on cursor position.
    */
-  getFormattedText(inputText: string, params: { mentionsTargetElement: MentionsTargetElement }): string | void {
+  getFormattedText(
+    inputText: string,
+    params: { mentionsTargetElement: MentionsTargetElement }
+  ): string | void {
     return this.onRegexMatch(inputText);
   }
 
@@ -293,9 +287,8 @@ export abstract class CometChatTextFormatter {
     this.composerId = composerId;
   }
 
-
   getComposerConfig() {
-    return { user: this.user, group: this.group, composerId: this.composerId }
+    return { user: this.user, group: this.group, composerId: this.composerId };
   }
 
   /**
@@ -304,17 +297,10 @@ export abstract class CometChatTextFormatter {
    */
   protected formatTextOnKeyUp = (inputText: string | void) => {
     if (!inputText) {
-      const textToLeft = this.getPrecedingText(
-        this.currentCaretPosition,
-        this.currentRange
-      );
+      const textToLeft = this.getPrecedingText(this.currentCaretPosition, this.currentRange);
       if (textToLeft) {
-        let updatedText = this.onRegexMatch(textToLeft);
-        this.addAtCaretPosition(
-          updatedText,
-          this.currentCaretPosition!,
-          this.currentRange!
-        );
+        const updatedText = this.onRegexMatch(textToLeft);
+        this.addAtCaretPosition(updatedText, this.currentCaretPosition!, this.currentRange!);
       }
       return;
     }
@@ -339,16 +325,15 @@ export abstract class CometChatTextFormatter {
       const rangeCopy = currentRange.cloneRange();
       while (
         rangeCopy.startOffset > 0 &&
-        rangeCopy.startContainer.textContent?.charAt(
-          rangeCopy.startOffset - 1
-        ) !== this.trackCharacter
+        rangeCopy.startContainer.textContent?.charAt(rangeCopy.startOffset - 1) !==
+          this.trackCharacter
       ) {
         rangeCopy.setStart(rangeCopy.startContainer, rangeCopy.startOffset - 1);
 
         /** if the container is not text, it could be a span (already formatted)
          *  So do not perform any action
          * */
-        if (!(rangeCopy.startContainer.nodeName === "#text")) {
+        if (!(rangeCopy.startContainer.nodeName === '#text')) {
           return null;
         }
       }
@@ -356,24 +341,15 @@ export abstract class CometChatTextFormatter {
       // Check the character immediately before the track character
       const charBeforeTrackChar =
         rangeCopy.startOffset > 1
-          ? rangeCopy.startContainer.textContent?.charAt(
-            rangeCopy.startOffset - 2
-          )
-          : "";
+          ? rangeCopy.startContainer.textContent?.charAt(rangeCopy.startOffset - 2)
+          : '';
 
       // If the character before the track character is not a space or doesn't exist, return null
-      if (
-        charBeforeTrackChar &&
-        charBeforeTrackChar !== " " &&
-        charBeforeTrackChar !== "\n"
-      ) {
+      if (charBeforeTrackChar && charBeforeTrackChar !== ' ' && charBeforeTrackChar !== '\n') {
         return null;
       }
 
-      if (
-        rangeCopy.startOffset > 0 &&
-        rangeCopy.startContainer.nodeName === "#text"
-      ) {
+      if (rangeCopy.startOffset > 0 && rangeCopy.startContainer.nodeName === '#text') {
         rangeCopy.setStart(rangeCopy.startContainer, rangeCopy.startOffset - 1);
         return rangeCopy.toString();
       }
@@ -387,7 +363,7 @@ export abstract class CometChatTextFormatter {
    * @returns  {boolean}
    */
   protected checkPreviousCharacterUsingRange(
-    previousCharacterToCheck: string = " ",
+    previousCharacterToCheck: string = ' ',
     currentRange?: Range
   ) {
     if (this.inputElementReference && currentRange) {
@@ -399,9 +375,8 @@ export abstract class CometChatTextFormatter {
 
       if (
         rangeCopy.startOffset > 0 &&
-        rangeCopy.startContainer.textContent?.charAt(
-          rangeCopy.startOffset - 2
-        ) !== previousCharacterToCheck
+        rangeCopy.startContainer.textContent?.charAt(rangeCopy.startOffset - 2) !==
+          previousCharacterToCheck
       ) {
         return false;
       }
@@ -417,25 +392,22 @@ export abstract class CometChatTextFormatter {
    * @return {string} - The replaced text.
    */
   protected onRegexMatch(inputText?: string | null, entity?: any): string {
-    let replacedText = inputText ?? "";
+    let replacedText = inputText ?? '';
     for (let i = 0; i < this.regexPatterns.length; i++) {
-      let regexPattern = this.regexPatterns[i];
+      const regexPattern = this.regexPatterns[i];
 
       if (inputText) {
-        replacedText = inputText.replace(
-          regexPattern,
-          (match, capturedGroup) => {
-            const span = document.createElement("span");
-            span.classList.add(this.cssClassMapping[0]);
-            span.setAttribute("contentEditable", "false");
-            span.style.color = this.textStyle?.formattedTextColor ?? "green";
-            span.style.font = this.textStyle?.formattedTextFont;
-            span.textContent = match;
-            span.insertAdjacentText('beforeend', "\u200B"); // Zero-width space to ensure proper spacing
+        replacedText = inputText.replace(regexPattern, (match, capturedGroup) => {
+          const span = document.createElement('span');
+          span.classList.add(this.cssClassMapping[0]);
+          span.setAttribute('contentEditable', 'false');
+          span.style.color = this.textStyle?.formattedTextColor ?? 'green';
+          span.style.font = this.textStyle?.formattedTextFont;
+          span.textContent = match;
+          span.insertAdjacentText('beforeend', '\u200B'); // Zero-width space to ensure proper spacing
 
-            return span.outerHTML + " ";
-          }
-        );
+          return span.outerHTML + ' ';
+        });
       }
     }
     return replacedText;
@@ -450,7 +422,7 @@ export abstract class CometChatTextFormatter {
   debounce(func: Function, wait: number) {
     let timeout: NodeJS.Timeout;
 
-    return function executedFunction(...args: Object[]) {
+    return function executedFunction(...args: object[]) {
       const later = () => {
         clearTimeout(timeout);
         func(...args);
@@ -470,7 +442,7 @@ export abstract class CometChatTextFormatter {
       this.startTracking = true;
     }
 
-    if (this.startTracking && event.key == " ") {
+    if (this.startTracking && event.key == ' ') {
       this.debouncedFormatTextOnKeyUp();
     }
   }
@@ -479,7 +451,7 @@ export abstract class CometChatTextFormatter {
    * Handles 'keydown' events.
    * @param {KeyboardEvent} event - The keyboard event.
    */
-  onKeyDown(event: KeyboardEvent) { }
+  onKeyDown(event: KeyboardEvent) {}
 
   /**
    * Adds HTML at the current caret position.
@@ -494,18 +466,15 @@ export abstract class CometChatTextFormatter {
   ) {
     if (this.inputElementReference && currentRange) {
       const selection = currentCaretPosition;
-      let range = currentRange;
+      const range = currentRange;
       range.collapse(true);
 
       range.setStart(range.startContainer, range.startOffset - 1);
       while (
         range.startOffset > 0 &&
-        range.startContainer.textContent?.charAt(range.startOffset - 1) !==
-        this.trackCharacter
+        range.startContainer.textContent?.charAt(range.startOffset - 1) !== this.trackCharacter
       ) {
-        if (
-          range.startContainer.textContent?.charAt(range.startOffset - 1) == " "
-        ) {
+        if (range.startContainer.textContent?.charAt(range.startOffset - 1) == ' ') {
           return;
         }
         range.setStart(range.startContainer, range.startOffset - 1);
@@ -515,15 +484,12 @@ export abstract class CometChatTextFormatter {
         range.setStart(range.startContainer, range.startOffset - 1);
         range.deleteContents();
 
-        const tempDiv = document.createElement("div");
+        const tempDiv = document.createElement('div');
         tempDiv.innerHTML = newHtml;
 
         const fragment = document.createDocumentFragment();
         Array.from(tempDiv.childNodes).forEach((node) => {
-          if (
-            node instanceof Element &&
-            node.classList.contains(this.cssClassMapping[0])
-          ) {
+          if (node instanceof Element && node.classList.contains(this.cssClassMapping[0])) {
             this.registerEventListeners(node, node.classList);
           }
           fragment.appendChild(node);
@@ -547,13 +513,13 @@ export abstract class CometChatTextFormatter {
    */
   getOriginalText(inputText: string | null | undefined): string {
     if (!inputText) {
-      return "";
+      return '';
     }
     for (let i = 0; i < this.regexToReplaceFormatting.length; i++) {
-      let regexPattern = this.regexToReplaceFormatting[i];
+      const regexPattern = this.regexToReplaceFormatting[i];
 
       if (inputText) {
-        inputText = inputText.replace(regexPattern, "$1");
+        inputText = inputText.replace(regexPattern, '$1');
       }
     }
 
@@ -563,21 +529,19 @@ export abstract class CometChatTextFormatter {
   /**
    * To inform formatter to stop keeping a track of characters
    */
-  stopTracking(): void { }
+  stopTracking(): void {}
 
   /**
    * To reset the formatter properties
    */
-  reset(): void { }
+  reset(): void {}
 
   /**
    * This will be called by composer before sending the message. This can be used to set metadata, tags on message
    * @param {CometChat.BaseMessage} message
    * @return {CometChat.BaseMessage} - message with metadata added
    */
-  formatMessageForSending(
-    message: CometChat.BaseMessage
-  ): CometChat.BaseMessage {
+  formatMessageForSending(message: CometChat.BaseMessage): CometChat.BaseMessage {
     return message;
   }
 

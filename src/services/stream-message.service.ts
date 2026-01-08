@@ -8,9 +8,8 @@ import { CometChatAIAssistantTools } from '../modals/CometChatAIAssistantTools';
  * and the accumulated streamed text content that has been processed so far.
  */
 export interface IStreamData {
-  message:CometChat.AIAssistantBaseEvent,
+  message: CometChat.AIAssistantBaseEvent;
   streamedMessages?: string;
-
 }
 /**
  * RxJS subjects for managing message streaming
@@ -53,8 +52,8 @@ const toolEventsMap = [
   CometChatUIKitConstants.streamMessageTypes.tool_call_args,
   CometChatUIKitConstants.streamMessageTypes.tool_call_end,
   CometChatUIKitConstants.streamMessageTypes.tool_call_result,
-  CometChatUIKitConstants.streamMessageTypes.tool_call_start
-]
+  CometChatUIKitConstants.streamMessageTypes.tool_call_start,
+];
 
 /**
  * Initializes the message processing pipeline with configurable delays
@@ -64,36 +63,39 @@ const initializeMessageProcessor = () => {
   if (subscription) {
     subscription.unsubscribe();
   }
-  subscription = messageQueue.pipe(
-    concatMap((msg: CometChat.AIAssistantBaseEvent) => {
-      let delayTime = 0;
+  subscription = messageQueue
+    .pipe(
+      concatMap((msg: CometChat.AIAssistantBaseEvent) => {
+        let delayTime = 0;
 
-      // Configure delays based on message type for realistic streaming experience
-      if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.run_started) {
-        delayTime = 0; // Thinking delay before response begins
-      }
-      // Configure delays based on message type for realistic streaming experience
-      else if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.tool_call_args) {
-        delayTime = 500;
-      }
-      else if (toolEventsMap.includes(msg.getType())) {
-        delayTime = 100;
-      }
-      else if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.text_message_start) {
-        delayTime = 0;
-      }
-      else if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.text_message_content) {
-        delayTime = streamSpeed;
-      } else if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.run_finished) {
-        streamingStateSubject.next(false);
-      }
+        // Configure delays based on message type for realistic streaming experience
+        if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.run_started) {
+          delayTime = 0; // Thinking delay before response begins
+        }
+        // Configure delays based on message type for realistic streaming experience
+        else if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.tool_call_args) {
+          delayTime = 500;
+        } else if (toolEventsMap.includes(msg.getType())) {
+          delayTime = 100;
+        } else if (
+          msg.getType() === CometChatUIKitConstants.streamMessageTypes.text_message_start
+        ) {
+          delayTime = 0;
+        } else if (
+          msg.getType() === CometChatUIKitConstants.streamMessageTypes.text_message_content
+        ) {
+          delayTime = streamSpeed;
+        } else if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.run_finished) {
+          streamingStateSubject.next(false);
+        }
 
-      return of(msg).pipe(
-        delay(delayTime),
-        tap(() => processMessage(msg))
-      );
-    })
-  ).subscribe();
+        return of(msg).pipe(
+          delay(delayTime),
+          tap(() => processMessage(msg))
+        );
+      })
+    )
+    .subscribe();
 };
 
 // Initialize the processor on service load
@@ -125,37 +127,37 @@ const processMessage = (msg: CometChat.AIAssistantBaseEvent) => {
   // Handle different message types for streaming workflow
   if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.run_started) {
     streamedMessages[msg.getMessageId()] = '';
-    messageSubject.next({message:msg});
+    messageSubject.next({ message: msg });
   }
   if (toolEventsMap.includes(msg.getType())) {
     streamedMessages[msg.getMessageId()] = '';
     messageSubject.next({ message: msg });
-  }
-  else if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.text_message_start) {
+  } else if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.text_message_start) {
     streamedMessages[msg.getMessageId()] = '';
-    messageSubject.next({message:msg});
+    messageSubject.next({ message: msg });
   } else if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.text_message_content) {
     // Accumulate content deltas for streaming text display
     if (!streamedMessages[msg.getMessageId()]) {
       streamedMessages[msg.getMessageId()] = '';
     }
-    streamedMessages[msg.getMessageId()] += (msg as CometChat.AIAssistantContentReceivedEvent).getDelta() || '';
+    streamedMessages[msg.getMessageId()] +=
+      (msg as CometChat.AIAssistantContentReceivedEvent).getDelta() || '';
 
     // Emit message with accumulated content for real-time display
     const streamingMessage = {
-      message:msg,
-      streamedMessages: streamedMessages[msg.getMessageId()]
+      message: msg,
+      streamedMessages: streamedMessages[msg.getMessageId()],
     };
     messageSubject.next(streamingMessage);
   } else if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.text_message_end) {
     messageSubject.next({
-      message:msg,
-      streamedMessages: streamedMessages[msg.getMessageId()] || ''
+      message: msg,
+      streamedMessages: streamedMessages[msg.getMessageId()] || '',
     });
   } else if (msg.getType() === CometChatUIKitConstants.streamMessageTypes.run_finished) {
     messageSubject.next({
-      message:msg,
-      streamedMessages: streamedMessages[msg.getMessageId()] || ''
+      message: msg,
+      streamedMessages: streamedMessages[msg.getMessageId()] || '',
     });
   }
 };
@@ -166,10 +168,8 @@ const processMessage = (msg: CometChat.AIAssistantBaseEvent) => {
  */
 export const setStreamSpeed = (delay: number) => {
   if (delay !== streamSpeed) {
-     streamSpeed = delay;
-
+    streamSpeed = delay;
   }
-
 };
 
 /**
@@ -180,9 +180,9 @@ export const getStreamSpeed = (): number => {
   return streamSpeed;
 };
 export const getAIAssistantTools = (): CometChatAIAssistantTools => {
-   return toolKitActions;
+  return toolKitActions;
 };
-export const setAIAssistantTools = (actions:CometChatAIAssistantTools): void => {
+export const setAIAssistantTools = (actions: CometChatAIAssistantTools): void => {
   toolKitActions = actions;
 };
 

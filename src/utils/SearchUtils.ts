@@ -1,20 +1,23 @@
-import { CometChat } from "@cometchat/chat-sdk-javascript";
-import { CometChatUIKitConstants } from "../constants/CometChatUIKitConstants";
-import { CometChatSearchFilter } from "../Enums/Enums";
-import { CometChatLocalize } from "../resources/CometChatLocalize/cometchat-localize";
-import { CalendarObject } from "./CalendarObject";
-import { sanitizeCalendarObject } from "./util";
-
+import { CometChat } from '@cometchat/chat-sdk-javascript';
+import { CometChatUIKitConstants } from '../constants/CometChatUIKitConstants';
+import { CometChatSearchFilter } from '../Enums/Enums';
+import { CometChatLocalize } from '../resources/CometChatLocalize/cometchat-localize';
+import { CalendarObject } from './CalendarObject';
+import { sanitizeCalendarObject } from './util';
 
 /**
  * Checks if two dates (timestamps) are from different months or years
- * 
+ *
  * @param firstDate - First timestamp to compare in milliseconds
  * @param secondDate - Second timestamp to compare in milliseconds
  * @param errorHandler - Optional error handler function for exception handling
  * @returns boolean indicating if the dates belong to different months or years
  */
-export function isMonthDifferent(firstDate?: number, secondDate?: number, errorHandler?: (error: unknown, source?: string) => void): boolean {
+export function isMonthDifferent(
+  firstDate?: number,
+  secondDate?: number,
+  errorHandler?: (error: unknown, source?: string) => void
+): boolean {
   try {
     if (!firstDate || !secondDate) {
       return false;
@@ -22,12 +25,9 @@ export function isMonthDifferent(firstDate?: number, secondDate?: number, errorH
     const first = new Date(firstDate * 1000);
     const second = new Date(secondDate * 1000);
 
-    return (
-      first.getMonth() !== second.getMonth() ||
-      first.getFullYear() !== second.getFullYear()
-    );
+    return first.getMonth() !== second.getMonth() || first.getFullYear() !== second.getFullYear();
   } catch (error) {
-    errorHandler?.(error, "isMonthDifferent");
+    errorHandler?.(error, 'isMonthDifferent');
     return false;
   }
 }
@@ -38,9 +38,9 @@ export function isMonthDifferent(firstDate?: number, secondDate?: number, errorH
  */
 export function getCommonDateFormat(customFormat?: CalendarObject): CalendarObject {
   const defaultFormat = {
-    today: "hh:mm A",
-    yesterday: "Yesterday",
-    otherDays: "DD/MM/YYYY"
+    today: 'hh:mm A',
+    yesterday: 'Yesterday',
+    otherDays: 'DD/MM/YYYY',
   };
 
   const globalCalendarFormat = sanitizeCalendarObject(CometChatLocalize.calendarObject);
@@ -49,7 +49,7 @@ export function getCommonDateFormat(customFormat?: CalendarObject): CalendarObje
   return {
     ...defaultFormat,
     ...globalCalendarFormat,
-    ...componentCalendarFormat
+    ...componentCalendarFormat,
   };
 }
 
@@ -57,9 +57,12 @@ export function getCommonDateFormat(customFormat?: CalendarObject): CalendarObje
  * Checks if message search criteria are valid
  * Returns true if search keyword exists or if valid filters are active
  */
-export function hasValidMessageSearchCriteria(searchKeyword: string, filters: CometChatSearchFilter[]): boolean {
+export function hasValidMessageSearchCriteria(
+  searchKeyword: string,
+  filters: CometChatSearchFilter[]
+): boolean {
   // Check if search keyword exists
-  if (searchKeyword && searchKeyword.trim() !== "") {
+  if (searchKeyword && searchKeyword.trim() !== '') {
     return true;
   }
 
@@ -67,7 +70,7 @@ export function hasValidMessageSearchCriteria(searchKeyword: string, filters: Co
   const invalidFilters = [
     CometChatSearchFilter.Unread,
     CometChatSearchFilter.Groups,
-    CometChatSearchFilter.Conversations
+    CometChatSearchFilter.Conversations,
   ];
 
   // If no filters are selected, return false
@@ -76,16 +79,19 @@ export function hasValidMessageSearchCriteria(searchKeyword: string, filters: Co
   }
 
   // Check if at least one valid filter type exists
-  return filters.some(filter => !invalidFilters.includes(filter));
+  return filters.some((filter) => !invalidFilters.includes(filter));
 }
 
 /**
  * Checks if conversation search criteria are valid
  * Returns true if search keyword exists or if valid filters are active
  */
-export function hasValidConversationSearchCriteria(searchKeyword: string, filters: CometChatSearchFilter[]): boolean {
+export function hasValidConversationSearchCriteria(
+  searchKeyword: string,
+  filters: CometChatSearchFilter[]
+): boolean {
   // Check if search keyword exists
-  if (searchKeyword && searchKeyword.trim() !== "") {
+  if (searchKeyword && searchKeyword.trim() !== '') {
     return true;
   }
 
@@ -93,7 +99,7 @@ export function hasValidConversationSearchCriteria(searchKeyword: string, filter
   const validFilters = [
     CometChatSearchFilter.Unread,
     CometChatSearchFilter.Groups,
-    CometChatSearchFilter.Conversations
+    CometChatSearchFilter.Conversations,
   ];
 
   // If no filters are selected, return false
@@ -102,14 +108,15 @@ export function hasValidConversationSearchCriteria(searchKeyword: string, filter
   }
 
   // Check if all filters are valid (in the validFilters array)
-  return filters.every(filter => validFilters.includes(filter));
+  return filters.every((filter) => validFilters.includes(filter));
 }
 
 /**
  * Checks if a message has link preview metadata
  */
 export function hasLink(metadata: any): boolean {
-  return metadata &&
+  return (
+    metadata &&
     '@injected' in metadata &&
     typeof metadata['@injected'] === 'object' &&
     metadata['@injected'] !== null &&
@@ -120,5 +127,6 @@ export function hasLink(metadata: any): boolean {
     metadata['@injected']['extensions']['link-preview'] !== null &&
     'links' in metadata['@injected']['extensions']['link-preview'] &&
     Array.isArray(metadata['@injected']['extensions']['link-preview']['links']) &&
-    metadata['@injected']['extensions']['link-preview']['links'].length > 0;
+    metadata['@injected']['extensions']['link-preview']['links'].length > 0
+  );
 }

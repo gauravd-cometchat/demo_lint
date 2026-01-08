@@ -1,15 +1,14 @@
-import { ChatConfigurator } from "../../../utils/ChatConfigurator";
-import { ExtensionsDataSource } from "../ExtensionsDataSource";
-import { ExtensionsId } from "../ExtensionsId";
-import { CollaborativeWhiteboardConfiguration } from "./CollaborativeWhiteboardConfiguration";
-import { CollaborativeWhiteBoardExtensionDecorator } from "./CollaborativeWhiteboardExtensionDecorator";
+import { ChatConfigurator } from '../../../utils/ChatConfigurator';
+import { ExtensionsDataSource } from '../ExtensionsDataSource';
+import { ExtensionsId } from '../ExtensionsId';
+import { CollaborativeWhiteboardConfiguration } from './CollaborativeWhiteboardConfiguration';
+import { CollaborativeWhiteBoardExtensionDecorator } from './CollaborativeWhiteboardExtensionDecorator';
 
 /**
  * Class representing a Collaborative Whiteboard Extension.
  * This class extends the `ExtensionsDataSource` to add support for collaborative whiteboard functionality.
  */
 export class CollaborativeWhiteboardExtension extends ExtensionsDataSource {
-
   /**
    * Configuration for the collaborative whiteboard extension.
    * @type {CollaborativeWhiteboardConfiguration | undefined}
@@ -32,7 +31,8 @@ export class CollaborativeWhiteboardExtension extends ExtensionsDataSource {
    */
   override addExtension(): void {
     ChatConfigurator.enable(
-      (dataSource: any) => new CollaborativeWhiteBoardExtensionDecorator(dataSource, this.configuration)
+      (dataSource: any) =>
+        new CollaborativeWhiteBoardExtensionDecorator(dataSource, this.configuration)
     );
   }
 

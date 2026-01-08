@@ -1,31 +1,25 @@
-import {
-  JSX,
-  useCallback,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import { JSX, useCallback, useReducer, useRef, useState } from 'react';
 
-import { CometChat, User } from "@cometchat/chat-sdk-javascript";
-import { CometChatCheckbox } from "../BaseComponents/CometChatCheckbox/CometChatCheckbox";
-import { CometChatList } from "../BaseComponents/CometChatList/CometChatList";
-import { CometChatListItem } from "../BaseComponents/CometChatListItem/CometChatListItem";
-import { CometChatRadioButton } from "../BaseComponents/CometChatRadioButton/CometChatRadioButton";
-import { useCometChatUsers } from "./useCometChatUsers";
-import { UsersManager } from "./controller";
-import { useCometChatErrorHandler } from "../../CometChatCustomHooks";
-import { SelectionMode, States } from "../../Enums/Enums";
-import { CometChatOption } from "../../modals/CometChatOption";
-import {getLocalizedString} from "../../resources/CometChatLocalize/cometchat-localize";
-import { CometChatContextMenu } from "../BaseComponents/CometChatContextMenu/CometChatContextMenu";
-import { CometChatActionsIcon, CometChatActionsView } from "../../modals";
-import emptyIcon from "../../assets/user_empty.svg";
-import emptyIconDark from "../../assets/user_empty_dark.svg";
-import errorIcon from "../../assets/list_error_state_icon.svg"
-import errorIconDark from "../../assets/list_error_state_icon_dark.svg"
-import { getThemeMode } from "../../utils/util";
-import { CometChatUIKitConstants } from "../../constants/CometChatUIKitConstants";
-import { MessageUtils } from "../../utils/MessageUtils";
+import { CometChat, User } from '@cometchat/chat-sdk-javascript';
+import { CometChatCheckbox } from '../BaseComponents/CometChatCheckbox/CometChatCheckbox';
+import { CometChatList } from '../BaseComponents/CometChatList/CometChatList';
+import { CometChatListItem } from '../BaseComponents/CometChatListItem/CometChatListItem';
+import { CometChatRadioButton } from '../BaseComponents/CometChatRadioButton/CometChatRadioButton';
+import { useCometChatUsers } from './useCometChatUsers';
+import { UsersManager } from './controller';
+import { useCometChatErrorHandler } from '../../CometChatCustomHooks';
+import { SelectionMode, States } from '../../Enums/Enums';
+import { CometChatOption } from '../../modals/CometChatOption';
+import { getLocalizedString } from '../../resources/CometChatLocalize/cometchat-localize';
+import { CometChatContextMenu } from '../BaseComponents/CometChatContextMenu/CometChatContextMenu';
+import { CometChatActionsIcon, CometChatActionsView } from '../../modals';
+import emptyIcon from '../../assets/user_empty.svg';
+import emptyIconDark from '../../assets/user_empty_dark.svg';
+import errorIcon from '../../assets/list_error_state_icon.svg';
+import errorIconDark from '../../assets/list_error_state_icon_dark.svg';
+import { getThemeMode } from '../../utils/util';
+import { CometChatUIKitConstants } from '../../constants/CometChatUIKitConstants';
+import { MessageUtils } from '../../utils/MessageUtils';
 
 export interface UsersProps {
   /**
@@ -207,10 +201,10 @@ export interface UsersProps {
 
   /**
    * Controls the visibility of the scrollbar in the list list.
-   * 
+   *
    * @defaultValue `false`
    */
-    showScrollbar?: boolean;
+  showScrollbar?: boolean;
 }
 
 type State = {
@@ -222,27 +216,27 @@ type State = {
 };
 
 export type Action =
-  | { type: "setSearchText"; searchText: State["searchText"] }
+  | { type: 'setSearchText'; searchText: State['searchText'] }
   | {
-    type: "appendUsers";
-    users: CometChat.User[];
-    removeOldUsers?: boolean;
-    usersManager?: UsersManager | null;
-    onEmpty?: () => void;
-  }
-  | { type: "setFetchState"; fetchState: States }
-  | { type: "setUserList"; userList: CometChat.User[] }
-  | { type: "updateUser"; user: CometChat.User }
-  | { type: "setIsFirstReload"; isFirstReload: boolean };
+      type: 'appendUsers';
+      users: CometChat.User[];
+      removeOldUsers?: boolean;
+      usersManager?: UsersManager | null;
+      onEmpty?: () => void;
+    }
+  | { type: 'setFetchState'; fetchState: States }
+  | { type: 'setUserList'; userList: CometChat.User[] }
+  | { type: 'updateUser'; user: CometChat.User }
+  | { type: 'setIsFirstReload'; isFirstReload: boolean };
 
 function stateReducer(state: State, action: Action): State {
   let newState = state;
   const { type } = action;
   switch (type) {
-    case "setSearchText":
+    case 'setSearchText':
       newState = { ...state, searchText: action.searchText };
       break;
-    case "appendUsers":
+    case 'appendUsers':
       let users: CometChat.User[] = [];
       if (action.removeOldUsers) {
         if (!state.disableLoadingState) {
@@ -278,19 +272,17 @@ function stateReducer(state: State, action: Action): State {
         }
       }
       break;
-    case "setUserList":
+    case 'setUserList':
       newState = { ...state, userList: action.userList };
       break;
-    case "setFetchState":
+    case 'setFetchState':
       newState = { ...state, fetchState: action.fetchState };
       break;
-    case "updateUser": {
+    case 'updateUser': {
       const { userList } = state;
       const { user: targetUser } = action;
       const targetUserUid = targetUser.getUid();
-      const targetIdx = userList.findIndex(
-        (user) => user.getUid() === targetUserUid
-      );
+      const targetIdx = userList.findIndex((user) => user.getUid() === targetUserUid);
       if (targetIdx > -1) {
         newState = {
           ...state,
@@ -301,7 +293,7 @@ function stateReducer(state: State, action: Action): State {
       }
       break;
     }
-    case "setIsFirstReload":
+    case 'setIsFirstReload':
       newState = { ...state, isFirstReload: action.isFirstReload };
       break;
     default: {
@@ -320,7 +312,7 @@ export function CometChatUsers(props: UsersProps) {
     hideSearch = false,
     itemView = null,
     showSectionHeader = true,
-    sectionHeaderKey = "getName",
+    sectionHeaderKey = 'getName',
     loadingView, // Will use the default provided by CometChatList if undefined
     hideError = false,
     errorView, // Will use the default provided by CometChatList if undefined
@@ -336,7 +328,7 @@ export function CometChatUsers(props: UsersProps) {
     onItemClick, // Won't use if undefined
     onError,
     activeUser = null,
-    searchKeyword = "",
+    searchKeyword = '',
     onEmpty,
     disableLoadingState = false,
     leadingView,
@@ -347,21 +339,21 @@ export function CometChatUsers(props: UsersProps) {
 
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [state, dispatch] = useReducer(stateReducer, {
-    searchText: "",
+    searchText: '',
     userList: [],
     fetchState: States.loading,
     isFirstReload: false,
     disableLoadingState: disableLoadingState,
   });
-  const titleRef = useRef<string>(getLocalizedString("user_title"));
-  const searchPlaceholderTextRef = useRef<string>(getLocalizedString("user_search_placeholder"));
+  const titleRef = useRef<string>(getLocalizedString('user_title'));
+  const searchPlaceholderTextRef = useRef<string>(getLocalizedString('user_search_placeholder'));
   const errorHandler = useCometChatErrorHandler(onError);
   const usersManagerRef = useRef<UsersManager | null>(null);
-  const fetchNextIdRef = useRef("");
+  const fetchNextIdRef = useRef('');
   const attachListenerOnFetch = useRef<boolean>(false);
   const isConnectionReestablished = useRef<boolean>(false);
-  const usersSearchText = useRef<string>("");
-  let isJustMounted = useRef<boolean>(true);
+  const usersSearchText = useRef<string>('');
+  const isJustMounted = useRef<boolean>(true);
   (() => {
     if (state.searchText && state.searchText !== usersSearchText.current) {
       usersSearchText.current = state.searchText;
@@ -386,20 +378,19 @@ export function CometChatUsers(props: UsersProps) {
       if (!usersManager) {
         return;
       }
-      let initialState =
-        isConnectionReestablished.current ||
-          (disableLoadingState && !isJustMounted)
+      const initialState =
+        isConnectionReestablished.current || (disableLoadingState && !isJustMounted)
           ? States.loaded
           : States.loading;
-      dispatch({ type: "setFetchState", fetchState: initialState });
+      dispatch({ type: 'setFetchState', fetchState: initialState });
       try {
         const newUsers = await usersManager.fetchNext();
         if (fetchId !== fetchNextIdRef.current) {
           return;
         }
-        let removeOldUsers = isConnectionReestablished.current ? true : false;
+        const removeOldUsers = isConnectionReestablished.current ? true : false;
         dispatch({
-          type: "appendUsers",
+          type: 'appendUsers',
           users: newUsers,
           removeOldUsers,
           usersManager,
@@ -415,20 +406,20 @@ export function CometChatUsers(props: UsersProps) {
               searchText: usersSearchText.current,
               usersRequestBuilder: requestBuilder,
               searchRequestBuilder,
-              usersSearchText
+              usersSearchText,
             });
             isConnectionReestablished.current = true;
           });
           attachListenerOnFetch.current = false;
         }
         if (!isConnectionReestablished.current) {
-          dispatch({ type: "setFetchState", fetchState: States.loaded });
+          dispatch({ type: 'setFetchState', fetchState: States.loaded });
         } else {
           isConnectionReestablished.current = false;
         }
       } catch (error: unknown) {
         if (fetchId === fetchNextIdRef.current && state.userList?.length <= 0) {
-          dispatch({ type: "setFetchState", fetchState: States.error });
+          dispatch({ type: 'setFetchState', fetchState: States.error });
         }
         errorHandler(error, 'fetchNextAndAppendUsers');
       }
@@ -444,12 +435,9 @@ export function CometChatUsers(props: UsersProps) {
     (newSearchText: string): void => {
       try {
         const trimmedText = newSearchText.trim();
-        if (
-          newSearchText.length === 0 ||
-          trimmedText.length > 0
-        ) {
-          usersSearchText.current = "";
-          dispatch({ type: "setSearchText", searchText: trimmedText });
+        if (newSearchText.length === 0 || trimmedText.length > 0) {
+          usersSearchText.current = '';
+          dispatch({ type: 'setSearchText', searchText: trimmedText });
         }
         // dispatch({type: "setSearchText", searchText: newSearchText});
       } catch (error) {
@@ -464,7 +452,7 @@ export function CometChatUsers(props: UsersProps) {
    */
   const updateUser = useCallback(
     (user: CometChat.User): void => {
-      dispatch({ type: "updateUser", user });
+      dispatch({ type: 'updateUser', user });
     },
     [dispatch]
   );
@@ -472,17 +460,12 @@ export function CometChatUsers(props: UsersProps) {
   /**
    * Creates tail view for the default list item view
    */
-  function getDefaultListItemTailView(
-    user: CometChat.User
-  ): JSX.Element | null {
+  function getDefaultListItemTailView(user: CometChat.User): JSX.Element | null {
     try {
       if (trailingView) {
-        return trailingView(user)
+        return trailingView(user);
       }
-      if (
-        selectionMode !== SelectionMode.single &&
-        selectionMode !== SelectionMode.multiple
-      ) {
+      if (selectionMode !== SelectionMode.single && selectionMode !== SelectionMode.multiple) {
         return null;
       }
       let tailViewContent: JSX.Element;
@@ -507,19 +490,17 @@ export function CometChatUsers(props: UsersProps) {
                 } else {
                   const filteredUsers = prevState.filter((userItr) => {
                     return userItr !== user.getUid();
-                  })
+                  });
                   return [...filteredUsers];
                 }
-              })
+              });
             }}
           />
         );
       }
-      return (
-        <>{tailViewContent}</>
-      );
+      return <>{tailViewContent}</>;
     } catch (error) {
-      errorHandler(error, 'getDefaultListItemTailView')
+      errorHandler(error, 'getDefaultListItemTailView');
       return null;
     }
   }
@@ -531,9 +512,7 @@ export function CometChatUsers(props: UsersProps) {
    * This menu view is shown on mouse over the default list item view.
    * The visibility of this view is handled by the default list item view
    */
-  function getDefaultListItemMenuView(
-    user: CometChat.User
-  ): JSX.Element | null {
+  function getDefaultListItemMenuView(user: CometChat.User): JSX.Element | null {
     try {
       let curOptions: CometChatOption[] | undefined;
       if (!(curOptions = options?.(user))?.length) {
@@ -562,10 +541,10 @@ export function CometChatUsers(props: UsersProps) {
       try {
         const status = user.getStatus();
         const isActive = activeUser?.getUid() === user.getUid();
-        let userBlockedFlag = new MessageUtils().getUserStatusVisible(user) || hideUserStatus;        
+        const userBlockedFlag = new MessageUtils().getUserStatusVisible(user) || hideUserStatus;
         return (
           <div
-            className={`cometchat-users__list-item ${userBlockedFlag ? "" : `cometchat-users__list-item-${status}`} ${isActive ? `cometchat-users__list-item-active` : ""}`}
+            className={`cometchat-users__list-item ${userBlockedFlag ? '' : `cometchat-users__list-item-${status}`} ${isActive ? `cometchat-users__list-item-active` : ''}`}
           >
             <CometChatListItem
               stopEventPropagation={true}
@@ -587,24 +566,23 @@ export function CometChatUsers(props: UsersProps) {
                       userFound = true;
                     }
                     return userItr !== user.getUid();
-                  })
+                  });
                   if (userFound) {
                     return [...filteredUsers];
                   } else {
                     return [...prevState, user.getUid()];
                   }
-                })
+                });
               }}
             />
           </div>
         );
       } catch (error) {
         errorHandler(error, 'getListItem');
-        return (<></>);
+        return <></>;
       }
     };
   }
-
 
   /**
    * Renders the loading state view with shimmer effect
@@ -617,20 +595,22 @@ export function CometChatUsers(props: UsersProps) {
   const getLoadingView = () => {
     try {
       if (loadingView) {
-        return loadingView
+        return loadingView;
       }
-      return <div className="cometchat-users__shimmer">
-        {[...Array(15)].map((_, index) => (
-          <div key={index} className="cometchat-users__shimmer-item">
-            <div className="cometchat-users__shimmer-item-avatar"></div>
-            <div className="cometchat-users__shimmer-item-title"></div>
-          </div>
-        ))}
-      </div>
+      return (
+        <div className="cometchat-users__shimmer">
+          {[...Array(15)].map((_, index) => (
+            <div key={index} className="cometchat-users__shimmer-item">
+              <div className="cometchat-users__shimmer-item-avatar"></div>
+              <div className="cometchat-users__shimmer-item-title"></div>
+            </div>
+          ))}
+        </div>
+      );
     } catch (error) {
       errorHandler(error, 'getLoadingView');
     }
-  }
+  };
 
   /**
    * Renders the empty state view when there are no groups to display
@@ -642,9 +622,9 @@ export function CometChatUsers(props: UsersProps) {
    */
   const getEmptyView = () => {
     try {
-      const isDarkMode = getThemeMode() == "dark" ? true : false;
+      const isDarkMode = getThemeMode() == 'dark' ? true : false;
       if (emptyView) {
-        return emptyView
+        return emptyView;
       }
       return (
         <div className="cometchat-users__empty-state-view">
@@ -652,15 +632,19 @@ export function CometChatUsers(props: UsersProps) {
             <img src={isDarkMode ? emptyIconDark : emptyIcon} alt="" />
           </div>
           <div className="cometchat-users__empty-state-view-body">
-            <div className="cometchat-users__empty-state-view-body-title">{getLocalizedString("user_empty_title")}</div>
-            <div className="cometchat-users__empty-state-view-body-description">{getLocalizedString("user_empty_subtitle")}</div>
+            <div className="cometchat-users__empty-state-view-body-title">
+              {getLocalizedString('user_empty_title')}
+            </div>
+            <div className="cometchat-users__empty-state-view-body-description">
+              {getLocalizedString('user_empty_subtitle')}
+            </div>
           </div>
         </div>
-      )
+      );
     } catch (error) {
       errorHandler(error, 'getEmptyView');
     }
-  }
+  };
 
   /**
    * Renders the error state view when an error occurs
@@ -672,10 +656,10 @@ export function CometChatUsers(props: UsersProps) {
    */
   const getErrorView = () => {
     try {
-      const isDarkMode = getThemeMode() == "dark" ? true : false;
+      const isDarkMode = getThemeMode() == 'dark' ? true : false;
 
       if (errorView) {
-        return errorView
+        return errorView;
       }
 
       return (
@@ -684,16 +668,19 @@ export function CometChatUsers(props: UsersProps) {
             <img src={isDarkMode ? errorIconDark : errorIcon} alt="" />
           </div>
           <div className="cometchat-users__error-state-view-body">
-            <div className="cometchat-users__error-state-view-body-title">{getLocalizedString("user_error_title")}</div>
-            <div className="cometchat-users__error-state-view-body-description">{getLocalizedString("user_error_subtitle")}
+            <div className="cometchat-users__error-state-view-body-title">
+              {getLocalizedString('user_error_title')}
+            </div>
+            <div className="cometchat-users__error-state-view-body-description">
+              {getLocalizedString('user_error_subtitle')}
             </div>
           </div>
         </div>
-      )
+      );
     } catch (error) {
       errorHandler(error, 'getErrorView');
     }
-  }
+  };
 
   useCometChatUsers({
     usersManagerRef,
@@ -711,10 +698,8 @@ export function CometChatUsers(props: UsersProps) {
     errorHandler,
   });
   return (
-    <div className="cometchat" style={{ width: "100%", height: "100%", overflow: "hidden" }}>
-      <div
-        className={`cometchat-users ${!showScrollbar ? "cometchat-users-hide-scrollbar" : ""}`}
-      >
+    <div className="cometchat" style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
+      <div className={`cometchat-users ${!showScrollbar ? 'cometchat-users-hide-scrollbar' : ''}`}>
         <CometChatList
           showScrollbar={showScrollbar}
           title={titleRef.current}
@@ -726,17 +711,14 @@ export function CometChatUsers(props: UsersProps) {
           itemView={getListItem()}
           onScrolledToBottom={() =>
             fetchNextAndAppendUsers(
-              (fetchNextIdRef.current =
-                "onScrolledToBottom_" + String(Date.now()))
+              (fetchNextIdRef.current = 'onScrolledToBottom_' + String(Date.now()))
             )
           }
           showSectionHeader={showSectionHeader}
           sectionHeaderKey={sectionHeaderKey}
-          listItemKey='getUid'
+          listItemKey="getUid"
           state={
-            state.fetchState === States.loaded &&
-              state.userList.length === 0 &&
-              !onEmpty
+            state.fetchState === States.loaded && state.userList.length === 0 && !onEmpty
               ? States.empty
               : state.fetchState
           }

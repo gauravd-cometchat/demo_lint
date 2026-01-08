@@ -1,23 +1,23 @@
-import { CometChat } from "@cometchat/chat-sdk-javascript";
-import React from "react";
-import { DataSource } from "../../../utils/DataSource";
-import { DataSourceDecorator } from "../../../utils/DataSourceDecorator";
-import { CollaborativeWhiteboardConfiguration } from "./CollaborativeWhiteboardConfiguration";
-import WhiteboardIcon from "../../../assets/collaborative_whiteboard.svg";
-import { CollaborativeWhiteboardConstants } from "./CollaborativeWhiteboardConstants";
-import { CometChatUIKitUtility } from "../../../CometChatUIKit/CometChatUIKitUtility";
-import { CometChatUIKitConstants } from "../../../constants/CometChatUIKitConstants";
-import { DocumentIconAlignment, MessageBubbleAlignment, MessageStatus } from "../../../Enums/Enums";
-import {getLocalizedString} from "../../../resources/CometChatLocalize/cometchat-localize";
-import { CometChatMessageComposerAction, CometChatMessageTemplate } from "../../../modals";
-import { CometChatDocumentBubble } from "../../BaseComponents/CometChatDocumentBubble/CometChatDocumentBubble";
-import bannerImageUrlLight from "../../../assets/Collaborative_Whiteboard_Light.png"
-import bannerImageUrlDark from "../../../assets/Collaborative_Whiteboard_Dark.png"
-import { CometChatUIKitLoginListener } from "../../../CometChatUIKit/CometChatUIKitLoginListener";
-import { getThemeMode, isMessageSentByMe } from "../../../utils/util";
-import { CometChatUIKit } from "../../../CometChatUIKit/CometChatUIKit";
-import { ChatConfigurator } from "../../../utils/ChatConfigurator";
-import { CometChatMessageEvents } from "../../../events/CometChatMessageEvents";
+import { CometChat } from '@cometchat/chat-sdk-javascript';
+import React from 'react';
+import { DataSource } from '../../../utils/DataSource';
+import { DataSourceDecorator } from '../../../utils/DataSourceDecorator';
+import { CollaborativeWhiteboardConfiguration } from './CollaborativeWhiteboardConfiguration';
+import WhiteboardIcon from '../../../assets/collaborative_whiteboard.svg';
+import { CollaborativeWhiteboardConstants } from './CollaborativeWhiteboardConstants';
+import { CometChatUIKitUtility } from '../../../CometChatUIKit/CometChatUIKitUtility';
+import { CometChatUIKitConstants } from '../../../constants/CometChatUIKitConstants';
+import { DocumentIconAlignment, MessageBubbleAlignment, MessageStatus } from '../../../Enums/Enums';
+import { getLocalizedString } from '../../../resources/CometChatLocalize/cometchat-localize';
+import { CometChatMessageComposerAction, CometChatMessageTemplate } from '../../../modals';
+import { CometChatDocumentBubble } from '../../BaseComponents/CometChatDocumentBubble/CometChatDocumentBubble';
+import bannerImageUrlLight from '../../../assets/Collaborative_Whiteboard_Light.png';
+import bannerImageUrlDark from '../../../assets/Collaborative_Whiteboard_Dark.png';
+import { CometChatUIKitLoginListener } from '../../../CometChatUIKit/CometChatUIKitLoginListener';
+import { getThemeMode, isMessageSentByMe } from '../../../utils/util';
+import { CometChatUIKit } from '../../../CometChatUIKit/CometChatUIKit';
+import { ChatConfigurator } from '../../../utils/ChatConfigurator';
+import { CometChatMessageEvents } from '../../../events/CometChatMessageEvents';
 /**
  * Decorator class for extending functionality related to collaborative whiteboard.
  * @extends DataSourceDecorator
@@ -35,8 +35,6 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
    */
   public newDataSource!: DataSource;
 
-
-
   /**
    * The user who is currently logged in.
    */
@@ -48,11 +46,7 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
    * @param {DataSource} dataSource - The data source to be decorated.
    * @param {CollaborativeWhiteboardConfiguration} [configuration] - The configuration for the whiteboard extension.
    */
-  constructor(
-    dataSource: DataSource,
-    configuration?: CollaborativeWhiteboardConfiguration,
-
-  ) {
+  constructor(dataSource: DataSource, configuration?: CollaborativeWhiteboardConfiguration) {
     super(dataSource);
     this.newDataSource = dataSource;
     this.configuration = configuration;
@@ -64,26 +58,22 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
    * @returns {string[]} Array of message types.
    */
   override getAllMessageTypes(): string[] {
-    let types: string[] = super.getAllMessageTypes();
-    if (
-      !types.some(
-        (type) => type === CollaborativeWhiteboardConstants.extension_whiteboard
-      )
-    ) {
+    const types: string[] = super.getAllMessageTypes();
+    if (!types.some((type) => type === CollaborativeWhiteboardConstants.extension_whiteboard)) {
       types.push(CollaborativeWhiteboardConstants.extension_whiteboard);
     }
     return types;
   }
 
   override getId(): string {
-    return "collaborativewhiteboard";
+    return 'collaborativewhiteboard';
   }
 
   /**
    * Gets the unique identifier for the collaborative whiteboard extension.
    * @returns {string} The extension ID.
    */
-  override getAllMessageCategories(additionalConfigurations?: Object | undefined): string[] {
+  override getAllMessageCategories(additionalConfigurations?: object | undefined): string[] {
     const categories = super.getAllMessageCategories(additionalConfigurations);
     if (!categories.includes(CometChatUIKitConstants.MessageCategory.custom)) {
       categories.push(CometChatUIKitConstants.MessageCategory.custom);
@@ -97,10 +87,7 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
    * @param {string} type - Type of the template to check.
    * @returns {boolean} True if the template exists, otherwise false.
    */
-  checkIfTemplateExist(
-    template: CometChatMessageTemplate[],
-    type: string
-  ): boolean {
+  checkIfTemplateExist(template: CometChatMessageTemplate[], type: string): boolean {
     return template.some((obj) => obj.type === type);
   }
 
@@ -109,17 +96,10 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
    * @param {any} [additionalConfigurations] - Additional configurations.
    * @returns {CometChatMessageTemplate[]} Array of message templates.
    */
-  override getAllMessageTemplates(
-    additionalConfigurations?: any
-  ): CometChatMessageTemplate[] {
-    const templates = super.getAllMessageTemplates(
-      additionalConfigurations
-    );
+  override getAllMessageTemplates(additionalConfigurations?: any): CometChatMessageTemplate[] {
+    const templates = super.getAllMessageTemplates(additionalConfigurations);
     if (
-      !this.checkIfTemplateExist(
-        templates,
-        CollaborativeWhiteboardConstants.extension_whiteboard
-      )
+      !this.checkIfTemplateExist(templates, CollaborativeWhiteboardConstants.extension_whiteboard)
     ) {
       templates.push(this.getWhiteBoardTemplate());
     }
@@ -138,40 +118,31 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
       replyView: (
         message: CometChat.BaseMessage,
         _alignment?: MessageBubbleAlignment,
-        onReplyViewClicked?:(messageToReply: CometChat.BaseMessage) => void
+        onReplyViewClicked?: (messageToReply: CometChat.BaseMessage) => void
       ) => {
-        let documentMessage: CometChat.CustomMessage =
-          message as CometChat.CustomMessage;
-        return ChatConfigurator.getDataSource().getReplyView(documentMessage, _alignment, onReplyViewClicked);
+        const documentMessage: CometChat.CustomMessage = message as CometChat.CustomMessage;
+        return ChatConfigurator.getDataSource().getReplyView(
+          documentMessage,
+          _alignment,
+          onReplyViewClicked
+        );
       },
-      contentView: (
-        message: CometChat.BaseMessage,
-        _alignment: MessageBubbleAlignment
-      ) => {
-        let whiteboardMessage: CometChat.CustomMessage =
-          message as CometChat.CustomMessage;
+      contentView: (message: CometChat.BaseMessage, _alignment: MessageBubbleAlignment) => {
+        const whiteboardMessage: CometChat.CustomMessage = message as CometChat.CustomMessage;
         if (whiteboardMessage.getDeletedAt()) {
-          return super.getDeleteMessageBubble(whiteboardMessage,undefined,_alignment);
+          return super.getDeleteMessageBubble(whiteboardMessage, undefined, _alignment);
         }
-        return this.getWhiteboardContentView(whiteboardMessage,_alignment);
+        return this.getWhiteboardContentView(whiteboardMessage, _alignment);
       },
       options: (
         loggedInUser: CometChat.User,
         messageObject: CometChat.BaseMessage,
         group?: CometChat.Group,
-        additionalParams?: Object | undefined
+        additionalParams?: object | undefined
       ) => {
-        return super.getCommonOptions(
-          loggedInUser,
-          messageObject,
-          group,
-          additionalParams
-        );
+        return super.getCommonOptions(loggedInUser, messageObject, group, additionalParams);
       },
-      bottomView: (
-        message: CometChat.BaseMessage,
-        alignment: MessageBubbleAlignment
-      ) => {
+      bottomView: (message: CometChat.BaseMessage, alignment: MessageBubbleAlignment) => {
         return super.getBottomView(message, alignment);
       },
     });
@@ -183,32 +154,31 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
    * @returns {JSX.Element} The content view for the whiteboard message.
    */
   getWhiteboardContentView(
-    whiteboardMessage: CometChat.CustomMessage,alignment?: MessageBubbleAlignment) {
-    let documentBubbleAlignment: DocumentIconAlignment =
-      DocumentIconAlignment.right;
+    whiteboardMessage: CometChat.CustomMessage,
+    alignment?: MessageBubbleAlignment
+  ) {
+    const documentBubbleAlignment: DocumentIconAlignment = DocumentIconAlignment.right;
     const whiteboardURL = this.getWhiteboardDocument(whiteboardMessage);
-    const whiteboardTitle = getLocalizedString("message_list_collaborative_whiteboard_title");
-    const whiteboardButtonText = getLocalizedString("messag_list_collaborative_whiteboard_open");
-    const whiteboardSubitle = getLocalizedString("message_collaborative_whiteboard_subtitile");
-    const isSentByMe = isMessageSentByMe(whiteboardMessage, this.loggedInUser!)
-    const isDarkMode = getThemeMode() == "dark" ? true : false;
-    const bannerImage = !isDarkMode ? bannerImageUrlLight : bannerImageUrlDark
-
+    const whiteboardTitle = getLocalizedString('message_list_collaborative_whiteboard_title');
+    const whiteboardButtonText = getLocalizedString('messag_list_collaborative_whiteboard_open');
+    const whiteboardSubitle = getLocalizedString('message_collaborative_whiteboard_subtitile');
+    const isSentByMe = isMessageSentByMe(whiteboardMessage, this.loggedInUser!);
+    const isDarkMode = getThemeMode() == 'dark' ? true : false;
+    const bannerImage = !isDarkMode ? bannerImageUrlLight : bannerImageUrlDark;
 
     return (
       <div className="cometchat-collaborative-whiteboard">
-      <CometChatDocumentBubble
-        title={whiteboardTitle}
-        URL={whiteboardURL}
-        subtitle={whiteboardSubitle}
-        buttonText={whiteboardButtonText}
-        onClicked={this.launchCollaborativeWhiteboardDocument}
-        bannerImage={bannerImage}
-        isSentByMe={alignment == MessageBubbleAlignment.right}
-
-      />
+        <CometChatDocumentBubble
+          title={whiteboardTitle}
+          URL={whiteboardURL}
+          subtitle={whiteboardSubitle}
+          buttonText={whiteboardButtonText}
+          onClicked={this.launchCollaborativeWhiteboardDocument}
+          bannerImage={bannerImage}
+          isSentByMe={alignment == MessageBubbleAlignment.right}
+        />
       </div>
-          );
+    );
   }
 
   /**
@@ -217,7 +187,7 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
    */
   launchCollaborativeWhiteboardDocument(whiteboardURL: string) {
     const username = CometChatUIKitLoginListener.getLoggedInUser()?.getName();
-    window.open(`${whiteboardURL}&username=${username}`, "", "fullscreen=yes, scrollbars=auto");
+    window.open(`${whiteboardURL}&username=${username}`, '', 'fullscreen=yes, scrollbars=auto');
   }
 
   /**
@@ -231,25 +201,19 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
         const data: any = message.getData();
         if (data?.metadata) {
           const metadata = data?.metadata;
-          if (
-            CometChatUIKitUtility.checkHasOwnProperty(metadata, "@injected")
-          ) {
-            const injectedObject = metadata["@injected"];
+          if (CometChatUIKitUtility.checkHasOwnProperty(metadata, '@injected')) {
+            const injectedObject = metadata['@injected'];
             if (injectedObject?.extensions) {
               const extensionObject = injectedObject.extensions;
-              return extensionObject[
-                CollaborativeWhiteboardConstants.whiteboard
-              ]
-                ? extensionObject[CollaborativeWhiteboardConstants.whiteboard]
-                  .board_url
-                : extensionObject[CollaborativeWhiteboardConstants.whiteboard]
-                  .document_url;
+              return extensionObject[CollaborativeWhiteboardConstants.whiteboard]
+                ? extensionObject[CollaborativeWhiteboardConstants.whiteboard].board_url
+                : extensionObject[CollaborativeWhiteboardConstants.whiteboard].document_url;
             }
           }
         }
       }
     } catch (error: any) {
-      console.log("error in getting whiteboard details", error);
+      console.log('error in getting whiteboard details', error);
     }
   }
 
@@ -260,89 +224,89 @@ export class CollaborativeWhiteBoardExtensionDecorator extends DataSourceDecorat
    * @param {any} id - The ID object containing user or group information.
    * @returns {CometChatMessageComposerAction[]} An array of message composer actions.
    */
-  override getAttachmentOptions(id: any,additionalConfigurations?:any) {
+  override getAttachmentOptions(id: any, additionalConfigurations?: any) {
     if (!id?.parentMessageId && !additionalConfigurations?.hideCollaborativeWhiteboardOption) {
-      let replyToMessageRef = additionalConfigurations.messageToReplyRef;
-      const replyToMessage: CometChat.BaseMessage | undefined =replyToMessageRef ? replyToMessageRef.current : null;
-      let isUser = id?.user ? true : false;
-      let receiverType: string = isUser
+      const replyToMessageRef = additionalConfigurations.messageToReplyRef;
+      const replyToMessage: CometChat.BaseMessage | undefined = replyToMessageRef
+        ? replyToMessageRef.current
+        : null;
+      const isUser = id?.user ? true : false;
+      const receiverType: string = isUser
         ? CometChatUIKitConstants.MessageReceiverType.user
         : CometChatUIKitConstants.MessageReceiverType.group;
-      let receiverId: string | undefined = isUser ? id.user : id.group;
-      const messageComposerActions: CometChatMessageComposerAction[] =
-        super.getAttachmentOptions(id,additionalConfigurations);
-      let newAction: CometChatMessageComposerAction =
-        new CometChatMessageComposerAction({
-          id: CollaborativeWhiteboardConstants.whiteboard,
-          title: getLocalizedString("messsage_composer_collaborative_whiteboard"),
-          iconURL: this.configuration?.getOptionIconURL()
-            ? this.configuration?.getOptionIconURL()
-            : WhiteboardIcon,
-          onClick: () => {
-            const payload: any = {
-              receiver: receiverId,
-              receiverType: receiverType,
-            };
+      const receiverId: string | undefined = isUser ? id.user : id.group;
+      const messageComposerActions: CometChatMessageComposerAction[] = super.getAttachmentOptions(
+        id,
+        additionalConfigurations
+      );
+      const newAction: CometChatMessageComposerAction = new CometChatMessageComposerAction({
+        id: CollaborativeWhiteboardConstants.whiteboard,
+        title: getLocalizedString('messsage_composer_collaborative_whiteboard'),
+        iconURL: this.configuration?.getOptionIconURL()
+          ? this.configuration?.getOptionIconURL()
+          : WhiteboardIcon,
+        onClick: () => {
+          const payload: any = {
+            receiver: receiverId,
+            receiverType: receiverType,
+          };
 
-            if (replyToMessage) {
-              payload.quotedMessageId = replyToMessage.getId();
-            }
-            if(additionalConfigurations.closeReplyPreview){
-              additionalConfigurations.closeReplyPreview();
-            }
-            CometChat.callExtension(
-              CollaborativeWhiteboardConstants.whiteboard,
-              CollaborativeWhiteboardConstants.post,
-              CollaborativeWhiteboardConstants.v1_create,
-              payload
-            ).then(
-              (res: any) => { 
-                if(replyToMessageRef){
-                  CometChatMessageEvents.ccReplyToMessage.next({message: replyToMessageRef.current, status: MessageStatus.success});
-                }
-              },
-              (error: any) => {
-                console.log("error in sending whiteboard", error);
+          if (replyToMessage) {
+            payload.quotedMessageId = replyToMessage.getId();
+          }
+          if (additionalConfigurations.closeReplyPreview) {
+            additionalConfigurations.closeReplyPreview();
+          }
+          CometChat.callExtension(
+            CollaborativeWhiteboardConstants.whiteboard,
+            CollaborativeWhiteboardConstants.post,
+            CollaborativeWhiteboardConstants.v1_create,
+            payload
+          ).then(
+            (res: any) => {
+              if (replyToMessageRef) {
+                CometChatMessageEvents.ccReplyToMessage.next({
+                  message: replyToMessageRef.current,
+                  status: MessageStatus.success,
+                });
               }
-            );
-          },
-        });
+            },
+            (error: any) => {
+              console.log('error in sending whiteboard', error);
+            }
+          );
+        },
+      });
       messageComposerActions.push(newAction);
       return messageComposerActions;
     } else {
-      return super.getAttachmentOptions(id,additionalConfigurations);
+      return super.getAttachmentOptions(id, additionalConfigurations);
     }
   }
 
   /**
-  * Overrides the method to get the last message from a conversation.
-  * Checks if the last message is related to the collaborative whiteboard extension
-  * and returns a custom message if it matches.
-  * @param {CometChat.Conversation} conversation - The conversation object from which to get the last message.
-  * @param {CometChat.User} loggedInUser - The currently logged-in user.
-  * @param {any} additionalConfigurations - Additional configurations if any.
-  * @returns {string} A string representing the last conversation message.
-  */
+   * Overrides the method to get the last message from a conversation.
+   * Checks if the last message is related to the collaborative whiteboard extension
+   * and returns a custom message if it matches.
+   * @param {CometChat.Conversation} conversation - The conversation object from which to get the last message.
+   * @param {CometChat.User} loggedInUser - The currently logged-in user.
+   * @param {any} additionalConfigurations - Additional configurations if any.
+   * @returns {string} A string representing the last conversation message.
+   */
   override getLastConversationMessage(
     conversation: CometChat.Conversation,
     loggedInUser: CometChat.User,
     additionalConfigurations: any
   ): string {
-    const message: CometChat.BaseMessage | undefined =
-      conversation.getLastMessage();
+    const message: CometChat.BaseMessage | undefined = conversation.getLastMessage();
     if (
       message != null &&
-      message.getType() ===
-      CollaborativeWhiteboardConstants.extension_whiteboard &&
+      message.getType() === CollaborativeWhiteboardConstants.extension_whiteboard &&
       message.getCategory() === CometChatUIKitConstants.MessageCategory.custom
     ) {
-      return getLocalizedString("conversation_subtitle_collaborative_whiteboard");
+      return getLocalizedString('conversation_subtitle_collaborative_whiteboard');
     } else {
-      return super.getLastConversationMessage(
-        conversation,
-        loggedInUser,
-        additionalConfigurations
-      );
+      return super.getLastConversationMessage(conversation, loggedInUser, additionalConfigurations);
     }
   }
 }

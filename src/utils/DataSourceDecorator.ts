@@ -1,13 +1,17 @@
-
-import { DataSource } from "./DataSource";
-import { ComposerId, MessagesDataSource } from "./MessagesDataSource";
-import { CometChatUrlsFormatter } from "../formatters/CometChatFormatters/CometChatUrlsFormatter/CometChatUrlsFormatter";
-import { CometChatMentionsFormatter } from "../formatters/CometChatFormatters/CometChatMentionsFormatter/CometChatMentionsFormatter";
-import { CometChatTextFormatter } from "../formatters/CometChatFormatters/CometChatTextFormatter";
-import { additionalParams } from "./ConversationUtils";
-import { CometChatActionsIcon, CometChatActionsView, CometChatMessageComposerAction, CometChatMessageTemplate } from "../modals";
-import { MessageBubbleAlignment } from "../Enums/Enums";
-import { CalendarObject } from "./CalendarObject";
+import { DataSource } from './DataSource';
+import { ComposerId, MessagesDataSource } from './MessagesDataSource';
+import { CometChatUrlsFormatter } from '../formatters/CometChatFormatters/CometChatUrlsFormatter/CometChatUrlsFormatter';
+import { CometChatMentionsFormatter } from '../formatters/CometChatFormatters/CometChatMentionsFormatter/CometChatMentionsFormatter';
+import { CometChatTextFormatter } from '../formatters/CometChatFormatters/CometChatTextFormatter';
+import { additionalParams } from './ConversationUtils';
+import {
+  CometChatActionsIcon,
+  CometChatActionsView,
+  CometChatMessageComposerAction,
+  CometChatMessageTemplate,
+} from '../modals';
+import { MessageBubbleAlignment } from '../Enums/Enums';
+import { CalendarObject } from './CalendarObject';
 import { JSX } from 'react';
 
 /**
@@ -23,7 +27,7 @@ export abstract class DataSourceDecorator implements DataSource {
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
     group?: CometChat.Group,
-    additionalParams?: Object | undefined
+    additionalParams?: object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getTextMessageOptions(
       loggedInUser,
@@ -36,7 +40,7 @@ export abstract class DataSourceDecorator implements DataSource {
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
     group?: CometChat.Group,
-    additionalParams?: Object | undefined
+    additionalParams?: object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getImageMessageOptions(
       loggedInUser,
@@ -49,7 +53,7 @@ export abstract class DataSourceDecorator implements DataSource {
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
     group?: CometChat.Group,
-    additionalParams?: Object | undefined
+    additionalParams?: object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getVideoMessageOptions(
       loggedInUser,
@@ -62,7 +66,7 @@ export abstract class DataSourceDecorator implements DataSource {
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
     group?: CometChat.Group,
-    additionalParams?: Object | undefined
+    additionalParams?: object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getAudioMessageOptions(
       loggedInUser,
@@ -75,7 +79,7 @@ export abstract class DataSourceDecorator implements DataSource {
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
     group?: CometChat.Group,
-    additionalParams?: Object | undefined
+    additionalParams?: object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getFileMessageOptions(
       loggedInUser,
@@ -90,7 +94,7 @@ export abstract class DataSourceDecorator implements DataSource {
     alignment: MessageBubbleAlignment,
     hideReceipts?: boolean,
     messageSentAtDateTimeFormat?: CalendarObject,
-    showError?:boolean
+    showError?: boolean
   ) {
     return (this.dataSource ?? new MessagesDataSource()).getStatusInfoView(
       message,
@@ -100,14 +104,8 @@ export abstract class DataSourceDecorator implements DataSource {
       showError
     );
   }
-  getBottomView(
-    message: CometChat.BaseMessage,
-    alignment: MessageBubbleAlignment
-  ) {
-    return (this.dataSource ?? new MessagesDataSource()).getBottomView(
-      message,
-      alignment
-    );
+  getBottomView(message: CometChat.BaseMessage, alignment: MessageBubbleAlignment) {
+    return (this.dataSource ?? new MessagesDataSource()).getBottomView(message, alignment);
   }
   getReplyView(
     message: CometChat.BaseMessage,
@@ -122,7 +120,7 @@ export abstract class DataSourceDecorator implements DataSource {
       textFormatters
     );
   }
-  
+
   getFooterView(message: CometChat.BaseMessage) {
     return (this.dataSource ?? new MessagesDataSource()).getFooterView(message);
   }
@@ -131,7 +129,7 @@ export abstract class DataSourceDecorator implements DataSource {
     message: CometChat.BaseMessage,
     textFormatters?: CometChatTextFormatter[],
     _alignment?: MessageBubbleAlignment
-  ): JSX.Element | null{
+  ): JSX.Element | null {
     return (this.dataSource ?? new MessagesDataSource()).getMessagePreviewSubtitle(
       message,
       textFormatters,
@@ -142,118 +140,101 @@ export abstract class DataSourceDecorator implements DataSource {
   getMessagePreviewTitle(
     message: CometChat.BaseMessage,
     _alignment?: MessageBubbleAlignment
-  ): JSX.Element | null{
-    return (this.dataSource ?? new MessagesDataSource()).getMessagePreviewTitle(message, _alignment);
+  ): JSX.Element | null {
+    return (this.dataSource ?? new MessagesDataSource()).getMessagePreviewTitle(
+      message,
+      _alignment
+    );
   }
 
   getTextMessageContentView(
     message: CometChat.TextMessage,
     alignment: MessageBubbleAlignment,
-    additionalConfigurations?: Object | undefined
+    additionalConfigurations?: object | undefined
   ) {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getTextMessageContentView(
+    return (this.dataSource ?? new MessagesDataSource()).getTextMessageContentView(
       message,
       alignment,
       additionalConfigurations
     );
   }
-  getImageMessageContentView(
-    message: CometChat.MediaMessage,
-    alignment: MessageBubbleAlignment
-  ) {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getImageMessageContentView(message, alignment);
+  getImageMessageContentView(message: CometChat.MediaMessage, alignment: MessageBubbleAlignment) {
+    return (this.dataSource ?? new MessagesDataSource()).getImageMessageContentView(
+      message,
+      alignment
+    );
   }
-  getVideoMessageContentView(
-    message: CometChat.MediaMessage,
-    alignment: MessageBubbleAlignment
-  ) {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getVideoMessageContentView(message, alignment);
+  getVideoMessageContentView(message: CometChat.MediaMessage, alignment: MessageBubbleAlignment) {
+    return (this.dataSource ?? new MessagesDataSource()).getVideoMessageContentView(
+      message,
+      alignment
+    );
   }
-  getAudioMessageContentView(
-    message: CometChat.MediaMessage,
-    alignment: MessageBubbleAlignment
-  ) {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getAudioMessageContentView(message, alignment);
+  getAudioMessageContentView(message: CometChat.MediaMessage, alignment: MessageBubbleAlignment) {
+    return (this.dataSource ?? new MessagesDataSource()).getAudioMessageContentView(
+      message,
+      alignment
+    );
   }
-  getFileMessageContentView(
-    message: CometChat.MediaMessage,
-    alignment: MessageBubbleAlignment
-  ) {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getFileMessageContentView(message, alignment);
+  getFileMessageContentView(message: CometChat.MediaMessage, alignment: MessageBubbleAlignment) {
+    return (this.dataSource ?? new MessagesDataSource()).getFileMessageContentView(
+      message,
+      alignment
+    );
   }
 
-  getTextMessageTemplate(
-    additionalConfigurations?: Object | undefined
-  ): CometChatMessageTemplate {
+  getTextMessageTemplate(additionalConfigurations?: object | undefined): CometChatMessageTemplate {
     return (this.dataSource ?? new MessagesDataSource()).getTextMessageTemplate(
       additionalConfigurations
     );
   }
   getAgentAssistantMessageTemplate(
-    additionalConfigurations?: Object | undefined
+    additionalConfigurations?: object | undefined
   ): CometChatMessageTemplate {
     return (this.dataSource ?? new MessagesDataSource()).getAgentAssistantMessageTemplate(
       additionalConfigurations
     );
   }
-    getToolArgumentsMessageTemplate(
-    additionalConfigurations?: Object | undefined
+  getToolArgumentsMessageTemplate(
+    additionalConfigurations?: object | undefined
   ): CometChatMessageTemplate {
     return (this.dataSource ?? new MessagesDataSource()).getToolArgumentsMessageTemplate(
       additionalConfigurations
     );
   }
-    getToolResultsMessageTemplate(
-    additionalConfigurations?: Object | undefined
+  getToolResultsMessageTemplate(
+    additionalConfigurations?: object | undefined
   ): CometChatMessageTemplate {
     return (this.dataSource ?? new MessagesDataSource()).getToolResultsMessageTemplate(
       additionalConfigurations
     );
   }
   getStreamMessageTemplate(
-    additionalConfigurations?: Object | undefined
+    additionalConfigurations?: object | undefined
   ): CometChatMessageTemplate {
     return (this.dataSource ?? new MessagesDataSource()).getStreamMessageTemplate(
       additionalConfigurations
     );
   }
   getImageMessageTemplate(): CometChatMessageTemplate {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getImageMessageTemplate();
+    return (this.dataSource ?? new MessagesDataSource()).getImageMessageTemplate();
   }
   getVideoMessageTemplate(): CometChatMessageTemplate {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getVideoMessageTemplate();
+    return (this.dataSource ?? new MessagesDataSource()).getVideoMessageTemplate();
   }
   getAudioMessageTemplate(): CometChatMessageTemplate {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getAudioMessageTemplate();
+    return (this.dataSource ?? new MessagesDataSource()).getAudioMessageTemplate();
   }
   getFileMessageTemplate(): CometChatMessageTemplate {
-    return (this.dataSource ?? new MessagesDataSource()).getFileMessageTemplate(
-
-    );
+    return (this.dataSource ?? new MessagesDataSource()).getFileMessageTemplate();
   }
-  getGroupActionTemplate(additionalConfigurations?: Object | undefined): CometChatMessageTemplate {
+  getGroupActionTemplate(additionalConfigurations?: object | undefined): CometChatMessageTemplate {
     return (this.dataSource ?? new MessagesDataSource()).getGroupActionTemplate(
       additionalConfigurations
     );
   }
   getAllMessageTemplates(
-    additionalConfigurations?: Object | undefined
+    additionalConfigurations?: object | undefined
   ): CometChatMessageTemplate[] {
     return (this.dataSource ?? new MessagesDataSource()).getAllMessageTemplates(
       additionalConfigurations
@@ -261,7 +242,7 @@ export abstract class DataSourceDecorator implements DataSource {
   }
   getMessageTemplate(
     messageType: string,
-    messageCategory: string,
+    messageCategory: string
   ): CometChatMessageTemplate | null {
     return (this.dataSource ?? new MessagesDataSource()).getMessageTemplate(
       messageType,
@@ -272,7 +253,7 @@ export abstract class DataSourceDecorator implements DataSource {
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
     group?: CometChat.Group,
-    additionalParams?: Object | undefined
+    additionalParams?: object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getMessageOptions(
       loggedInUser,
@@ -285,7 +266,7 @@ export abstract class DataSourceDecorator implements DataSource {
     loggedInUser: CometChat.User,
     messageObject: CometChat.BaseMessage,
     group?: CometChat.Group,
-    additionalParams?: Object | undefined
+    additionalParams?: object | undefined
   ): Array<CometChatActionsIcon | CometChatActionsView> {
     return (this.dataSource ?? new MessagesDataSource()).getCommonOptions(
       loggedInUser,
@@ -297,7 +278,6 @@ export abstract class DataSourceDecorator implements DataSource {
   getAttachmentOptions(
     id: ComposerId,
     additionalConfigurations?: any
-
   ): CometChatMessageComposerAction[] {
     return (this.dataSource ?? new MessagesDataSource()).getAttachmentOptions(
       id,
@@ -307,17 +287,17 @@ export abstract class DataSourceDecorator implements DataSource {
   getAllMessageTypes(): string[] {
     return (this.dataSource ?? new MessagesDataSource()).getAllMessageTypes();
   }
-  getAllMessageCategories(additionalConfigurations?: Object | undefined): string[] {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getAllMessageCategories(additionalConfigurations);
+  getAllMessageCategories(additionalConfigurations?: object | undefined): string[] {
+    return (this.dataSource ?? new MessagesDataSource()).getAllMessageCategories(
+      additionalConfigurations
+    );
   }
   getStickerButton(
     id: ComposerId,
     user?: CometChat.User,
     group?: CometChat.Group,
     messageToReply?: CometChat.BaseMessage | null,
-    closeReplyPreview?: () => void,
+    closeReplyPreview?: () => void
   ): JSX.Element | undefined {
     return (this.dataSource ?? new MessagesDataSource()).getStickerButton(
       id,
@@ -331,22 +311,24 @@ export abstract class DataSourceDecorator implements DataSource {
     return (this.dataSource ?? new MessagesDataSource()).getId();
   }
   getDeleteMessageBubble(
-    messageObject: CometChat.BaseMessage, text?: string, alignment?: MessageBubbleAlignment) {
-    return (this.dataSource ?? new MessagesDataSource()).getDeleteMessageBubble(
-      messageObject, text, alignment);
-  }
-  getGroupActionBubble(
-    message: CometChat.BaseMessage
+    messageObject: CometChat.BaseMessage,
+    text?: string,
+    alignment?: MessageBubbleAlignment
   ) {
-    return (this.dataSource ?? new MessagesDataSource()).getGroupActionBubble(
-      message
+    return (this.dataSource ?? new MessagesDataSource()).getDeleteMessageBubble(
+      messageObject,
+      text,
+      alignment
     );
+  }
+  getGroupActionBubble(message: CometChat.BaseMessage) {
+    return (this.dataSource ?? new MessagesDataSource()).getGroupActionBubble(message);
   }
   getTextMessageBubble(
     messageText: string,
     message: CometChat.TextMessage,
     alignment: MessageBubbleAlignment,
-    additionalConfigurations?: Object | undefined
+    additionalConfigurations?: object | undefined
   ) {
     return (this.dataSource ?? new MessagesDataSource()).getTextMessageBubble(
       messageText,
@@ -358,7 +340,7 @@ export abstract class DataSourceDecorator implements DataSource {
   getAgentAssistantMessageBubble(
     message: CometChat.AIAssistantMessage,
     alignment: MessageBubbleAlignment,
-    additionalConfigurations?: Object | undefined
+    additionalConfigurations?: object | undefined
   ) {
     return (this.dataSource ?? new MessagesDataSource()).getAgentAssistantMessageBubble(
       message,
@@ -370,7 +352,7 @@ export abstract class DataSourceDecorator implements DataSource {
   getToolArgumentsMessageBubble(
     message: CometChat.AIToolArgumentMessage,
     alignment: MessageBubbleAlignment,
-    additionalConfigurations?: Object | undefined
+    additionalConfigurations?: object | undefined
   ) {
     return (this.dataSource ?? new MessagesDataSource()).getToolArgumentsMessageBubble(
       message,
@@ -382,7 +364,7 @@ export abstract class DataSourceDecorator implements DataSource {
   getToolResultsMessageBubble(
     message: CometChat.AIToolResultMessage,
     alignment: MessageBubbleAlignment,
-    additionalConfigurations?: Object | undefined
+    additionalConfigurations?: object | undefined
   ) {
     return (this.dataSource ?? new MessagesDataSource()).getToolResultsMessageBubble(
       message,
@@ -393,7 +375,7 @@ export abstract class DataSourceDecorator implements DataSource {
   getStreamMessageBubble(
     message: CometChat.CustomMessage,
     alignment: MessageBubbleAlignment,
-    additionalConfigurations?: Object | undefined
+    additionalConfigurations?: object | undefined
   ) {
     return (this.dataSource ?? new MessagesDataSource()).getStreamMessageBubble(
       message,
@@ -405,7 +387,9 @@ export abstract class DataSourceDecorator implements DataSource {
     videoUrl: string,
     message: CometChat.MediaMessage,
     thumbnailUrl?: string,
-    onClick?: Function, alignment?: MessageBubbleAlignment) {
+    onClick?: Function,
+    alignment?: MessageBubbleAlignment
+  ) {
     return (this.dataSource ?? new MessagesDataSource()).getVideoMessageBubble(
       videoUrl,
       message,
@@ -418,7 +402,8 @@ export abstract class DataSourceDecorator implements DataSource {
     imageUrl: string,
     placeholderImage: string,
     message: CometChat.MediaMessage,
-    onClick?: Function, alignment?: MessageBubbleAlignment
+    onClick?: Function,
+    alignment?: MessageBubbleAlignment
   ) {
     return (this.dataSource ?? new MessagesDataSource()).getImageMessageBubble(
       imageUrl,
@@ -444,8 +429,8 @@ export abstract class DataSourceDecorator implements DataSource {
   getFileMessageBubble(
     fileUrl: string,
     message: CometChat.MediaMessage,
-    title?: string
-    , alignment?: MessageBubbleAlignment
+    title?: string,
+    alignment?: MessageBubbleAlignment
   ) {
     return (this.dataSource ?? new MessagesDataSource()).getFileMessageBubble(
       fileUrl,
@@ -459,16 +444,18 @@ export abstract class DataSourceDecorator implements DataSource {
     loggedInUser: CometChat.User,
     additionalConfigurations?: additionalParams
   ): string {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getLastConversationMessage(
+    return (this.dataSource ?? new MessagesDataSource()).getLastConversationMessage(
       conversation,
       loggedInUser,
       additionalConfigurations
     );
   }
 
-  getAuxiliaryHeaderMenu(user?: CometChat.User, group?: CometChat.Group, additionalConfigurations?: any): Element[] | JSX.Element[] {
+  getAuxiliaryHeaderMenu(
+    user?: CometChat.User,
+    group?: CometChat.Group,
+    additionalConfigurations?: any
+  ): Element[] | JSX.Element[] {
     return (this.dataSource ?? new MessagesDataSource()).getAuxiliaryHeaderMenu(
       user,
       group,
@@ -476,10 +463,10 @@ export abstract class DataSourceDecorator implements DataSource {
     );
   }
   getAllTextFormatters(formatterParams: additionalParams): CometChatTextFormatter[] {
-    let formatters = [];
-    const mentionsFormatter = formatterParams.disableMentions ? null : (this.dataSource ?? new MessagesDataSource()).getMentionsTextFormatter(
-      formatterParams
-    );
+    const formatters = [];
+    const mentionsFormatter = formatterParams.disableMentions
+      ? null
+      : (this.dataSource ?? new MessagesDataSource()).getMentionsTextFormatter(formatterParams);
     const urlTextFormatter = (this.dataSource ?? new MessagesDataSource()).getUrlTextFormatter(
       formatterParams
     );
@@ -492,89 +479,73 @@ export abstract class DataSourceDecorator implements DataSource {
     return formatters;
   }
 
-  getMentionsTextFormatter(params: Object = {}): CometChatMentionsFormatter {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getMentionsTextFormatter(params);
+  getMentionsTextFormatter(params: object = {}): CometChatMentionsFormatter {
+    return (this.dataSource ?? new MessagesDataSource()).getMentionsTextFormatter(params);
   }
-  getUrlTextFormatter(params: Object = {}): CometChatUrlsFormatter {
-    return (this.dataSource ?? new MessagesDataSource()).getUrlTextFormatter(
-      params
-    );
+  getUrlTextFormatter(params: object = {}): CometChatUrlsFormatter {
+    return (this.dataSource ?? new MessagesDataSource()).getUrlTextFormatter(params);
   }
   getMentionsFormattedText(
     message: CometChat.TextMessage,
     subtitle: string,
-    additionalConfigurations: Object
+    additionalConfigurations: object
   ): string {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getMentionsFormattedText(message, subtitle, additionalConfigurations);
+    return (this.dataSource ?? new MessagesDataSource()).getMentionsFormattedText(
+      message,
+      subtitle,
+      additionalConfigurations
+    );
   }
 
   getFormMessageContentView(
     message: CometChat.InteractiveMessage,
     alignment: MessageBubbleAlignment
   ) {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getFormMessageContentView(message, alignment);
+    return (this.dataSource ?? new MessagesDataSource()).getFormMessageContentView(
+      message,
+      alignment
+    );
   }
   getSchedulerMessageContentView(
     message: CometChat.InteractiveMessage,
     alignment: MessageBubbleAlignment
   ) {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getSchedulerMessageContentView(message, alignment);
+    return (this.dataSource ?? new MessagesDataSource()).getSchedulerMessageContentView(
+      message,
+      alignment
+    );
   }
   getCardMessageContentView(
     message: CometChat.InteractiveMessage,
     alignment: MessageBubbleAlignment
   ) {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getCardMessageContentView(message, alignment);
-  }
-  getFormMessageTemplate(): CometChatMessageTemplate {
-    return (this.dataSource ?? new MessagesDataSource()).getFormMessageTemplate(
-
-    );
-  }
-  getSchedulerMessageTemplate(): CometChatMessageTemplate {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getSchedulerMessageTemplate();
-  }
-  getCardMessageTemplate(): CometChatMessageTemplate {
-    return (this.dataSource ?? new MessagesDataSource()).getCardMessageTemplate(
-
-    );
-  }
-  getFormMessageBubble(
-    message: CometChat.InteractiveMessage,
-    alignment: MessageBubbleAlignment
-  ) {
-    return (this.dataSource ?? new MessagesDataSource()).getFormMessageBubble(
+    return (this.dataSource ?? new MessagesDataSource()).getCardMessageContentView(
       message,
       alignment
     );
+  }
+  getFormMessageTemplate(): CometChatMessageTemplate {
+    return (this.dataSource ?? new MessagesDataSource()).getFormMessageTemplate();
+  }
+  getSchedulerMessageTemplate(): CometChatMessageTemplate {
+    return (this.dataSource ?? new MessagesDataSource()).getSchedulerMessageTemplate();
+  }
+  getCardMessageTemplate(): CometChatMessageTemplate {
+    return (this.dataSource ?? new MessagesDataSource()).getCardMessageTemplate();
+  }
+  getFormMessageBubble(message: CometChat.InteractiveMessage, alignment: MessageBubbleAlignment) {
+    return (this.dataSource ?? new MessagesDataSource()).getFormMessageBubble(message, alignment);
   }
   getSchedulerMessageBubble(
     message: CometChat.InteractiveMessage,
     alignment: MessageBubbleAlignment
   ) {
-    return (
-      this.dataSource ?? new MessagesDataSource()
-    ).getSchedulerMessageBubble(message, alignment);
-  }
-  getCardMessageBubble(
-    message: CometChat.InteractiveMessage,
-    alignment: MessageBubbleAlignment,
-  ) {
-    return (this.dataSource ?? new MessagesDataSource()).getCardMessageBubble(
+    return (this.dataSource ?? new MessagesDataSource()).getSchedulerMessageBubble(
       message,
       alignment
     );
+  }
+  getCardMessageBubble(message: CometChat.InteractiveMessage, alignment: MessageBubbleAlignment) {
+    return (this.dataSource ?? new MessagesDataSource()).getCardMessageBubble(message, alignment);
   }
 }

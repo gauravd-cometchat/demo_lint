@@ -1,14 +1,11 @@
-import React, { JSX, useEffect, useRef } from "react";
-import {
-  useCometChatErrorHandler,
-  useRefSync,
-} from "../../../CometChatCustomHooks";
+import React, { JSX, useEffect, useRef } from 'react';
+import { useCometChatErrorHandler, useRefSync } from '../../../CometChatCustomHooks';
 
-import { CometChat } from "@cometchat/chat-sdk-javascript";
-import { useCometChatList } from "./useCometChatList";
-import { States } from "../../../Enums/Enums";
-import { CometChatSearchBar } from "../CometChatSearchBar/CometChatSearchBar";
-import { useCometChatFrameContext } from "../../../context/CometChatFrameContext";
+import { CometChat } from '@cometchat/chat-sdk-javascript';
+import { useCometChatList } from './useCometChatList';
+import { States } from '../../../Enums/Enums';
+import { CometChatSearchBar } from '../CometChatSearchBar/CometChatSearchBar';
+import { useCometChatFrameContext } from '../../../context/CometChatFrameContext';
 /**
  * Extracts the value associated with the passed key from the passed object
  *
@@ -20,9 +17,9 @@ function getKeyValue<T>(key: keyof T, item: T): string {
   let res: string;
 
   const keyValue = item[key];
-  if (typeof keyValue === "function") {
+  if (typeof keyValue === 'function') {
     const result = keyValue.call(item);
-    if (typeof result === "undefined") {
+    if (typeof result === 'undefined') {
       if ((item as any)?.id) {
         res = String((item as any)?.id);
       } else {
@@ -156,14 +153,14 @@ interface ListProps<T> {
    * @defaultValue `""`
    */
   title?: string;
-  
+
   /**
-  * A custom search bar component to display in the header.
-  * 
-  * @remarks
-  * When provided, this component overrides the default search bar and the `hideSearch` property.
-  * The custom search view will be displayed even if `hideSearch` is set to true.
-  */
+   * A custom search bar component to display in the header.
+   *
+   * @remarks
+   * When provided, this component overrides the default search bar and the `hideSearch` property.
+   * The custom search view will be displayed even if `hideSearch` is set to true.
+   */
   searchView?: JSX.Element;
 
   /**
@@ -181,15 +178,15 @@ interface ListProps<T> {
   /**
    * Controls the visibility of the scrollbar in the list.
    * @defaultValue `false`
-  */
+   */
   showScrollbar?: boolean;
   /**
    * Set the scrollbar to the bottom-most position of the scrollable list in Agent Chat
    *
    * @remarks
-   * 
+   *
    */
-  scrollToEnd?:boolean;
+  scrollToEnd?: boolean;
 }
 /**
  * Renders a list component that can display a title, search bar,
@@ -200,9 +197,9 @@ interface ListProps<T> {
 function List<T>(props: ListProps<T>): JSX.Element {
   const {
     hideSearch = false,
-    searchText = "",
+    searchText = '',
     onSearch,
-    searchPlaceholderText = "Search",
+    searchPlaceholderText = 'Search',
     list,
     itemView,
     showSectionHeader = true,
@@ -219,12 +216,12 @@ function List<T>(props: ListProps<T>): JSX.Element {
     onError,
     scrolledUpCallback,
     headerView,
-    title = "",
+    title = '',
     searchView,
     onSearchBarClicked,
     showShimmerOnTop = false,
     showScrollbar = false,
-    scrollToEnd = false
+    scrollToEnd = false,
   } = props;
   // Refs for DOM elements and other states
   const intersectionObserverRootRef = useRef<DivElementRef>(null);
@@ -244,13 +241,13 @@ function List<T>(props: ListProps<T>): JSX.Element {
 
   const getCurrentWindow = () => {
     return IframeContext?.iframeWindow || window;
-  }
+  };
 
   /**
- * Handles changes in the search input field and triggers a search with a debounce of 500ms.
- *
- * @param e - The event object containing the new search value
- */
+   * Handles changes in the search input field and triggers a search with a debounce of 500ms.
+   *
+   * @param e - The event object containing the new search value
+   */
   const handleSearchChanged = (e: { value?: string }) => {
     const newSearchText = e.value;
     if (timeoutIdRef.current !== null) {
@@ -260,7 +257,7 @@ function List<T>(props: ListProps<T>): JSX.Element {
       onSearchRef.current?.(newSearchText!);
       timeoutIdRef.current = null;
     }, 500);
-  }
+  };
   useEffect(() => {
     if (scrollToEnd && intersectionObserverRootRef.current) {
       const rootElement = intersectionObserverRootRef.current;
@@ -273,11 +270,11 @@ function List<T>(props: ListProps<T>): JSX.Element {
    */
   function getSearchBox(): JSX.Element | null {
     if (hideSearch && !searchView) return null;
-  
+
     const handleClick = () => {
       if (!searchView && onSearchBarClicked) onSearchBarClicked();
     };
-  
+
     return (
       <div className="cometchat-list__header-search-bar" onClick={handleClick}>
         {searchView || (
@@ -302,7 +299,7 @@ function List<T>(props: ListProps<T>): JSX.Element {
     ) {
       return null;
     }
-    let currrentSectionHeader = "";
+    let currrentSectionHeader = '';
     return list.map((item, itemIdx) => {
       let listSectionJSX: JSX.Element | null = null;
       if (showSectionHeader) {
@@ -310,35 +307,32 @@ function List<T>(props: ListProps<T>): JSX.Element {
         if (sectionHeaderKey === undefined) {
           errorHandler(
             new CometChat.CometChatException({
-              code: "ERROR",
-              name: "Error",
+              code: 'ERROR',
+              name: 'Error',
               message:
                 "'sectionHeaderKey' prop must be provided when 'showSectionHeader' prop is set to true. 'showSectionHeader' is set to be true by default",
             })
           );
-          itemSectionHeader = " ";
+          itemSectionHeader = ' ';
         } else {
           itemSectionHeader = (getKeyValue(sectionHeaderKey as keyof T, item) ||
-            " ")[0].toUpperCase();
+            ' ')[0].toUpperCase();
         }
         let sectionHeaderJSX: JSX.Element | null = null;
 
         if (!currrentSectionHeader || currrentSectionHeader !== itemSectionHeader) {
           sectionHeaderJSX = (
-            <div
-              className="cometchat-list__section-header"
-            >
-              {itemSectionHeader}
-            </div>
+            <div className="cometchat-list__section-header">{itemSectionHeader}</div>
           );
           currrentSectionHeader = itemSectionHeader;
         }
-        listSectionJSX = (
-          <div className="cometchat-list__section">{sectionHeaderJSX}</div>
-        );
+        listSectionJSX = <div className="cometchat-list__section">{sectionHeaderJSX}</div>;
       }
       return (
-        <div key={listItemKey ? getKeyValue(listItemKey as keyof T, item) : itemIdx} className="cometchat-list__item-wrapper">
+        <div
+          key={listItemKey ? getKeyValue(listItemKey as keyof T, item) : itemIdx}
+          className="cometchat-list__item-wrapper"
+        >
           {listSectionJSX}
           {itemView(item, itemIdx)}
         </div>
@@ -346,51 +340,40 @@ function List<T>(props: ListProps<T>): JSX.Element {
     });
   }
   /**
-    * Renders the loading view while the list is in the loading state.
-    */
+   * Renders the loading view while the list is in the loading state.
+   */
   function getLoadingView(): JSX.Element {
     return (
       <div
-        className={`cometchat-list__loading-view ${showShimmerOnTop ? "cometchat-list__loading-view-top" : ""}`}
+        className={`cometchat-list__loading-view ${showShimmerOnTop ? 'cometchat-list__loading-view-top' : ''}`}
       >
         {loadingView}
       </div>
-    )
+    );
   }
 
   /**
-    * Renders the error view if the list is in the error state and hideError is false.
-    */
+   * Renders the error view if the list is in the error state and hideError is false.
+   */
   function getErrorView(): JSX.Element | null {
     if (hideError) {
       return null;
     }
-    return <div
-      className="cometchat-list__error-view"
-    >
-      {errorView}
-    </div>
+    return <div className="cometchat-list__error-view">{errorView}</div>;
   }
 
   /**
-    * Renders the empty view if the list is empty.
-    */
+   * Renders the empty view if the list is empty.
+   */
   function getEmptyView(): JSX.Element {
-    return (
-      <div
-        className="cometchat-list__empty-view"
-      >
-        {emptyView}
-      </div>
-    )
+    return <div className="cometchat-list__empty-view">{emptyView}</div>;
   }
 
   /**
-    * Renders the appropriate view based on the current state (loading, error, empty).
-    */
+   * Renders the appropriate view based on the current state (loading, error, empty).
+   */
   function getStateView(): JSX.Element | null {
     let res: JSX.Element | null = null;
-
 
     switch (state) {
       case States.loading:
@@ -425,36 +408,43 @@ function List<T>(props: ListProps<T>): JSX.Element {
     scrollHeightTupleRef,
     didTopObserverCallbackRunRef,
     errorHandler,
-    scrolledUpCallback
+    scrolledUpCallback,
   });
   /**
- * Renders the title view if the title prop is provided.
- */
+   * Renders the title view if the title prop is provided.
+   */
   function getTitle(): JSX.Element {
-    return (
-      <div
-        className="cometchat-list__header-title"
-      >
-        {title}
-      </div>
-    );
+    return <div className="cometchat-list__header-title">{title}</div>;
   }
   return (
-    <div className="cometchat" style={{
-      width: "100%",
-      height: "100%"
-    }}>
+    <div
+      className="cometchat"
+      style={{
+        width: '100%',
+        height: '100%',
+      }}
+    >
       <div className={`cometchat-list ${!showScrollbar ? ' cometchat-list-hide-scrollbar' : ''}`}>
-        {headerView || title || getSearchBox() ? <div className="cometchat-list__header">
-          {headerView ?? null}
-          {!headerView && title ? getTitle() : null}
-          {getSearchBox()}
-        </div> : null}
+        {headerView || title || getSearchBox() ? (
+          <div className="cometchat-list__header">
+            {headerView ?? null}
+            {!headerView && title ? getTitle() : null}
+            {getSearchBox()}
+          </div>
+        ) : null}
         <div ref={intersectionObserverRootRef} className="cometchat-list__body">
-          <div ref={intersectionObserverTopTargetRef} className="cometchat-list__body-intersection-top" style={{ height: "1px", minHeight: "1px" }}></div>
+          <div
+            ref={intersectionObserverTopTargetRef}
+            className="cometchat-list__body-intersection-top"
+            style={{ height: '1px', minHeight: '1px' }}
+          ></div>
           {getList()}
           {showShimmerOnTop ? getLoadingView() : getStateView()}
-          <div ref={intersectionObserverBottomTargetRef} className="cometchat-list__body-intersection-bottom" style={{ height: "1px", minHeight: "1px" }}></div>
+          <div
+            ref={intersectionObserverBottomTargetRef}
+            className="cometchat-list__body-intersection-bottom"
+            style={{ height: '1px', minHeight: '1px' }}
+          ></div>
         </div>
       </div>
     </div>

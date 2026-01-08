@@ -1,29 +1,28 @@
-import { isMissedCall, isSentByMe, verifyCallUser } from "../Utils/utils";
-import { useCallback, useMemo, useRef, useState } from "react";
-import { CometChat } from "@cometchat/chat-sdk-javascript";
-import { CometChatList } from "../../BaseComponents/CometChatList/CometChatList";
-import { CometChatListItem } from "../../BaseComponents/CometChatListItem/CometChatListItem";
-import { useCometChatCallLogs } from "./useCometChatCallLogs";
+import { isMissedCall, isSentByMe, verifyCallUser } from '../Utils/utils';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { CometChat } from '@cometchat/chat-sdk-javascript';
+import { CometChatList } from '../../BaseComponents/CometChatList/CometChatList';
+import { CometChatListItem } from '../../BaseComponents/CometChatListItem/CometChatListItem';
+import { useCometChatCallLogs } from './useCometChatCallLogs';
+import { CallWorkflow, MessageStatus, States } from '../../../Enums/Enums';
 import {
-  CallWorkflow,
-  MessageStatus,
-  States,
-} from "../../../Enums/Enums";
-import { CometChatLocalize, getLocalizedString } from "../../../resources/CometChatLocalize/cometchat-localize";
-import { CometChatUIKitCalls } from "../../../CometChatUIKit/CometChatCalls";
-import { CometChatDate } from "../../BaseComponents/CometChatDate/CometChatDate";
-import { CometChatUIKitConstants } from "../../../constants/CometChatUIKitConstants";
-import { CometChatOutgoingCall } from "../CometChatOutgoingCall/CometChatOutgoingCall";
-import { CometChatOngoingCall } from "../CometChatOngoingCall/CometChatOngoingCall";
-import { CometChatMessageEvents } from "../../../events/CometChatMessageEvents";
-import { CometChatCallEvents } from "../../../events/CometChatCallEvents";
-import emptyIcon from "../../../assets/call-logs_empty_state.svg";
-import emptyIconDark from "../../../assets/call-logs_empty_state_dark.svg";
-import errorIcon from "../../../assets/list_error_state_icon.svg"
-import errorIconDark from "../../../assets/list_error_state_icon_dark.svg"
-import { getThemeMode, sanitizeCalendarObject } from "../../../utils/util";
-import { useCometChatErrorHandler } from "../../../CometChatCustomHooks";
-import { CalendarObject } from "../../../utils/CalendarObject";
+  CometChatLocalize,
+  getLocalizedString,
+} from '../../../resources/CometChatLocalize/cometchat-localize';
+import { CometChatUIKitCalls } from '../../../CometChatUIKit/CometChatCalls';
+import { CometChatDate } from '../../BaseComponents/CometChatDate/CometChatDate';
+import { CometChatUIKitConstants } from '../../../constants/CometChatUIKitConstants';
+import { CometChatOutgoingCall } from '../CometChatOutgoingCall/CometChatOutgoingCall';
+import { CometChatOngoingCall } from '../CometChatOngoingCall/CometChatOngoingCall';
+import { CometChatMessageEvents } from '../../../events/CometChatMessageEvents';
+import { CometChatCallEvents } from '../../../events/CometChatCallEvents';
+import emptyIcon from '../../../assets/call-logs_empty_state.svg';
+import emptyIconDark from '../../../assets/call-logs_empty_state_dark.svg';
+import errorIcon from '../../../assets/list_error_state_icon.svg';
+import errorIconDark from '../../../assets/list_error_state_icon_dark.svg';
+import { getThemeMode, sanitizeCalendarObject } from '../../../utils/util';
+import { useCometChatErrorHandler } from '../../../CometChatCustomHooks';
+import { CalendarObject } from '../../../utils/CalendarObject';
 import { JSX } from 'react';
 interface CallLogsProps {
   /**
@@ -38,24 +37,24 @@ interface CallLogsProps {
   callLogRequestBuilder?: any;
 
   /**
-  *  Format for displaying the call initiation time in call logs.
-  */
-  callInitiatedDateTimeFormat?: CalendarObject,
+   *  Format for displaying the call initiation time in call logs.
+   */
+  callInitiatedDateTimeFormat?: CalendarObject;
   /**
    * Callback function triggered when a call log list item is clicked.
    * @returns void
    */
-  onItemClick?: (call:any)=>void;
+  onItemClick?: (call: any) => void;
 
   /**
    * Callback function triggered when the call button in the trailing view is clicked.
    * @returns void
    */
-  onCallButtonClicked?: (call:any)=>void;
+  onCallButtonClicked?: (call: any) => void;
 
   /**
    * Callback function triggered when the component encounters an error.
-   * 
+   *
    * @param error - An instance of CometChat.CometChatException representing the error.
    * @returns void
    */
@@ -136,8 +135,7 @@ const defaultProps: CallLogsProps = {
     console.log(error);
   },
   activeCall: undefined,
-  showScrollbar:false
-
+  showScrollbar: false,
 };
 
 const CometChatCallLogs = (props: CallLogsProps) => {
@@ -156,23 +154,21 @@ const CometChatCallLogs = (props: CallLogsProps) => {
     onCallButtonClicked,
     onError,
     callInitiatedDateTimeFormat,
-    showScrollbar
-  } = { ...defaultProps, ...props, };
-  const titleRef = useRef<string>(getLocalizedString("call_logs_title"));
+    showScrollbar,
+  } = { ...defaultProps, ...props };
+  const titleRef = useRef<string>(getLocalizedString('call_logs_title'));
 
   const [callList, setCallList] = useState<any[]>([]);
   const [loggedInUser, setLoggedInUser] = useState<CometChat.User | null>(null);
   const [callListState, setCallListState] = useState(States.loading);
 
   const [showOutgoingCallScreen, setShowOutgoingCallScreen] = useState(false);
-  const [callInitiated, setCallInitiated] = useState<
-    CometChat.Call | undefined
-  >(undefined);
+  const [callInitiated, setCallInitiated] = useState<CometChat.Call | undefined>(undefined);
   const [call, setCall] = useState<CometChat.Call | undefined>(undefined);
   const [sessionId, setSessionId] = useState(null);
   const [showOngoingCall, setShowOngoingCall] = useState(false);
 
-  const listenerId = "callLogsScreen_" + new Date().getTime();
+  const listenerId = 'callLogsScreen_' + new Date().getTime();
   const requestBuilder = useRef<any>(null);
 
   const initiatedCallRef = useRef<CometChat.Call | undefined>(undefined);
@@ -191,7 +187,7 @@ const CometChatCallLogs = (props: CallLogsProps) => {
         const authToken = loggedInUser!.getAuthToken();
         return new CometChatUIKitCalls.CallLogRequestBuilder()
           .setLimit(30)
-          .setCallCategory("call")
+          .setCallCategory('call')
           .setAuthToken(authToken)
           .build();
       }
@@ -237,22 +233,13 @@ const CometChatCallLogs = (props: CallLogsProps) => {
       }
       onErrorCallback(e, 'getCallList');
     }
-  }, [
-    fetchNextCallList,
-    callList,
-    setCallList,
-    setCallListState,
-    onErrorCallback,
-  ]);
+  }, [fetchNextCallList, callList, setCallList, setCallListState, onErrorCallback]);
 
   /**
    * Cancels an outgoing call and sends a rejection request to the server.
    */
   const cancelOutgoingCall = useCallback(() => {
-    CometChat.rejectCall(
-      call?.getSessionId()!,
-      CometChatUIKitConstants.calls.cancelled
-    )
+    CometChat.rejectCall(call?.getSessionId()!, CometChatUIKitConstants.calls.cancelled)
       .then(() => {
         setCall(undefined);
         setShowOutgoingCallScreen(false);
@@ -275,20 +262,15 @@ const CometChatCallLogs = (props: CallLogsProps) => {
    */
   const initiateCall = useCallback(
     (type: string, uid: string) => {
-      const receiverType: string =
-        CometChatUIKitConstants.MessageReceiverType.user;
+      const receiverType: string = CometChatUIKitConstants.MessageReceiverType.user;
       const receiverId: string = uid;
-      let callType: string = "";
+      let callType: string = '';
       if (type === CometChat.CALL_TYPE.VIDEO) {
         callType = CometChat.CALL_TYPE.VIDEO;
       } else {
         callType = CometChat.CALL_TYPE.AUDIO;
       }
-      const callTmp: CometChat.Call = new CometChat.Call(
-        receiverId,
-        callType,
-        receiverType
-      );
+      const callTmp: CometChat.Call = new CometChat.Call(receiverId, callType, receiverType);
       CometChat.initiateCall(callTmp)
         .then((outgoingCall: CometChat.Call) => {
           setCallInitiated(outgoingCall);
@@ -446,11 +428,9 @@ const CometChatCallLogs = (props: CallLogsProps) => {
    */
   const subscribeToEvents = useCallback(() => {
     try {
-      const ccCallEnded = CometChatCallEvents.ccCallEnded.subscribe(
-        () => {
-          closeCallScreen();
-        }
-      );
+      const ccCallEnded = CometChatCallEvents.ccCallEnded.subscribe(() => {
+        closeCallScreen();
+      });
 
       return () => {
         try {
@@ -458,11 +438,11 @@ const CometChatCallLogs = (props: CallLogsProps) => {
         } catch (error: any) {
           onErrorCallback(error, 'subscribeToEvents');
         }
-      }
+      };
     } catch (e) {
       onErrorCallback(e, 'subscribeToEvents');
     }
-  }, [closeCallScreen, onErrorCallback])
+  }, [closeCallScreen, onErrorCallback]);
 
   /**
    * Detaches the call listeners by removing the call listener with the provided listener ID.
@@ -477,26 +457,26 @@ const CometChatCallLogs = (props: CallLogsProps) => {
       onErrorCallback(e, 'detachListeners');
     }
   }, [listenerId, onErrorCallback]);
-   /**
-    * Function for displaying the call initiation time in call logs.
-    * @returns CalendarObject
-     */
-   function getDateFormat():CalendarObject{
+  /**
+   * Function for displaying the call initiation time in call logs.
+   * @returns CalendarObject
+   */
+  function getDateFormat(): CalendarObject {
     const defaultFormat = {
       yesterday: `DD MMM, hh:mm A`,
       otherDays: `DD MMM, hh:mm A`,
-      today: `DD MMM, hh:mm A`
+      today: `DD MMM, hh:mm A`,
     };
 
-        var globalCalendarFormat = sanitizeCalendarObject(CometChatLocalize.calendarObject)
-        var componentCalendarFormat = sanitizeCalendarObject(callInitiatedDateTimeFormat)
-        
-          const finalFormat = {
-            ...defaultFormat,
-            ...globalCalendarFormat,
-            ...componentCalendarFormat
-          };
-          return finalFormat;
+    const globalCalendarFormat = sanitizeCalendarObject(CometChatLocalize.calendarObject);
+    const componentCalendarFormat = sanitizeCalendarObject(callInitiatedDateTimeFormat);
+
+    const finalFormat = {
+      ...defaultFormat,
+      ...globalCalendarFormat,
+      ...componentCalendarFormat,
+    };
+    return finalFormat;
   }
 
   /**
@@ -506,29 +486,25 @@ const CometChatCallLogs = (props: CallLogsProps) => {
     (item: any): JSX.Element => {
       try {
         const missedCall = isMissedCall(item, loggedInUser!);
-        const isCallSentByMe = isSentByMe(item, loggedInUser!)
+        const isCallSentByMe = isSentByMe(item, loggedInUser!);
 
         if (subtitleView) {
           return <>{subtitleView(item)}</>;
         }
 
         const iconClass = isCallSentByMe
-        ? "cometchat-call-logs__list-item-subtitle-icon-outgoing-call" :
-        missedCall ? "cometchat-call-logs__list-item-subtitle-icon-missed-call"
-          : "cometchat-call-logs__list-item-subtitle-icon-incoming-call";
+          ? 'cometchat-call-logs__list-item-subtitle-icon-outgoing-call'
+          : missedCall
+            ? 'cometchat-call-logs__list-item-subtitle-icon-missed-call'
+            : 'cometchat-call-logs__list-item-subtitle-icon-incoming-call';
 
         return (
           <>
             <div className={`cometchat-call-logs__list-item-subtitle`}>
-              <div
-                className={`cometchat-call-logs__list-item-subtitle-icon ${iconClass}`}
-              />
+              <div className={`cometchat-call-logs__list-item-subtitle-icon ${iconClass}`} />
               <div className="cometchat-call-logs__list-item-subtitle-text">
-                {" "}
-                <CometChatDate
-                  timestamp={item.initiatedAt}
-                  calendarObject={getDateFormat()}
-                />
+                {' '}
+                <CometChatDate timestamp={item.initiatedAt} calendarObject={getDateFormat()} />
               </div>
             </div>
           </>
@@ -554,12 +530,12 @@ const CometChatCallLogs = (props: CallLogsProps) => {
         return (
           <div
             className={`cometchat-call-logs__list-item-trailing-view
-          ${callType === CometChat.CALL_TYPE.VIDEO ? "cometchat-call-logs__list-item-trailing-view-video" : "cometchat-call-logs__list-item-trailing-view-audio"}`}
+          ${callType === CometChat.CALL_TYPE.VIDEO ? 'cometchat-call-logs__list-item-trailing-view-video' : 'cometchat-call-logs__list-item-trailing-view-audio'}`}
             onClick={(e) => {
               if (e.stopPropagation) {
                 e.stopPropagation();
               }
-              handleInfoClick?.(item)
+              handleInfoClick?.(item);
             }}
           />
         );
@@ -577,15 +553,17 @@ const CometChatCallLogs = (props: CallLogsProps) => {
   const getListItem = useMemo(() => {
     return function (item: any, index: number): any {
       try {
-        const isActive = activeCall?.getSessionID() === item?.getSessionID()
+        const isActive = activeCall?.getSessionID() === item?.getSessionID();
 
         if (itemView) {
           return itemView(item);
         } else {
           return (
-            <div className={`cometchat-call-logs__list-item ${isActive ? "cometchat-call-logs__list-item-active" : ""}`} key={String(index)}>
+            <div
+              className={`cometchat-call-logs__list-item ${isActive ? 'cometchat-call-logs__list-item-active' : ''}`}
+              key={String(index)}
+            >
               <CometChatListItem
-
                 title={verifyCallUser(item, loggedInUser!)?.getName()}
                 avatarURL={
                   verifyCallUser(item, loggedInUser!)?.avatar ||
@@ -628,17 +606,17 @@ const CometChatCallLogs = (props: CallLogsProps) => {
         return loadingView;
       }
       return (
-        <div className='cometchat-call-logs__shimmer'>
+        <div className="cometchat-call-logs__shimmer">
           {[...Array(15)].map((_, index) => (
-            <div key={index} className='cometchat-call-logs__shimmer-item'>
-              <div className='cometchat-call-logs__shimmer-item-avatar'></div>
-              <div className='cometchat-call-logs__shimmer-item-body'>
-                <div className='cometchat-call-logs__shimmer-item-body-title-wrapper'>
-                  <div className='cometchat-call-logs__shimmer-item-body-title'></div>
-                  <div className='cometchat-call-logs__shimmer-item-body-subtitle'></div>
+            <div key={index} className="cometchat-call-logs__shimmer-item">
+              <div className="cometchat-call-logs__shimmer-item-avatar"></div>
+              <div className="cometchat-call-logs__shimmer-item-body">
+                <div className="cometchat-call-logs__shimmer-item-body-title-wrapper">
+                  <div className="cometchat-call-logs__shimmer-item-body-title"></div>
+                  <div className="cometchat-call-logs__shimmer-item-body-subtitle"></div>
                 </div>
 
-                <div className='cometchat-call-logs__shimmer-item-body-tail'></div>
+                <div className="cometchat-call-logs__shimmer-item-body-tail"></div>
               </div>
             </div>
           ))}
@@ -659,22 +637,22 @@ const CometChatCallLogs = (props: CallLogsProps) => {
    */
   const getEmptyView = () => {
     try {
-      const isDarkMode = getThemeMode() == "dark" ? true : false;
+      const isDarkMode = getThemeMode() == 'dark' ? true : false;
 
       if (emptyView) {
         return emptyView;
       }
       return (
-        <div className='cometchat-call-logs__empty-state-view'>
-          <div className='cometchat-call-logs__empty-state-view-icon'>
+        <div className="cometchat-call-logs__empty-state-view">
+          <div className="cometchat-call-logs__empty-state-view-icon">
             <img src={isDarkMode ? emptyIconDark : emptyIcon} alt="" />
           </div>
-          <div className='cometchat-call-logs__empty-state-view-body'>
-            <div className='cometchat-call-logs__empty-state-view-body-title'>
-              {getLocalizedString("call_logs_empty_title")}
+          <div className="cometchat-call-logs__empty-state-view-body">
+            <div className="cometchat-call-logs__empty-state-view-body-title">
+              {getLocalizedString('call_logs_empty_title')}
             </div>
-            <div className='cometchat-call-logs__empty-state-view-body-description'>
-              {getLocalizedString("call_logs_empty_subtitle")}
+            <div className="cometchat-call-logs__empty-state-view-body-description">
+              {getLocalizedString('call_logs_empty_subtitle')}
             </div>
           </div>
         </div>
@@ -694,24 +672,23 @@ const CometChatCallLogs = (props: CallLogsProps) => {
    */
   const getErrorView = () => {
     try {
-      const isDarkMode = getThemeMode() == "dark" ? true : false;
-
+      const isDarkMode = getThemeMode() == 'dark' ? true : false;
 
       if (errorView) {
         return errorView;
       }
 
       return (
-        <div className='cometchat-call-logs__error-state-view'>
-          <div className='cometchat-call-logs__error-state-view-icon'>
+        <div className="cometchat-call-logs__error-state-view">
+          <div className="cometchat-call-logs__error-state-view-icon">
             <img src={isDarkMode ? errorIconDark : errorIcon} alt="" />
           </div>
-          <div className='cometchat-call-logs__error-state-view-body'>
-            <div className='cometchat-call-logs__error-state-view-body-title'>
-              {getLocalizedString("call_logs_error_title")}
+          <div className="cometchat-call-logs__error-state-view-body">
+            <div className="cometchat-call-logs__error-state-view-body-title">
+              {getLocalizedString('call_logs_error_title')}
             </div>
-            <div className='cometchat-call-logs__error-state-view-body-description'>
-              {getLocalizedString("call_logs_error_subtitle")}
+            <div className="cometchat-call-logs__error-state-view-body-description">
+              {getLocalizedString('call_logs_error_subtitle')}
             </div>
           </div>
         </div>
@@ -735,11 +712,9 @@ const CometChatCallLogs = (props: CallLogsProps) => {
 
   /* This function updates and returns the call builder with required configs and listeners attached. */
   function getCallBuilder(): typeof CometChatUIKitCalls.CallSettings {
-    let audioOnlyCall: boolean =
-      call?.getType() === CometChatUIKitConstants.MessageTypes.audio
-        ? true
-        : false
-    let callsBuilder = new CometChatUIKitCalls.CallSettingsBuilder()
+    const audioOnlyCall: boolean =
+      call?.getType() === CometChatUIKitConstants.MessageTypes.audio ? true : false;
+    const callsBuilder = new CometChatUIKitCalls.CallSettingsBuilder()
       .enableDefaultLayout(true)
       .setIsAudioOnlyCall(audioOnlyCall);
 
@@ -757,7 +732,7 @@ const CometChatCallLogs = (props: CallLogsProps) => {
             .then((call: CometChat.Call) => {
               CometChatUIKitCalls.endSession();
               CometChatCallEvents.ccCallEnded.next(call);
-              closeCallScreen()
+              closeCallScreen();
             })
             .catch((err: CometChat.CometChatException) => {
               onErrorCallback(err, 'getCallBuilder');
@@ -769,31 +744,27 @@ const CometChatCallLogs = (props: CallLogsProps) => {
       })
     );
     return callsBuilder;
-
   }
 
-
   return (
-    <div className='cometchat' style={{ width: "100%", height: "100%" }}>
-      <div className={`cometchat-call-logs ${!showScrollbar ? "cometchat-call-logs-hide-scrollbar" : ""}`}>
+    <div className="cometchat" style={{ width: '100%', height: '100%' }}>
+      <div
+        className={`cometchat-call-logs ${!showScrollbar ? 'cometchat-call-logs-hide-scrollbar' : ''}`}
+      >
         {showOutgoingCallScreen ? (
-          <div className='cometchat-call-logs__outgoing-call'>
-            <CometChatOutgoingCall
-              call={call!}
-              onCallCanceled={cancelOutgoingCall}
-            />
+          <div className="cometchat-call-logs__outgoing-call">
+            <CometChatOutgoingCall call={call!} onCallCanceled={cancelOutgoingCall} />
           </div>
         ) : null}
 
         {showOngoingCall ? (
-          <div className='cometchat-call-logs__ongoing-call'>
+          <div className="cometchat-call-logs__ongoing-call">
             <CometChatOngoingCall
               sessionID={sessionId!}
               callWorkflow={CallWorkflow.defaultCalling}
               callSettingsBuilder={getCallBuilder()}
             />
           </div>
-
         ) : null}
 
         <CometChatList
@@ -802,7 +773,7 @@ const CometChatCallLogs = (props: CallLogsProps) => {
           hideSearch={true}
           list={callList}
           onScrolledToBottom={getCallList}
-          listItemKey='getSessionID'
+          listItemKey="getSessionID"
           itemView={getListItem}
           emptyView={getEmptyView()}
           errorView={getErrorView()}

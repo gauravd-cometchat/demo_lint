@@ -1,25 +1,23 @@
-import React from "react";
-import { DataSource } from "../../../utils/DataSource";
-import { DataSourceDecorator } from "../../../utils/DataSourceDecorator";
-import { ChatConfigurator } from "../../../utils/ChatConfigurator";
-import { CometChatUIKitLoginListener } from "../../../CometChatUIKit/CometChatUIKitLoginListener";
-import { LinkPreviewConstants } from "./LinkPreviewConstants";
-import { CometChatUIKitUtility } from "../../../CometChatUIKit/CometChatUIKitUtility";
-import { LinkPreview } from "./LinkPreview";
-import { CometChatTextFormatter } from "../../../formatters/CometChatFormatters/CometChatTextFormatter";
-import { CometChatMentionsFormatter } from "../../../formatters/CometChatFormatters/CometChatMentionsFormatter/CometChatMentionsFormatter";
-import { CometChatUrlsFormatter } from "../../../formatters/CometChatFormatters/CometChatUrlsFormatter/CometChatUrlsFormatter";
-import { MessageBubbleAlignment } from "../../../Enums/Enums";
-import { CometChatUIKitConstants } from "../../../constants/CometChatUIKitConstants";
-import { CometChatTextBubble } from "../../BaseComponents/CometChatTextBubble/CometChatTextBubble";
+import React from 'react';
+import { DataSource } from '../../../utils/DataSource';
+import { DataSourceDecorator } from '../../../utils/DataSourceDecorator';
+import { ChatConfigurator } from '../../../utils/ChatConfigurator';
+import { CometChatUIKitLoginListener } from '../../../CometChatUIKit/CometChatUIKitLoginListener';
+import { LinkPreviewConstants } from './LinkPreviewConstants';
+import { CometChatUIKitUtility } from '../../../CometChatUIKit/CometChatUIKitUtility';
+import { LinkPreview } from './LinkPreview';
+import { CometChatTextFormatter } from '../../../formatters/CometChatFormatters/CometChatTextFormatter';
+import { CometChatMentionsFormatter } from '../../../formatters/CometChatFormatters/CometChatMentionsFormatter/CometChatMentionsFormatter';
+import { CometChatUrlsFormatter } from '../../../formatters/CometChatFormatters/CometChatUrlsFormatter/CometChatUrlsFormatter';
+import { MessageBubbleAlignment } from '../../../Enums/Enums';
+import { CometChatUIKitConstants } from '../../../constants/CometChatUIKitConstants';
+import { CometChatTextBubble } from '../../BaseComponents/CometChatTextBubble/CometChatTextBubble';
 
 /**
  * The `LinkPreviewExtensionDecorator` class is responsible for adding link preview functionality
  * to text messages within the chat. It decorates the data source with the ability to handle link previews.
  */
 export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
-
-
   /**
    * The data source that the decorator wraps, adding link preview capabilities.
    * @type {DataSource}
@@ -32,9 +30,7 @@ export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
    * @param {DataSource} dataSource - The data source that the decorator will wrap.
    * @param {LinkPreviewConfiguration} [configuration] - Optional configuration settings for the link preview extension.
    */
-  constructor(
-    dataSource: DataSource
-  ) {
+  constructor(dataSource: DataSource) {
     super(dataSource);
     this.newDataSource = dataSource;
   }
@@ -44,7 +40,7 @@ export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
    * @returns {string} The ID of the decorator.
    */
   override getId(): string {
-    return "linkpreview";
+    return 'linkpreview';
   }
 
   /**
@@ -65,44 +61,39 @@ export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
       !message.getDeletedAt() &&
       message.getType() !== CometChatUIKitConstants.MessageTypes.groupMember
     ) {
-      let config = {
+      const config = {
         ...additionalConfigurations,
         textFormatters:
           additionalConfigurations?.textFormatters &&
-            additionalConfigurations?.textFormatters.length
+          additionalConfigurations?.textFormatters.length
             ? [...additionalConfigurations.textFormatters]
-            : this.getAllTextFormatters({ alignment, disableMentions: additionalConfigurations.disableMentions }),
+            : this.getAllTextFormatters({
+                alignment,
+                disableMentions: additionalConfigurations.disableMentions,
+              }),
       };
 
-      let textFormatters: Array<CometChatTextFormatter> = config.textFormatters;
+      const textFormatters: Array<CometChatTextFormatter> = config.textFormatters;
 
       let urlTextFormatter!: CometChatUrlsFormatter;
       if (config && !config.disableMentions) {
         let mentionsTextFormatter!: CometChatMentionsFormatter;
         for (let i = 0; i < textFormatters.length; i++) {
           if (textFormatters[i] instanceof CometChatMentionsFormatter) {
-            mentionsTextFormatter = textFormatters[
-              i
-            ] as CometChatMentionsFormatter;
+            mentionsTextFormatter = textFormatters[i] as CometChatMentionsFormatter;
             mentionsTextFormatter.setMessage(message);
             if (message.getMentionedUsers().length) {
-              mentionsTextFormatter.setCometChatUserGroupMembers(
-                message.getMentionedUsers()
-              );
+              mentionsTextFormatter.setCometChatUserGroupMembers(message.getMentionedUsers());
             }
             if (!message.getDeletedAt()) {
               const channelRegex = /<@all:(.*?)>/g;
               const text = message.getText();
               const matches = Array.from(text.matchAll(channelRegex));
               const mentionedChannels = matches.map((m) => m[1]);
-              mentionsTextFormatter.setCometChatMentionedChannels(
-                mentionedChannels
-              );
+              mentionsTextFormatter.setCometChatMentionedChannels(mentionedChannels);
             }
 
-            mentionsTextFormatter.setLoggedInUser(
-              CometChatUIKitLoginListener.getLoggedInUser()!
-            );
+            mentionsTextFormatter.setLoggedInUser(CometChatUIKitLoginListener.getLoggedInUser()!);
             if (urlTextFormatter) {
               break;
             }
@@ -115,12 +106,11 @@ export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
           }
         }
         if (!mentionsTextFormatter) {
-          mentionsTextFormatter =
-            ChatConfigurator.getDataSource().getMentionsTextFormatter({
-              message,
-              ...config,
-              alignment
-            });
+          mentionsTextFormatter = ChatConfigurator.getDataSource().getMentionsTextFormatter({
+            message,
+            ...config,
+            alignment,
+          });
           textFormatters.push(mentionsTextFormatter);
         }
       } else {
@@ -133,11 +123,9 @@ export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
       }
 
       if (!urlTextFormatter) {
-        urlTextFormatter = ChatConfigurator.getDataSource().getUrlTextFormatter(
-          {
-            alignment,
-          }
-        );
+        urlTextFormatter = ChatConfigurator.getDataSource().getUrlTextFormatter({
+          alignment,
+        });
         textFormatters.push(urlTextFormatter);
       }
 
@@ -147,14 +135,11 @@ export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
       }
       return (
         <LinkPreview
-          title={this.getLinkPreviewDetails(linkPreviewObject, "title")}
-          description={this.getLinkPreviewDetails(
-            linkPreviewObject,
-            "description"
-          )}
-          URL={this.getLinkPreviewDetails(linkPreviewObject, "url")}
-          image={this.getLinkPreviewDetails(linkPreviewObject, "image")}
-          favIconURL={this.getLinkPreviewDetails(linkPreviewObject, "favicon")}
+          title={this.getLinkPreviewDetails(linkPreviewObject, 'title')}
+          description={this.getLinkPreviewDetails(linkPreviewObject, 'description')}
+          URL={this.getLinkPreviewDetails(linkPreviewObject, 'url')}
+          image={this.getLinkPreviewDetails(linkPreviewObject, 'image')}
+          favIconURL={this.getLinkPreviewDetails(linkPreviewObject, 'favicon')}
           ccLinkClicked={(url) => this.openLink(url)}
           isSentByMe={alignment == MessageBubbleAlignment.right}
         >
@@ -166,11 +151,7 @@ export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
         </LinkPreview>
       );
     } else {
-      return super.getTextMessageContentView(
-        message,
-        alignment,
-        additionalConfigurations
-      );
+      return super.getTextMessageContentView(message, alignment, additionalConfigurations);
     }
   }
 
@@ -179,7 +160,7 @@ export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
    * @returns {object} The style object for the link preview wrapper.
    */
   getLinkPreviewWrapperStyle() {
-    return { height: "inherit", width: "inherit" };
+    return { height: 'inherit', width: 'inherit' };
   }
 
   /**
@@ -187,7 +168,7 @@ export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
    * @param {string} url - The URL to open.
    */
   openLink(url: string) {
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   }
 
   /**
@@ -209,8 +190,7 @@ export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
               LinkPreviewConstants.link_preview
             )
           ) {
-            const linkPreviewObject =
-              extensionsObject[LinkPreviewConstants.link_preview];
+            const linkPreviewObject = extensionsObject[LinkPreviewConstants.link_preview];
             if (
               linkPreviewObject &&
               CometChatUIKitUtility.checkHasOwnProperty(
@@ -231,7 +211,7 @@ export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
         return null;
       }
     } catch (error: any) {
-      console.log("error in getting link preview details", error);
+      console.log('error in getting link preview details', error);
     }
   }
 
@@ -245,7 +225,7 @@ export class LinkPreviewExtensionDecorator extends DataSourceDecorator {
     if (Object.keys(linkPreviewObject).length > 0) {
       return linkPreviewObject[key];
     } else {
-      return "";
+      return '';
     }
   }
 }

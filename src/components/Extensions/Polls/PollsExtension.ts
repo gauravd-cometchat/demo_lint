@@ -1,8 +1,8 @@
-import { ChatConfigurator } from "../../../utils/ChatConfigurator";
-import { ExtensionsDataSource } from "../ExtensionsDataSource";
-import { ExtensionsId } from "../ExtensionsId";
-import { PollsConfiguration } from "./PollsConfiguration";
-import { PollsExtensionDecorator } from "./PollsExtensionDecorator";
+import { ChatConfigurator } from '../../../utils/ChatConfigurator';
+import { ExtensionsDataSource } from '../ExtensionsDataSource';
+import { ExtensionsId } from '../ExtensionsId';
+import { PollsConfiguration } from './PollsConfiguration';
+import { PollsExtensionDecorator } from './PollsExtensionDecorator';
 
 export class PollsExtension extends ExtensionsDataSource {
   private configuration?: PollsConfiguration;

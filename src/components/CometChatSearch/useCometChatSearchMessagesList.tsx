@@ -1,27 +1,36 @@
-import { JSX, useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
-import { useCometChatErrorHandler } from "../../CometChatCustomHooks";
-import { CometChat } from "@cometchat/chat-sdk-javascript";
-import { CometChatListItem } from "../BaseComponents/CometChatListItem/CometChatListItem";
-import { CometChatList } from "../BaseComponents/CometChatList/CometChatList";
-import { CometChatTextFormatter } from "../../formatters/CometChatFormatters/CometChatTextFormatter";
-import { CometChatLocalize, getLocalizedString } from "../../resources/CometChatLocalize/cometchat-localize";
-import { CometChatSearchFilter, MentionsTargetElement, MessageBubbleAlignment, Placement, States } from "../../Enums/Enums";
-import { CometChatActionsIcon, CometChatOption } from "../../modals";
-import { CometChatUIKitConstants } from "../../constants/CometChatUIKitConstants";
-import { CometChatDate } from "../BaseComponents/CometChatDate/CometChatDate";
-import { CometChatContextMenu } from "../BaseComponents/CometChatContextMenu/CometChatContextMenu";
-import { ChatConfigurator } from "../../utils/ChatConfigurator";
-import { CalendarObject } from "../../utils/CalendarObject";
-import { CometChatButton } from "../BaseComponents/CometChatButton/CometChatButton";
-import { CometChatMentionsFormatter, CometChatTextHighlightFormatter } from "../../formatters";
-import { CometChatUIKitLoginListener } from "../../CometChatUIKit/CometChatUIKitLoginListener";
-import {  hasLink, hasValidMessageSearchCriteria, isMonthDifferent } from "../../utils/SearchUtils";
-import { isMessageSentByMe, isURL, sanitizeCalendarObject } from "../../utils/util";
-import { CometChatUIKit } from "../../CometChatUIKit/CometChatUIKit";
-import { MessageUtils } from "../../utils/MessageUtils";
-import { MessagesDataSource } from "../../utils/MessagesDataSource";
-import { CometChatUIKitUtility } from "../../CometChatUIKit/CometChatUIKitUtility";
-import { LinkPreviewConstants } from "../Extensions/LinkPreview/LinkPreviewConstants";
+import { JSX, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { useCometChatErrorHandler } from '../../CometChatCustomHooks';
+import { CometChat } from '@cometchat/chat-sdk-javascript';
+import { CometChatListItem } from '../BaseComponents/CometChatListItem/CometChatListItem';
+import { CometChatList } from '../BaseComponents/CometChatList/CometChatList';
+import { CometChatTextFormatter } from '../../formatters/CometChatFormatters/CometChatTextFormatter';
+import {
+  CometChatLocalize,
+  getLocalizedString,
+} from '../../resources/CometChatLocalize/cometchat-localize';
+import {
+  CometChatSearchFilter,
+  MentionsTargetElement,
+  MessageBubbleAlignment,
+  Placement,
+  States,
+} from '../../Enums/Enums';
+import { CometChatActionsIcon, CometChatOption } from '../../modals';
+import { CometChatUIKitConstants } from '../../constants/CometChatUIKitConstants';
+import { CometChatDate } from '../BaseComponents/CometChatDate/CometChatDate';
+import { CometChatContextMenu } from '../BaseComponents/CometChatContextMenu/CometChatContextMenu';
+import { ChatConfigurator } from '../../utils/ChatConfigurator';
+import { CalendarObject } from '../../utils/CalendarObject';
+import { CometChatButton } from '../BaseComponents/CometChatButton/CometChatButton';
+import { CometChatMentionsFormatter, CometChatTextHighlightFormatter } from '../../formatters';
+import { CometChatUIKitLoginListener } from '../../CometChatUIKit/CometChatUIKitLoginListener';
+import { hasLink, hasValidMessageSearchCriteria, isMonthDifferent } from '../../utils/SearchUtils';
+import { isMessageSentByMe, isURL, sanitizeCalendarObject } from '../../utils/util';
+import { CometChatUIKit } from '../../CometChatUIKit/CometChatUIKit';
+import { MessageUtils } from '../../utils/MessageUtils';
+import { MessagesDataSource } from '../../utils/MessagesDataSource';
+import { CometChatUIKitUtility } from '../../CometChatUIKit/CometChatUIKitUtility';
+import { LinkPreviewConstants } from '../Extensions/LinkPreview/LinkPreviewConstants';
 
 /**
  * Interface for the props used by the useCometChatSearchMessagesList hook.
@@ -147,7 +156,6 @@ interface UseCometChatSearchMessagesListProps {
   loggedInUser?: CometChat.User | null;
 }
 
-
 /**
  * State interface for the hook
  */
@@ -161,10 +169,10 @@ interface State {
  * Action types for the reducer
  */
 type Action =
-  | { type: "setMessageList"; messageList: CometChat.BaseMessage[] }
-  | { type: "appendMessages"; messages: CometChat.BaseMessage[] }
-  | { type: "setFetchState"; fetchState: States }
-  | { type: "setHasMoreResults"; hasMoreResults: boolean };
+  | { type: 'setMessageList'; messageList: CometChat.BaseMessage[] }
+  | { type: 'appendMessages'; messages: CometChat.BaseMessage[] }
+  | { type: 'setFetchState'; fetchState: States }
+  | { type: 'setHasMoreResults'; hasMoreResults: boolean };
 
 /**
  * Reducer function for state management
@@ -174,7 +182,7 @@ function stateReducer(state: State, action: Action): State {
   const { type } = action;
 
   switch (type) {
-    case "setMessageList": {
+    case 'setMessageList': {
       const { messageList } = action;
       newState = {
         ...state,
@@ -183,7 +191,7 @@ function stateReducer(state: State, action: Action): State {
       break;
     }
 
-    case "appendMessages": {
+    case 'appendMessages': {
       const newMessageList = [...state.messageList, ...action.messages];
       newState = {
         ...state,
@@ -192,11 +200,11 @@ function stateReducer(state: State, action: Action): State {
       break;
     }
 
-    case "setFetchState":
+    case 'setFetchState':
       newState = { ...state, fetchState: action.fetchState };
       break;
 
-    case "setHasMoreResults":
+    case 'setHasMoreResults':
       newState = { ...state, hasMoreResults: action.hasMoreResults };
       break;
 
@@ -210,11 +218,7 @@ function stateReducer(state: State, action: Action): State {
   return newState;
 }
 
-function LinkPreviewImage(props: {
-  url: string;
-  viewClass: string;
-  iconClass: string;
-}) {
+function LinkPreviewImage(props: { url: string; viewClass: string; iconClass: string }) {
   const { url, viewClass, iconClass } = props;
   const [failed, setFailed] = useState(false);
   if (failed || !url) {
@@ -236,7 +240,7 @@ function LinkPreviewImage(props: {
  */
 export function useCometChatSearchMessagesList(props: UseCometChatSearchMessagesListProps) {
   const {
-    searchKeyword = "",
+    searchKeyword = '',
     messagesRequestBuilder,
     onItemClick,
     itemView = null,
@@ -251,20 +255,20 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
     titleView,
     messageDateTimeFormat,
     onError,
-    seeMoreButtonText = getLocalizedString("search_result_see_more"),
+    seeMoreButtonText = getLocalizedString('search_result_see_more'),
     alwaysShowSeeMore = false,
     activeFilters = [],
     uid,
     guid,
     hideError = false,
-    loggedInUser
+    loggedInUser,
   } = props;
 
   // Initialize state
   const [messageState, dispatch] = useReducer(stateReducer, {
     messageList: [],
     fetchState: States.loading,
-    hasMoreResults: false
+    hasMoreResults: false,
   });
   const lastActiveFiltersRef = useRef<CometChatSearchFilter[]>(activeFilters || []);
 
@@ -274,65 +278,63 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
   const isMoreResultsLoading = useRef<boolean>(false);
 
   /**
-  * Fetch messages based on the search keyword and active filters
-  */
+   * Fetch messages based on the search keyword and active filters
+   */
   const searchMessages = useCallback(async () => {
     try {
-      dispatch({ type: "setFetchState", fetchState: States.loading });
+      dispatch({ type: 'setFetchState', fetchState: States.loading });
 
       // Check if valid search criteria are present
       if (!hasValidMessageSearchCriteria(searchKeyword, activeFilters || [])) {
-        dispatch({ type: "setMessageList", messageList: [] });
-        dispatch({ type: "setFetchState", fetchState: States.empty });
-        dispatch({ type: "setHasMoreResults", hasMoreResults: false });
+        dispatch({ type: 'setMessageList', messageList: [] });
+        dispatch({ type: 'setFetchState', fetchState: States.empty });
+        dispatch({ type: 'setHasMoreResults', hasMoreResults: false });
         return;
       }
 
       // Build the request with filters
       searchRequestRef.current = buildMessagesRequest();
-      let limit = activeFilters.length > 0 ? 30 : 3;
+      const limit = activeFilters.length > 0 ? 30 : 3;
 
       const messages = await searchRequestRef.current.fetchPrevious();
 
       if (messages.length > 0) {
         const reversedList = messages.reverse();
-        dispatch({ type: "setMessageList", messageList: reversedList });
-        dispatch({ type: "setFetchState", fetchState: States.loaded });
+        dispatch({ type: 'setMessageList', messageList: reversedList });
+        dispatch({ type: 'setFetchState', fetchState: States.loaded });
 
         // Check if there might be more results
-        dispatch({ type: "setHasMoreResults", hasMoreResults: messages.length >= limit });
+        dispatch({ type: 'setHasMoreResults', hasMoreResults: messages.length >= limit });
       } else {
-        dispatch({ type: "setFetchState", fetchState: States.empty });
-        dispatch({ type: "setHasMoreResults", hasMoreResults: false });
+        dispatch({ type: 'setFetchState', fetchState: States.empty });
+        dispatch({ type: 'setHasMoreResults', hasMoreResults: false });
       }
     } catch (error) {
-      dispatch({ type: "setFetchState", fetchState: States.error });
-      errorHandler(error, "searchMessages");
+      dispatch({ type: 'setFetchState', fetchState: States.error });
+      errorHandler(error, 'searchMessages');
     }
   }, [searchKeyword, activeFilters, uid, guid, errorHandler]);
-
 
   useEffect(() => {
     const hasKeywordChanged = searchKeyword !== lastSearchKeyword.current;
 
-    const haveFiltersChanged = activeFilters &&
+    const haveFiltersChanged =
+      activeFilters &&
       (!lastActiveFiltersRef.current ||
         lastActiveFiltersRef.current.length !== activeFilters.length ||
-        !activeFilters.every(filter => lastActiveFiltersRef.current.includes(filter)));
+        !activeFilters.every((filter) => lastActiveFiltersRef.current.includes(filter)));
 
     if (hasKeywordChanged || haveFiltersChanged) {
       lastSearchKeyword.current = searchKeyword;
       lastActiveFiltersRef.current = [...(activeFilters || [])];
 
-      dispatch({ type: "setMessageList", messageList: [] });
-      dispatch({ type: "setFetchState", fetchState: States.loading });
-      dispatch({ type: "setHasMoreResults", hasMoreResults: false });
-      
+      dispatch({ type: 'setMessageList', messageList: [] });
+      dispatch({ type: 'setFetchState', fetchState: States.loading });
+      dispatch({ type: 'setHasMoreResults', hasMoreResults: false });
+
       searchMessages();
     }
   }, [searchKeyword, activeFilters, searchMessages]);
-
-
 
   /**
    * Load more search results
@@ -348,16 +350,15 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
       const messages = await searchRequestRef.current.fetchPrevious();
       if (messages.length > 0) {
         const reversedList = messages.reverse();
-        dispatch({ type: "appendMessages", messages:reversedList });
-        let limit = activeFilters.length > 0 ? 30 : 3;
+        dispatch({ type: 'appendMessages', messages: reversedList });
+        const limit = activeFilters.length > 0 ? 30 : 3;
 
-        dispatch({ type: "setHasMoreResults", hasMoreResults: messages.length >= limit });
+        dispatch({ type: 'setHasMoreResults', hasMoreResults: messages.length >= limit });
       } else {
-        dispatch({ type: "setHasMoreResults", hasMoreResults: false });
+        dispatch({ type: 'setHasMoreResults', hasMoreResults: false });
       }
-
     } catch (error) {
-      errorHandler(error, "loadMoreResults");
+      errorHandler(error, 'loadMoreResults');
     } finally {
       isMoreResultsLoading.current = false;
     }
@@ -365,7 +366,7 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
 
   function getLinkPreviewDetails(linkPreviewObject: any): string | null {
     if (Object.keys(linkPreviewObject).length > 0) {
-      return linkPreviewObject["favicon"];
+      return linkPreviewObject['favicon'];
     } else {
       return null;
     }
@@ -385,8 +386,7 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
               LinkPreviewConstants.link_preview
             )
           ) {
-            const linkPreviewObject =
-              extensionsObject[LinkPreviewConstants.link_preview];
+            const linkPreviewObject = extensionsObject[LinkPreviewConstants.link_preview];
             if (
               linkPreviewObject &&
               CometChatUIKitUtility.checkHasOwnProperty(
@@ -407,7 +407,7 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
         return null;
       }
     } catch (error: any) {
-      console.log("error in getting link preview details", error);
+      console.log('error in getting link preview details', error);
     }
   }
 
@@ -416,9 +416,9 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
    */
   function getListItemLeadingView(message: CometChat.BaseMessage): JSX.Element {
     try {
-      let messageType = message.getType();
-      let iconClass = "cometchat-search__messages-leading-view-icon";
-      let viewClass = "cometchat-search__messages-leading-view";
+      const messageType = message.getType();
+      const iconClass = 'cometchat-search__messages-leading-view-icon';
+      const viewClass = 'cometchat-search__messages-leading-view';
 
       // Add specific class based on message type
       switch (messageType) {
@@ -428,24 +428,23 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
             if (hasLink(metadata)) {
               const previewUrl = getLinkPreview(message);
               if (previewUrl) {
-                return <LinkPreviewImage url={previewUrl} viewClass={viewClass} iconClass={iconClass} />;
-              }
-              else {
+                return (
+                  <LinkPreviewImage url={previewUrl} viewClass={viewClass} iconClass={iconClass} />
+                );
+              } else {
                 return (
                   <div className={`${viewClass} ${viewClass}-link`}>
                     <div className={iconClass}></div>
                   </div>
                 );
               }
-            }
-            else if (isURL(message.getText())) {
+            } else if (isURL(message.getText())) {
               return (
                 <div className={`${viewClass} ${viewClass}-link`}>
                   <div className={iconClass}></div>
                 </div>
               );
-            }
-            else {
+            } else {
               return <></>;
             }
           }
@@ -455,14 +454,14 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
           return <></>;
 
         case CometChatUIKitConstants.MessageTypes.file:
-          let fileMessage = message as CometChat.MediaMessage;
-          let attachment = fileMessage.getAttachments()[0];
+          const fileMessage = message as CometChat.MediaMessage;
+          const attachment = fileMessage.getAttachments()[0];
           const metadataFile = (fileMessage.getMetadata() as any)?.file as File | undefined;
           const mimeType = attachment?.getMimeType() ?? metadataFile?.type;
-          let fileIcon = new MessagesDataSource().getFileType(mimeType)
+          const fileIcon = new MessagesDataSource().getFileType(mimeType);
           return (
             <div className={`${viewClass} ${viewClass}-file`}>
-              <img className={iconClass} src={fileIcon}/>
+              <img className={iconClass} src={fileIcon} />
             </div>
           );
 
@@ -477,10 +476,10 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
           );
 
         default:
-          return <></>
+          return <></>;
       }
     } catch (error) {
-      errorHandler(error, "getListItemLeadingView");
+      errorHandler(error, 'getListItemLeadingView');
       // Return default view on error
       return (
         <div className="cometchat-search__messages-leading-view">
@@ -496,87 +495,80 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
   /**
    * Get formatted message text for display
    */
-  const getFormattedMessageText = useCallback((message: CometChat.TextMessage): string => {
-    try {
-      let text = (message as CometChat.TextMessage).getText();
-      let finalText = CometChatUIKitUtility.sanitizeText(text);
-      let formatters = textFormatters ?? ChatConfigurator.getDataSource().getAllTextFormatters({ mentionsTargetElement: MentionsTargetElement.conversation });
+  const getFormattedMessageText = useCallback(
+    (message: CometChat.TextMessage): string => {
+      try {
+        const text = (message as CometChat.TextMessage).getText();
+        let finalText = CometChatUIKitUtility.sanitizeText(text);
+        const formatters =
+          textFormatters ??
+          ChatConfigurator.getDataSource().getAllTextFormatters({
+            mentionsTargetElement: MentionsTargetElement.conversation,
+          });
 
-      if (message) {
-        let mentionsTextFormatter!: CometChatMentionsFormatter;
-        for (let i = 0; i < textFormatters.length; i++) {
-          if (searchKeyword && textFormatters[i] instanceof CometChatTextHighlightFormatter) {
-            (textFormatters[i] as CometChatTextHighlightFormatter).setText(searchKeyword);
-          }
-          if (textFormatters[i] instanceof CometChatMentionsFormatter) {
-            mentionsTextFormatter = textFormatters[
-              i
-            ] as unknown as CometChatMentionsFormatter;
-            mentionsTextFormatter.setMessage(message);
-            if (message.getMentionedUsers().length) {
-              mentionsTextFormatter.setCometChatUserGroupMembers(
-                message.getMentionedUsers()
-              );
+        if (message) {
+          let mentionsTextFormatter!: CometChatMentionsFormatter;
+          for (let i = 0; i < textFormatters.length; i++) {
+            if (searchKeyword && textFormatters[i] instanceof CometChatTextHighlightFormatter) {
+              (textFormatters[i] as CometChatTextHighlightFormatter).setText(searchKeyword);
             }
+            if (textFormatters[i] instanceof CometChatMentionsFormatter) {
+              mentionsTextFormatter = textFormatters[i] as unknown as CometChatMentionsFormatter;
+              mentionsTextFormatter.setMessage(message);
+              if (message.getMentionedUsers().length) {
+                mentionsTextFormatter.setCometChatUserGroupMembers(message.getMentionedUsers());
+              }
 
-            if (!message.getDeletedAt()) {
-              const channelRegex = /<@all:(.*?)>/g;
-              const text = message.getText();
-              const matches = Array.from(text.matchAll(channelRegex));
-              const mentionedChannels = matches.map((m) => m[1]);
-              mentionsTextFormatter.setCometChatMentionedChannels(
-                mentionedChannels
-              );
+              if (!message.getDeletedAt()) {
+                const channelRegex = /<@all:(.*?)>/g;
+                const text = message.getText();
+                const matches = Array.from(text.matchAll(channelRegex));
+                const mentionedChannels = matches.map((m) => m[1]);
+                mentionsTextFormatter.setCometChatMentionedChannels(mentionedChannels);
+              }
+
+              mentionsTextFormatter.setLoggedInUser(CometChatUIKitLoginListener.getLoggedInUser()!);
             }
-            
-            mentionsTextFormatter.setLoggedInUser(
-              CometChatUIKitLoginListener.getLoggedInUser()!
-            );
+            if (mentionsTextFormatter) {
+              break;
+            }
           }
-          if (mentionsTextFormatter) {
-            break;
-          }
-        }
-        if (!mentionsTextFormatter) {
-          mentionsTextFormatter =
-            ChatConfigurator.getDataSource().getMentionsTextFormatter({
+          if (!mentionsTextFormatter) {
+            mentionsTextFormatter = ChatConfigurator.getDataSource().getMentionsTextFormatter({
               message,
-              alignment: null
+              alignment: null,
             });
-          formatters.push(mentionsTextFormatter);
-        }
+            formatters.push(mentionsTextFormatter);
+          }
 
-        if (
-          message &&
-          message instanceof CometChat.TextMessage
-        ) {
-          for (let i = 0; i < formatters.length; i++) {
-            let temp_message = formatters[i].getFormattedText(finalText, { mentionsTargetElement: MentionsTargetElement.conversation });
-            if (typeof (temp_message) == "string") {
-              finalText = temp_message;
+          if (message && message instanceof CometChat.TextMessage) {
+            for (let i = 0; i < formatters.length; i++) {
+              const temp_message = formatters[i].getFormattedText(finalText, {
+                mentionsTargetElement: MentionsTargetElement.conversation,
+              });
+              if (typeof temp_message == 'string') {
+                finalText = temp_message;
+              }
             }
           }
         }
+        return finalText;
+      } catch (error) {
+        errorHandler(error, 'getFormattedMessageText');
+        return message?.getText() || '';
       }
-      return finalText;
-
-    }
-      catch (error) {
-      errorHandler(error, "getFormattedMessageText");
-      return message?.getText() || "";
-    }
-  },[textFormatters, errorHandler,searchKeyword]);
+    },
+    [textFormatters, errorHandler, searchKeyword]
+  );
 
   function getSubtitleThreadView(message: CometChat.BaseMessage): JSX.Element | null {
     try {
       if (!message.getParentMessageId()) {
         return null;
       }
-      return (
-        <div className='cometchat-search__messages-subtitle-icon-thread' />
-      );
+      return <div className="cometchat-search__messages-subtitle-icon-thread" />;
     } catch (error) {
-      errorHandler(error, "getSubtitleThreadView");
+      errorHandler(error, 'getSubtitleThreadView');
       return null;
     }
   }
@@ -586,21 +578,25 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
    */
   function getSubtitleTextView(message: CometChat.TextMessage): JSX.Element {
     try {
-      let user = loggedInUser ?? CometChatUIKitLoginListener.getLoggedInUser();
+      const user = loggedInUser ?? CometChatUIKitLoginListener.getLoggedInUser();
       const messageText = getFormattedMessageText(message);
       const isMyMessage = message?.getSender().getUid() == user?.getUid();
-      const senderName = isMyMessage ? getLocalizedString("search_message_subtitle_you") : message?.getSender().getName()
+      const senderName = isMyMessage
+        ? getLocalizedString('search_message_subtitle_you')
+        : message?.getSender().getName();
       return (
         <>
-        {getSubtitleThreadView(message)}
-        <div
-          className="cometchat-search-messages__subtitle-text"
-          dangerouslySetInnerHTML={{ __html: `${!uid && !guid ? senderName + ": " : ""}${messageText}` }}
-        />
+          {getSubtitleThreadView(message)}
+          <div
+            className="cometchat-search-messages__subtitle-text"
+            dangerouslySetInnerHTML={{
+              __html: `${!uid && !guid ? senderName + ': ' : ''}${messageText}`,
+            }}
+          />
         </>
       );
     } catch (error) {
-      errorHandler(error, "getSubtitleTextView");
+      errorHandler(error, 'getSubtitleTextView');
       return <></>;
     }
   }
@@ -612,33 +608,43 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
     if (subtitleView !== null) {
       return <>{subtitleView(message)}</>;
     }
-    let subtitle = "";
+    let subtitle = '';
     if (CometChatUIKitConstants.MessageTypes.text === message.getType()) {
-      return (<div className='cometchat-search-messages__subtitle'>
-        {getSubtitleTextView(message as CometChat.TextMessage)}
-      </div>)
+      return (
+        <div className="cometchat-search-messages__subtitle">
+          {getSubtitleTextView(message as CometChat.TextMessage)}
+        </div>
+      );
     }
     switch (message.getType()) {
       case CometChatUIKitConstants.MessageTypes.image:
-        subtitle = (message as CometChat.MediaMessage).getAttachments() ? (message as CometChat.MediaMessage).getAttachments()[0].getName() : "";
-        break
+        subtitle = (message as CometChat.MediaMessage).getAttachments()
+          ? (message as CometChat.MediaMessage).getAttachments()[0].getName()
+          : '';
+        break;
 
       case CometChatUIKitConstants.MessageTypes.file:
-        subtitle = (message as CometChat.MediaMessage).getAttachments() ? (message as CometChat.MediaMessage).getAttachments()[0].getName() : "";
-        break
+        subtitle = (message as CometChat.MediaMessage).getAttachments()
+          ? (message as CometChat.MediaMessage).getAttachments()[0].getName()
+          : '';
+        break;
 
       case CometChatUIKitConstants.MessageTypes.video:
-        subtitle = (message as CometChat.MediaMessage).getAttachments() ? (message as CometChat.MediaMessage).getAttachments()[0].getName() : "";
-        break
+        subtitle = (message as CometChat.MediaMessage).getAttachments()
+          ? (message as CometChat.MediaMessage).getAttachments()[0].getName()
+          : '';
+        break;
 
       case CometChatUIKitConstants.MessageTypes.audio:
-        subtitle = (message as CometChat.MediaMessage).getAttachments() ? (message as CometChat.MediaMessage).getAttachments()[0].getName() : "";
-        break
+        subtitle = (message as CometChat.MediaMessage).getAttachments()
+          ? (message as CometChat.MediaMessage).getAttachments()[0].getName()
+          : '';
+        break;
       default:
         break;
     }
     return (
-      <div className='cometchat-search-messages__subtitle'>
+      <div className="cometchat-search-messages__subtitle">
         {getSubtitleThreadView(message)}
         {subtitle}
       </div>
@@ -650,9 +656,9 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
    */
   function getDateFormat(): CalendarObject {
     const defaultFormat = {
-      yesterday: "DD MMM, YYYY",
+      yesterday: 'DD MMM, YYYY',
       otherDays: `DD MMM, YYYY`,
-      today: "DD MMM, YYYY"
+      today: 'DD MMM, YYYY',
     };
 
     const globalCalendarFormat = sanitizeCalendarObject(CometChatLocalize.calendarObject);
@@ -661,7 +667,7 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
     return {
       ...defaultFormat,
       ...globalCalendarFormat,
-      ...componentCalendarFormat
+      ...componentCalendarFormat,
     };
   }
 
@@ -673,25 +679,25 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
       if (trailingView) {
         return <>{trailingView(message)}</>;
       }
-      if (message.getType() != CometChatUIKitConstants.MessageTypes.image && message.getType() != CometChatUIKitConstants.MessageTypes.video) {
-        return (
-          <CometChatDate timestamp={message.getSentAt()} calendarObject={getDateFormat()} />
-
-        );
+      if (
+        message.getType() != CometChatUIKitConstants.MessageTypes.image &&
+        message.getType() != CometChatUIKitConstants.MessageTypes.video
+      ) {
+        return <CometChatDate timestamp={message.getSentAt()} calendarObject={getDateFormat()} />;
       }
 
-      let messageType = message.getType();
-      let iconClass = "cometchat-search__messages-trailing-view-icon";
-      let viewClass = "cometchat-search__messages-trailing-view";
-      let url = "";
+      const messageType = message.getType();
+      const iconClass = 'cometchat-search__messages-trailing-view-icon';
+      const viewClass = 'cometchat-search__messages-trailing-view';
+      let url = '';
       if (message instanceof CometChat.MediaMessage) {
-        url = (message as CometChat.MediaMessage).getAttachments() ? (message as CometChat.MediaMessage).getAttachments()[0].getUrl() : "";
+        url = (message as CometChat.MediaMessage).getAttachments()
+          ? (message as CometChat.MediaMessage).getAttachments()[0].getUrl()
+          : '';
       }
       // Add specific class based on message type
       switch (messageType) {
-
         case CometChatUIKitConstants.MessageTypes.image:
-
           return (
             <div className={`${viewClass} ${viewClass}-image`}>
               <div className={iconClass}></div>
@@ -702,7 +708,13 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
         case CometChatUIKitConstants.MessageTypes.video:
           return (
             <div className={`${viewClass} ${viewClass}-video`}>
-              <video src={url} className={iconClass} preload="metadata" controls={false} onContextMenu={(e) => e.preventDefault()}>
+              <video
+                src={url}
+                className={iconClass}
+                preload="metadata"
+                controls={false}
+                onContextMenu={(e) => e.preventDefault()}
+              >
                 <track kind="captions" />
               </video>
               <div className="cometchat-search__messages-video-play-button"></div>
@@ -713,11 +725,9 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
           break;
       }
 
-
-      return (<></>)
-
+      return <></>;
     } catch (error) {
-      errorHandler(error, "getListItemTrailingView");
+      errorHandler(error, 'getListItemTrailingView');
       return null;
     }
   }
@@ -744,42 +754,51 @@ export function useCometChatSearchMessagesList(props: UseCometChatSearchMessages
             topMenuSize={2}
             placement={Placement.left}
             onOptionClicked={() => {
-              curOptions && curOptions.forEach((option: CometChatOption) => {
-                if (option && option.id) {
-                  option.onClick?.(parseInt(String(option.id)));
-                }
-              });
+              curOptions &&
+                curOptions.forEach((option: CometChatOption) => {
+                  if (option && option.id) {
+                    option.onClick?.(parseInt(String(option.id)));
+                  }
+                });
             }}
           />
         </div>
       );
     } catch (error) {
-      errorHandler(error, "getListItemMenuView");
+      errorHandler(error, 'getListItemMenuView');
       return null;
     }
   }
-const getMessageTitle = useCallback((message: CometChat.BaseMessage): string => {
-  let user = loggedInUser ?? CometChatUIKitLoginListener.getLoggedInUser();
- if(uid || guid){
-   return isMessageSentByMe(message, user! ) ? getLocalizedString("search_message_title_you") : message.getSender()?.getName();
- }
- let receiver = message.getReceiver();
- return receiver.getName();
-
-},[uid,guid,loggedInUser])
+  const getMessageTitle = useCallback(
+    (message: CometChat.BaseMessage): string => {
+      const user = loggedInUser ?? CometChatUIKitLoginListener.getLoggedInUser();
+      if (uid || guid) {
+        return isMessageSentByMe(message, user!)
+          ? getLocalizedString('search_message_title_you')
+          : message.getSender()?.getName();
+      }
+      const receiver = message.getReceiver();
+      return receiver.getName();
+    },
+    [uid, guid, loggedInUser]
+  );
   /**
    * Creates `listItem` prop of the `CometChatList` component
    */
-  const getListItem = useCallback((): (message: CometChat.BaseMessage, index: number) => JSX.Element => {
+  const getListItem = useCallback((): ((
+    message: CometChat.BaseMessage,
+    index: number
+  ) => JSX.Element) => {
     if (itemView !== null) {
       return itemView;
     }
     return function (message: CometChat.BaseMessage, index: number) {
       try {
-
         // Determine if we need to show date separator
-        const shouldShowDateSeparator = index === 0 ||
-          (index > 0 && isMonthDifferent(message.getSentAt(), messageState.messageList[index - 1].getSentAt()));
+        const shouldShowDateSeparator =
+          index === 0 ||
+          (index > 0 &&
+            isMonthDifferent(message.getSentAt(), messageState.messageList[index - 1].getSentAt()));
 
         return (
           <>
@@ -790,7 +809,7 @@ const getMessageTitle = useCallback((message: CometChat.BaseMessage): string => 
                 title={getMessageTitle(message)}
                 titleView={titleView ? titleView(message) : undefined}
                 leadingView={leadingView ? leadingView(message) : getListItemLeadingView(message)}
-                onListItemClicked={(e) => onItemClick?.(message,searchKeyword)}
+                onListItemClicked={(e) => onItemClick?.(message, searchKeyword)}
                 subtitleView={getListItemSubtitleView(message)}
                 menuView={getListItemMenuView(message)}
                 trailingView={getListItemTrailingView(message)}
@@ -799,11 +818,23 @@ const getMessageTitle = useCallback((message: CometChat.BaseMessage): string => 
           </>
         );
       } catch (error) {
-        errorHandler(error, "getListItem");
+        errorHandler(error, 'getListItem');
         throw error;
       }
     };
-  }, [itemView, loggedInUser, messageState.messageList, titleView, leadingView, onItemClick, subtitleView, options, trailingView, errorHandler,searchKeyword]);
+  }, [
+    itemView,
+    loggedInUser,
+    messageState.messageList,
+    titleView,
+    leadingView,
+    onItemClick,
+    subtitleView,
+    options,
+    trailingView,
+    errorHandler,
+    searchKeyword,
+  ]);
 
   /**
    * Function to render the "See More" button
@@ -815,10 +846,7 @@ const getMessageTitle = useCallback((message: CometChat.BaseMessage): string => 
 
     return (
       <div className="cometchat-search-messages__see-more">
-        <CometChatButton
-          text={seeMoreButtonText}
-          onClick={loadMoreResults}
-        />
+        <CometChatButton text={seeMoreButtonText} onClick={loadMoreResults} />
       </div>
     );
   }
@@ -836,15 +864,14 @@ const getMessageTitle = useCallback((message: CometChat.BaseMessage): string => 
     if (activeFilters && activeFilters.length > 0) {
       return true;
     }
-    
+
     // Don't render if no search keyword and no filters
-    if (!searchKeyword || searchKeyword.trim() === "") {
+    if (!searchKeyword || searchKeyword.trim() === '') {
       return false;
     }
-    
+
     // If there's a search keyword, only render if we have results or are still loading
-    return messageState.fetchState === States.loading || 
-           messageState.messageList.length > 0;
+    return messageState.fetchState === States.loading || messageState.messageList.length > 0;
   }, [activeFilters, searchKeyword, messageState.fetchState, messageState.messageList.length]);
 
   /**
@@ -857,12 +884,14 @@ const getMessageTitle = useCallback((message: CometChat.BaseMessage): string => 
     }
 
     return (
-      <div className={`cometchat-search__messages ${!alwaysShowSeeMore || activeFilters.length > 0 ? "cometchat-search__messages-full" : ""}`}>
+      <div
+        className={`cometchat-search__messages ${!alwaysShowSeeMore || activeFilters.length > 0 ? 'cometchat-search__messages-full' : ''}`}
+      >
         <CometChatList
-          title={getLocalizedString("search_messages_header")}
+          title={getLocalizedString('search_messages_header')}
           hideSearch={true}
           list={messageState.messageList}
-          listItemKey='getId'
+          listItemKey="getId"
           itemView={getListItem()}
           showSectionHeader={false}
           state={messageState.fetchState}
@@ -871,57 +900,55 @@ const getMessageTitle = useCallback((message: CometChat.BaseMessage): string => 
           errorView={errorView}
           hideError={hideError}
           onScrolledToBottom={!alwaysShowSeeMore ? handleScrollToBottom : undefined}
-
         />
         {messageState.messageList.length > 0 && renderSeeMoreButton()}
       </div>
     );
   };
 
-  
   /**
    * Build the messages request with appropriate filters
    */
   const buildMessagesRequest = useCallback(() => {
     let builder: CometChat.MessagesRequestBuilder = messagesRequestBuilder
-    ? CometChatUIKitUtility.clone(messagesRequestBuilder)
-    : new CometChat.MessagesRequestBuilder();
-        builder.hideDeletedMessages(true);
-    let limit = alwaysShowSeeMore  ? 3 : 30;
-  
-  
+      ? CometChatUIKitUtility.clone(messagesRequestBuilder)
+      : new CometChat.MessagesRequestBuilder();
+    builder.hideDeletedMessages(true);
+    const limit = alwaysShowSeeMore ? 3 : 30;
+
     if (!messagesRequestBuilder) {
       builder = builder
         .setCategories(ChatConfigurator.getDataSource().getAllMessageCategories())
-        .setTypes(ChatConfigurator.getDataSource().getAllMessageTypes()).setLimit(limit);
+        .setTypes(ChatConfigurator.getDataSource().getAllMessageTypes())
+        .setLimit(limit);
     }
-  
-    if (searchKeyword && searchKeyword.trim() !== "") {
+
+    if (searchKeyword && searchKeyword.trim() !== '') {
       builder = builder.setSearchKeyword(searchKeyword);
     }
-  
+
     if (uid) {
       builder = builder.setUID(uid);
     } else if (guid) {
       builder = builder.setGUID(guid);
     }
-  
+
     if (activeFilters && activeFilters.length > 0) {
       if (activeFilters.includes(CometChatSearchFilter.Links)) {
         builder = builder.hasLinks(true);
       }
-  
+
       const attachmentTypeMap = {
         [CometChatSearchFilter.Photos]: CometChat.AttachmentType.IMAGE,
         [CometChatSearchFilter.Videos]: CometChat.AttachmentType.VIDEO,
         [CometChatSearchFilter.Documents]: CometChat.AttachmentType.FILE,
         [CometChatSearchFilter.Audio]: CometChat.AttachmentType.AUDIO,
       };
-  
+
       for (const [filter, attachmentType] of Object.entries(attachmentTypeMap)) {
         if (activeFilters.includes(filter as CometChatSearchFilter)) {
           builder = builder.setAttachmentTypes([attachmentType]);
-          break; 
+          break;
         }
       }
     }
@@ -934,9 +961,9 @@ const getMessageTitle = useCallback((message: CometChat.BaseMessage): string => 
    */
   function getDateSeparatorFormat(): CalendarObject {
     const defaultFormat = {
-      today: "MMM, YYYY",
-      yesterday: "MMM, YYYY",
-      otherDays: "MMM, YYYY"
+      today: 'MMM, YYYY',
+      yesterday: 'MMM, YYYY',
+      otherDays: 'MMM, YYYY',
     };
 
     const globalCalendarFormat = sanitizeCalendarObject(CometChatLocalize.calendarObject);
@@ -955,10 +982,7 @@ const getMessageTitle = useCallback((message: CometChat.BaseMessage): string => 
   function renderDateSeparator(timestamp: number): JSX.Element {
     return (
       <div className="cometchat-search-messages__date-separator">
-         <CometChatDate
-            timestamp={timestamp}
-            calendarObject={getDateSeparatorFormat()}
-          />
+        <CometChatDate timestamp={timestamp} calendarObject={getDateSeparatorFormat()} />
       </div>
     );
   }
@@ -969,6 +993,6 @@ const getMessageTitle = useCallback((message: CometChat.BaseMessage): string => 
     searchMessages,
     loadMoreResults,
     handleScrollToBottom,
-    shouldRender
+    shouldRender,
   };
 }

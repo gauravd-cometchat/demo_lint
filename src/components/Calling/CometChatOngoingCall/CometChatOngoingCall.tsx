@@ -1,9 +1,9 @@
-import { useCallback, useRef, useState } from "react";
-import { CometChat } from "@cometchat/chat-sdk-javascript";
-import { useCometChatOngoingCall } from "./useCometChatOngoingCall";
-import { CometChatUIKitCalls } from "../../../CometChatUIKit/CometChatCalls";
-import { CallWorkflow } from "../../../Enums/Enums";
-import { CometChatCallEvents } from "../../../events/CometChatCallEvents";
+import { useCallback, useRef, useState } from 'react';
+import { CometChat } from '@cometchat/chat-sdk-javascript';
+import { useCometChatOngoingCall } from './useCometChatOngoingCall';
+import { CometChatUIKitCalls } from '../../../CometChatUIKit/CometChatCalls';
+import { CallWorkflow } from '../../../Enums/Enums';
+import { CometChatCallEvents } from '../../../events/CometChatCallEvents';
 
 interface OngoingCallProps {
   /* Call settings builder for required call settings. */
@@ -16,7 +16,7 @@ interface OngoingCallProps {
   callWorkflow?: CallWorkflow;
 }
 const defaultProps: OngoingCallProps = {
-  sessionID: "",
+  sessionID: '',
   callSettingsBuilder: undefined,
   onError: (error: CometChat.CometChatException) => {
     console.log(error);
@@ -27,25 +27,20 @@ const defaultProps: OngoingCallProps = {
 const CometChatOngoingCall = (props: OngoingCallProps) => {
   const [loggedInUser, setLoggedInuser] = useState<CometChat.User | null>(null);
   const callScreenFrameRef = useRef<HTMLDivElement | null>(null);
-  const listenerId: string = "callListenerId_" + new Date().getMilliseconds()
+  const listenerId: string = 'callListenerId_' + new Date().getMilliseconds();
 
-  const {
-    sessionID,
-    callSettingsBuilder,
-    onError,
-    callWorkflow,
-  } = { ...defaultProps, ...props };
+  const { sessionID, callSettingsBuilder, onError, callWorkflow } = { ...defaultProps, ...props };
   /* Callback function which is triggered on any error occured. */
   const onErrorCallback = useCallback(
     (error: any) => {
       if (!(error instanceof CometChat.CometChatException)) {
-        let errorModel = {
+        const errorModel = {
           code: error?.code,
           name: error?.name,
           message: error?.message,
           details: error?.details,
         };
-        let errorObj = new CometChat.CometChatException(errorModel);
+        const errorObj = new CometChat.CometChatException(errorModel);
         onError?.(errorObj);
       } else {
         onError?.(error);
@@ -56,16 +51,18 @@ const CometChatOngoingCall = (props: OngoingCallProps) => {
 
   /* This function updates and returns the call builder with required settings. */
   const getCallBuilder = useCallback((): any => {
-    let callBuilder = callSettingsBuilder || new CometChatUIKitCalls.CallSettingsBuilder()
-      .enableDefaultLayout(true)
-      .setIsAudioOnlyCall(false);
+    const callBuilder =
+      callSettingsBuilder ||
+      new CometChatUIKitCalls.CallSettingsBuilder()
+        .enableDefaultLayout(true)
+        .setIsAudioOnlyCall(false);
     callBuilder.setCallListener(
       new CometChatUIKitCalls.OngoingCallListener({
         onCallEnded: () => {
           if (callWorkflow === CallWorkflow.defaultCalling) {
             CometChatUIKitCalls.endSession();
             CometChat.clearActiveCall();
-            CometChatCallEvents.ccCallEnded.next(null as any)
+            CometChatCallEvents.ccCallEnded.next(null as any);
           }
         },
         onCallEndButtonPressed: () => {
@@ -73,13 +70,13 @@ const CometChatOngoingCall = (props: OngoingCallProps) => {
             CometChat.endCall(sessionID)
               .then((call: CometChat.Call) => {
                 CometChatUIKitCalls.endSession();
-                CometChatCallEvents.ccCallEnded.next(call)
+                CometChatCallEvents.ccCallEnded.next(call);
               })
               .catch((err: CometChat.CometChatException) => {
                 onErrorCallback(err);
               });
           } else {
-            CometChatCallEvents.ccCallEnded.next(null as any)
+            CometChatCallEvents.ccCallEnded.next(null as any);
             CometChatUIKitCalls.endSession();
           }
         },
@@ -128,13 +125,9 @@ const CometChatOngoingCall = (props: OngoingCallProps) => {
 
   useCometChatOngoingCall(setLoggedInuser, sessionID, startCall);
 
-  return sessionID !== "" ? (
+  return sessionID !== '' ? (
     <div className="cometchat">
-      <div
-        className="cometchat-ongoing-call"
-        ref={callScreenFrameRef}
-      >
-      </div>
+      <div className="cometchat-ongoing-call" ref={callScreenFrameRef}></div>
     </div>
   ) : (
     <></>

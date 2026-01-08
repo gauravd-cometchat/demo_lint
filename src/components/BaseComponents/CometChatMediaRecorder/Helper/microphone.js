@@ -14,13 +14,16 @@ class Microphone {
 
     this.callbacks = {
       getBuffer: [],
-      exportWAV: []
+      exportWAV: [],
     };
 
     this.context = source.context;
-    this.node = (this.context.createScriptProcessor ||
-    this.context.createJavaScriptNode).call(this.context,
-      this.config.bufferLen, this.config.numChannels, this.config.numChannels);
+    this.node = (this.context.createScriptProcessor || this.context.createJavaScriptNode).call(
+      this.context,
+      this.config.bufferLen,
+      this.config.numChannels,
+      this.config.numChannels
+    );
 
     this.node.onaudioprocess = (e) => {
       if (!this.recording) return;
@@ -31,12 +34,12 @@ class Microphone {
       }
       this.worker.postMessage({
         command: 'record',
-        buffer: buffer
+        buffer: buffer,
       });
     };
 
     source.connect(this.node);
-    this.node.connect(this.context.destination);    //this should not be necessary
+    this.node.connect(this.context.destination); //this should not be necessary
 
     let self = {};
     this.worker = new InlineWorker(function () {
@@ -90,9 +93,9 @@ class Microphone {
           interleaved = buffers[0];
         }
         let dataview = encodeWAV(interleaved);
-        let audioBlob = new Blob([dataview], {type: type});
+        let audioBlob = new Blob([dataview], { type: type });
 
-        this.postMessage({command: 'exportWAV', data: audioBlob});
+        this.postMessage({ command: 'exportWAV', data: audioBlob });
       }
 
       function getBuffer() {
@@ -100,7 +103,7 @@ class Microphone {
         for (let channel = 0; channel < numChannels; channel++) {
           buffers.push(mergeBuffers(recBuffers[channel], recLength));
         }
-        this.postMessage({command: 'getBuffer', data: buffers});
+        this.postMessage({ command: 'getBuffer', data: buffers });
       }
 
       function clear() {
@@ -143,7 +146,7 @@ class Microphone {
       function floatTo16BitPCM(output, offset, input) {
         for (let i = 0; i < input.length; i++, offset += 2) {
           let s = Math.max(-1, Math.min(1, input[i]));
-          output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+          output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
         }
       }
 
@@ -154,13 +157,13 @@ class Microphone {
       }
 
       function encodeWAV(samples) {
-        const buffer = new ArrayBuffer(44 + (samples.length * 2));
+        const buffer = new ArrayBuffer(44 + samples.length * 2);
         const view = new DataView(buffer);
 
         /* RIFF identifier */
         writeString(view, 0, 'RIFF');
         /* RIFF chunk length */
-        view.setUint32(4, 36 + (samples.length * 2), true);
+        view.setUint32(4, 36 + samples.length * 2, true);
         /* RIFF type */
         writeString(view, 8, 'WAVE');
         /* format chunk identifier */
@@ -206,7 +209,6 @@ class Microphone {
     };
   }
 
-
   record() {
     this.recording = true;
   }
@@ -216,7 +218,7 @@ class Microphone {
   }
 
   clear() {
-    this.worker.postMessage({command: 'clear'});
+    this.worker.postMessage({ command: 'clear' });
   }
 
   getBuffer(cb) {
@@ -226,7 +228,7 @@ class Microphone {
 
     this.callbacks.getBuffer.push(cb);
 
-    this.worker.postMessage({command: 'getBuffer'});
+    this.worker.postMessage({ command: 'getBuffer' });
   }
 
   exportWAV(cb, mimeType) {
@@ -245,20 +247,20 @@ class Microphone {
 }
 
 Microphone.forceDownload = function forceDownload(blob, filename) {
-    const a = document.createElement('a');
+  const a = document.createElement('a');
 
-    a.style = 'display: none';
-    document.body.appendChild(a);
+  a.style = 'display: none';
+  document.body.appendChild(a);
 
-    var url = window.URL.createObjectURL(blob);
+  var url = window.URL.createObjectURL(blob);
 
-    a.href = url;
-    a.download = filename;
-    a.click();
+  a.href = url;
+  a.download = filename;
+  a.click();
 
-    window.URL.revokeObjectURL(url);
+  window.URL.revokeObjectURL(url);
 
-    document.body.removeChild(a);
+  document.body.removeChild(a);
 };
 
 export default Microphone;
